@@ -3,5 +3,5 @@ package rrpss;
 public class Customer {
 	private Boolean membership;
 	int i;
-	String x;
+	int ZHENYI_IS_HANDSOME;
 }
