@@ -1,5 +1,6 @@
 package rrpss;
 
 public class menuItem {
-	private int name;
+	private int menuName;
+	private	String menuDesc;
 }
