@@ -7,4 +7,5 @@ public class Customer {
 	private int sadlife2;
 	private boolean lasttry2;
 	private int yolo;
+	private int why;
 }
