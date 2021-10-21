@@ -6,4 +6,5 @@ public class Customer {
 	int ZHENYI_IS_HANDSOME;
 	private int sadlife2;
 	private boolean lasttry2;
+	private int yolo;
 }
