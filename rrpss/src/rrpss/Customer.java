@@ -5,4 +5,6 @@ public class Customer {
 	int i;
 	int ZHENYI_IS_HANDSOME;
 	private int iwant2sleep;
+	int sadlife;
+	double yoyoyo;
 }
