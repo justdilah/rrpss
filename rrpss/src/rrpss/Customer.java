@@ -1,13 +1,35 @@
 package rrpss;
 
-public class Customer {
+import java.util.*;
+
+public class Customer extends Person {
+
+	Collection<Order> order;
+	private int custId;
 	private Boolean membership;
-	private int i;
-	private int ZHENYI_IS_HANDSOME;
-	private int sadlife2;
-	private boolean lasttry2;
-	private int yolo;
-	private int why;
-	private int hello;
-	private int what;
+
+	public int getCustId() {
+		return this.custId;
+	}
+
+	/**
+	 * 
+	 * @param custId
+	 */
+	public void setCustId(int custId) {
+		this.custId = custId;
+	}
+
+	public Boolean getMembership() {
+		return this.membership;
+	}
+
+	/**
+	 * 
+	 * @param membership
+	 */
+	public void setMembership(Boolean membership) {
+		this.membership = membership;
+	}
+
 }
