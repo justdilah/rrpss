@@ -5,4 +5,5 @@ public class Customer {
 	int i;
 	int ZHENYI_IS_HANDSOME;
 	private int sadlife2;
+	private boolean lasttry2;
 }
