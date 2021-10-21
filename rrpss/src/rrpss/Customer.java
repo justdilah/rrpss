@@ -8,4 +8,5 @@ public class Customer {
 	private boolean lasttry2;
 	private int yolo;
 	private int why;
+	private int hello;
 }
