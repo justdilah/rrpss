@@ -9,4 +9,5 @@ public class Customer {
 	private int yolo;
 	private int why;
 	private int hello;
+	private int what;
 }
