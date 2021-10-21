@@ -1,4 +1,4 @@
-package rrpss;
+package entity;
 import java.util.*;
 
 public class MenuItem {

@@ -1,4 +1,4 @@
-package rrpss;
+package entity;
 
 public enum TableCapacity {
 	TWO_SEATER,

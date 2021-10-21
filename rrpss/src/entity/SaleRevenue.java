@@ -1,4 +1,4 @@
-package rrpss;
+package entity;
 
 public class SaleRevenue {
 
