@@ -2,6 +2,7 @@ package entity;
 
 public enum MenuItemType {
 	MAIN_COURSE,
-	DRINK,
-	DESSERT
+	STARTER,
+	DESSERT,
+	BEVERAGES
 }

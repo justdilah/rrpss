@@ -1,40 +1,21 @@
 package boundary;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import controller.MenuController;
+import entity.MenuItemType;
 
 public class MenuForm {
 		
 		MenuController mc = new MenuController();
-		
-		
+	
 		Scanner sc = new Scanner(System.in);
-		public void addFoodItem() {
-			System.out.println("Add a food item");
-			System.out.println("Enter the name of the food");
-			String name = sc.next();
-			System.out.println("Enter the description of the food");
-			String desc = sc.next();
-			System.out.println("Enter the price of the food");
-			Double price = sc.nextDouble();
-			System.out.println("Enter the food type");
-			String foodtype = sc.next();
-		}
-		
-		public void displayMenu() {
-			System.out.println("==================================");
-			System.out.println("\t Menu ");
-			System.out.println("==================================");
-		}
-		
-		public void deleteFoodItem() {
-			
-		}
-		
-		public void editFoodItem() {
+
+		public void updateMenuItem() {
+			// TODO - implement MenuForm.updateMenuItem
 			System.out.println("=================================");
-	        System.out.println("\t Edit Food Item Options ");
+	        System.out.println("\t Update Food Item Options ");
 			System.out.println("=================================");
 			System.out.println("1) Edit Food Item Name");
 			System.out.println("2) Edit Food Description ");
@@ -56,9 +37,51 @@ public class MenuForm {
 				case 5:
 					break;
 			}
+			throw new UnsupportedOperationException();
 		}
+
+		public void deleteMenuItem() {
+			// TODO - implement MenuForm.deleteMenuItem
+			System.out.println("Enter food item to be deleted");
+			Scanner sc = new Scanner(System.in);
+			String name = sc.next(); 
+			mc.deleteFoodItem(0);
+			throw new UnsupportedOperationException();
+		}
+	
+
+		public void insertMenuItem() {
+			// TODO - implement MenuForm.insertMenuItem
+			System.out.println("Add a food item");
+			System.out.println("Enter the name of the food");
+			String name = sc.next();
+			System.out.println("Enter the description of the food");
+			String desc = sc.next();
+			System.out.println("Enter the price of the food");
+			double price = sc.nextDouble();
+			System.out.println("Enter the food type");
+			String foodtype = sc.next();
+			mc.addFoodItem(name, desc, price, MenuItemType.valueOf(foodtype));
+			throw new UnsupportedOperationException();
+		}
+
+		public void displayMenu() throws FileNotFoundException {
+			// TODO - implement MenuForm.displayMenu
+			System.out.println("==================================");
+			System.out.println("\t Menu ");
+			System.out.println("==================================");
+			for(int i=0;i< mc.getAllFoodItem().size() ; i++ ) {
+				System.out.print(i + ") ");
+				System.out.print(mc.getAllFoodItem().get(i).getMenuName() + " $");
+				System.out.print(mc.getAllFoodItem().get(i).getMenuPrice());
+				System.out.println("");
+			};
+			
+		}
+
+
 		
-		public void displayForm() {
+		public void displayOption() throws FileNotFoundException {
 			System.out.println("=================================");
 	        System.out.println("\t Menu Options ");
 			System.out.println("=================================");
@@ -76,15 +99,15 @@ public class MenuForm {
 				displayMenu();
 				break;
 			case 2:
-				addFoodItem();
+				insertMenuItem();
 				
 				break;
 			case 3:
-				editFoodItem();
+				updateMenuItem();
 				
 				break;
 			case 4:
-				deleteFoodItem();
+				deleteMenuItem();
 				break;
 			case 5:
 				break;

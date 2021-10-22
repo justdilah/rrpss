@@ -1,5 +1,6 @@
 package boundary;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -12,7 +13,7 @@ public class MainForm {
 		print();
 	}
 	
-	public static void print()
+	public static void print() throws FileNotFoundException
 	{
 		MainController mc = new MainController();
 		
