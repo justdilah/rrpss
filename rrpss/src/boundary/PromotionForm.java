@@ -6,9 +6,9 @@ public class PromotionForm {
 	
 	public void displayForm() {
 		System.out.println("=================================");
-        System.out.println("\t Menu Options ");
+        System.out.println("\t promos Options ");
 		System.out.println("=================================");
-		System.out.println("1) Display Menu ");
+		System.out.println("1) nonono Menu ");
 		System.out.println("2) Add Food Item ");
 		System.out.println("3) Edit Food Description ");
 		System.out.println("4) Delete Food Item ");
