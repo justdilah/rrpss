@@ -70,5 +70,10 @@ public class SetPackage {
 	public void setPackEndDate(Date packEndDate) {
 		this.packEndDate = packEndDate;
 	}
+	
+	public void add(String desc)
+	{
+		this.packDesc = desc;
+	}
 
 }

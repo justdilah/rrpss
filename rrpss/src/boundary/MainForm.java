@@ -7,10 +7,15 @@ import java.util.*;
 import controller.MainController;
 
 public class MainForm {
+	
 	public static void main(String[] args) throws IOException, ParseException {
-		
+		print();
+	}
+	
+	public static void print()
+	{
 		MainController mc = new MainController();
-			
+		
 		int choice = -1;
 		Scanner sc = new Scanner(System.in);
 		
@@ -18,10 +23,12 @@ public class MainForm {
 		System.out.println("=================================");
         System.out.println("\t Welcome to RRPSS");
 		System.out.println("=================================");
-		System.out.println("1) Reservation");
-		System.out.println("2) Orders ");
-		System.out.println("3) Sales Revenue Report ");
-		System.out.println("4) Exit ");
+		System.out.println("(1) Reservation");
+		System.out.println("(2) Orders ");
+		System.out.println("(3) Sales Revenue Report ");
+		System.out.println("(4) Menu");
+		System.out.println("(5) Promotion");
+		System.out.println("(6) Exit ");
 		
 			
 			do {
@@ -37,9 +44,12 @@ public class MainForm {
 					System.out.println("=================================");
 			        System.out.println("\t Welcome to RRPSS");
 					System.out.println("=================================");
-					System.out.println("1) Reservation");
-					System.out.println("2) Orders ");
-					System.out.println("3) Sales Revenue Report ");
+					System.out.println("(1) Reservation");
+					System.out.println("(2) Orders ");
+					System.out.println("(3) Sales Revenue Report ");
+					System.out.println("(4) Menu");
+					System.out.println("(5) Promotion");
+					System.out.println("(6) Exit ");
 				}
 				sc.nextLine();
 			}while (choice == -1);
@@ -48,7 +58,6 @@ public class MainForm {
 			switch (choice) {
 			
 			case 1: 
-				mc.getMenuForm();
 				break;
 				
 			case 2: 
@@ -56,6 +65,17 @@ public class MainForm {
 				
 			case 3:
 				break; 
+				
+			case 4: 
+				mc.getMenuForm();
+				break;
+				
+			case 5:
+				mc.getPromotionForm();
+				break; 
+			
+			case 6:
+				break;
 			
 			default:
 		    	System.out.println("=========================================================");

@@ -13,11 +13,10 @@ public class MainController {
 	
 	public void getPromotionForm() {
 		PromotionForm pf = new PromotionForm();
-		pf.displayForm(); 
+		pf.displayOption(); 
 	}
 	
 	public void getOrderForm() {
-		
 	}
 	
 	public void getReservationForm() {
