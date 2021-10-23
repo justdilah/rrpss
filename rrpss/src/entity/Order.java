@@ -4,16 +4,16 @@ import java.util.*;
 
 public class Order {
 
-	Staff staff;
-	Customer customer;
-	Collection<OrderItem> orderitem;
-	Collection<SetPackage> setpack;
-	Collection<AlaCarte> menuitem;
-	Invoice invoice;
 	private int orderId;
 	private String timeStamp;
-	private int staffId;
 	private Boolean isPaid;
+	private int staffId;
+	Staff waiter;
+	Customer customer;
+	Table table;
+	Collection<OrderItem> orderitem;
+	Invoice invoice;
+	private ArrayList<OrderItem> orderItemList;
 
 	public int getOrderId() {
 		return this.orderId;
@@ -61,6 +61,18 @@ public class Order {
 	 */
 	public void setIsPaid(Boolean isPaid) {
 		this.isPaid = isPaid;
+	}
+
+	public ArrayList<OrderItem> getOrderItemList() {
+		return this.orderItemList;
+	}
+
+	/**
+	 * 
+	 * @param orderItemList
+	 */
+	public void setOrderItemList(ArrayList<OrderItem> orderItemList) {
+		this.orderItemList = orderItemList;
 	}
 
 }

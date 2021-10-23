@@ -1,7 +1,7 @@
 package entity;
 
 public enum TableStatus {
-	VACCANT,
+	VACANT,
 	OCCUPIED,
 	RESERVED
 }

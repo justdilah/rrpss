@@ -1,12 +1,8 @@
 package controller;
 
-import entity.Promotion;
+import entity.PromotionSet;
 
 public class PromotionController {
-	
-	private Promotion[] pack = new Promotion[5];
-	
-	
 
 	/**
 	 * 
@@ -15,9 +11,7 @@ public class PromotionController {
 	 * @param packPrice
 	 */
 	public void addPromoItem(String packName, String packDesc, double packPrice) {
-		
-
-		
+		// TODO - implement PromotionController.addPromoItem
 		throw new UnsupportedOperationException();
 	}
 
@@ -26,13 +20,12 @@ public class PromotionController {
 	 * @param packId
 	 */
 	public void getPromoItem(int packId) {
-		
+		// TODO - implement PromotionController.getPromoItem
 		throw new UnsupportedOperationException();
 	}
 
 	public void getAllPromoItem() {
-		
-		
+		// TODO - implement PromotionController.getAllPromoItem
 		throw new UnsupportedOperationException();
 	}
 
@@ -75,5 +68,6 @@ public class PromotionController {
 		throw new UnsupportedOperationException();
 	}
 
-
 }
+
+

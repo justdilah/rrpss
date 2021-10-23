@@ -2,11 +2,13 @@ package entity;
 
 import java.util.*;
 
+import java.util.*;
+
 public class Customer extends Person {
 
-	Collection<Order> order;
 	private int custId;
 	private Boolean membership;
+	Collection<Order> orders;
 
 	public int getCustId() {
 		return this.custId;

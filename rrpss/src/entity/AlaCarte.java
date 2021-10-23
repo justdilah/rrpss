@@ -35,20 +35,6 @@ public class AlaCarte {
 	public int getFoodId() {
 		return this.foodId;
 	}
-	
-	
-	public AlaCarte selectFoodByName(String n) throws FileNotFoundException {	
-		
-		AlaCarte a = null;
-		for(int i=0;i<getAllMenuItems().size();i++) {
-			
-			if(getAllMenuItems().get(i).getFoodName().equals(n)) {
-				a = getAllMenuItems().get(i);
-				System.out.println(getAllMenuItems().get(i).getFoodName() + " " + n);
-			}
-		}
-		return a;
-	}
 
 	/**
 	 * 
@@ -106,6 +92,19 @@ public class AlaCarte {
 		this.foodType = foodType;
 	}
 	
+	public AlaCarte selectFoodByName(String n) throws FileNotFoundException {	
+		AlaCarte a = null;
+		for(int i=0;i<getAllMenuItems().size();i++) {
+			
+			if(getAllMenuItems().get(i).getFoodName().equals(n)) {
+				a = getAllMenuItems().get(i);
+			}
+		}
+		return a;
+	}
+	
+	
+	// EXTRACT OUT FROM CSV FILE
 	public ArrayList<AlaCarte> getAllMenuItems() throws FileNotFoundException {
 		ArrayList<AlaCarte> miList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
@@ -116,7 +115,7 @@ public class AlaCarte {
 			String menuId = star.nextToken().trim();
 			String name = star.nextToken().trim();
 			String desc = star.nextToken().trim();
-			String newdesc = desc.replace('@', ',');
+			String newdesc = desc.replace('/', ',');
 			String price = star.nextToken().trim();
 			String menuType =  star.nextToken().trim();
 			String newmt = menuType.replace(" ", "_");
@@ -126,51 +125,54 @@ public class AlaCarte {
 		return miList;
 	}
 	
+	
+	//ADDING TO CSV FILE 
+	public void saveFoodItem(List list) throws IOException {
+		StoreController.write(filename, list);
+	}
+	
 	public void deleteFoodItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllMenuItems();
 		
 		for(int i=0;i<getAllMenuItems().size();i++) {
-			
 			if(getAllMenuItems().get(i).getFoodId() == a.getFoodId()) {
 				miList.remove(i);
 			} else {
 				AlaCarte k = miList.get(i);
-				String foodItem = k.getFoodId() + "," + k.getFoodName() + "," + k.getFoodDesc() +  "," +  k.getFoodPrice()+ "," +k.getFoodType();
+				String newdesc = k.getFoodDesc().replace(',', '/');
+				String foodItem = k.getFoodId() + "," + k.getFoodName() + "," + newdesc +  "," +  k.getFoodPrice()+ "," +k.getFoodType();
 				l.add(foodItem);
 			}
 		}
-		
 		replaceAll(l);
 	}
 	
-	public void saveFoodItem(List list) throws IOException {
-		System.out.println(list);
-		StoreController.write(filename, list);
-	}
-	
-	public void replaceAll(List list) throws IOException {
-		StoreController.replace(filename, list);
-	}
-	
+	//FOR UPDATE 
 	public void updateFoodItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllMenuItems();
 		
 		for(int i=0;i<getAllMenuItems().size();i++) {
 			
+			
 			if(getAllMenuItems().get(i).getFoodId() == a.getFoodId()) {
 				miList.set(i, a);
-				System.out.print(miList.get(i).getFoodPrice());
 			}
 					
 			AlaCarte k = miList.get(i);
-			String foodItem = k.getFoodId() + "," + k.getFoodName() + "," + k.getFoodDesc() +  "," +  k.getFoodPrice()+ "," +k.getFoodType();
+			String newdesc = k.getFoodDesc().replace(',', '/');
+			String foodItem = k.getFoodId() + "," + k.getFoodName() + "," + newdesc +  "," +  k.getFoodPrice()+ "," +k.getFoodType();
 			l.add(foodItem);
 		}
 		
 		replaceAll(l);		
 	}
+	
+	//REPLACE THE ENTIRE CSV FILE 
+		public void replaceAll(List list) throws IOException {
+			StoreController.replace(filename, list);
+		}
 	
 
 }

@@ -1,12 +1,16 @@
 package entity;
 
 
+import java.util.*;
+
 public class OrderItem {
 
 	private int orderItemId;
 	private int orderItemQty;
 	private String orderItemName;
 	private Double orderItemPrice;
+	Collection<PromotionSet> promoitem;
+	Collection<AlaCarte> food;
 
 	public int getOrderItemId() {
 		return this.orderItemId;
@@ -52,7 +56,7 @@ public class OrderItem {
 	 * 
 	 * @param orderItemPrice
 	 */
-	public void setOrderItemPrice(Double orderItemPrice) {
+	public void setOrderItemPrice(double orderItemPrice) {
 		this.orderItemPrice = orderItemPrice;
 	}
 

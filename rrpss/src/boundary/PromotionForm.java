@@ -2,13 +2,13 @@ package boundary;
 
 import java.util.Scanner;
 
-import controller.MainController;
+import controller.MainAppController;
 import controller.PromotionController;
 import entity.SetPackage;
 
 public class PromotionForm {
 	
-	private MainController mainControl = new MainController();
+	private MainAppController mainControl = new MainAppController();
 	private PromotionController control = new PromotionController();
 	private static Scanner sc = new Scanner(System.in);
 	private static int itemid;

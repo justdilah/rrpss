@@ -2,29 +2,34 @@ package entity;
 
 public class Reservation {
 
-	Staff staff;
-	Customer customer;
-	Table table;
 	private String resDate;
 	private String resTime;
 	private int resNoPax;
 	private String resName;
 	private String resContact;
-	private int staffId;
-	private int custId;
+	Table reserveTable;
+	Customer customer;
+	Staff staff;
+	private int resId;
 
-	public void checkAvailability() {
-		// TODO - implement Reservation.checkAvailability
-		throw new UnsupportedOperationException();
+	public int getResId() {
+		return this.resId;
 	}
 
-	public void allocateTable() {
-		// TODO - implement Reservation.allocateTable
-		throw new UnsupportedOperationException();
+	/**
+	 * 
+	 * @param resId
+	 */
+	public void setResId(int resId) {
+		this.resId = resId;
 	}
 
-	public void removeReservation() {
-		// TODO - implement Reservation.removeReservation
+	/**
+	 * 
+	 * @param tableNo
+	 */
+	public void allocateTable(int tableNo) {
+		// TODO - implement Reservation2.allocateTable
 		throw new UnsupportedOperationException();
 	}
 

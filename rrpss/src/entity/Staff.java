@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Staff extends Person {
 
-	ArrayList<Order> order;
 	private int staffId;
 	private String staffTitle;
+	Collection<Order> order;
 
 	public int getStaffId() {
 		return this.staffId;

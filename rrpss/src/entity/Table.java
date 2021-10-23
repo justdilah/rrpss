@@ -4,11 +4,11 @@ import java.util.*;
 
 public class Table {
 
-	ArrayList<Reservation> reservation;
-	ArrayList<Invoice> invoice;
 	private int tableNo;
 	private TableCapacity seatCapacity;
 	private TableStatus status;
+	Order order;
+	Collection<Reservation> reservation;
 
 	public int getTableNo() {
 		return this.tableNo;
@@ -23,7 +23,8 @@ public class Table {
 	}
 
 	public TableCapacity getSeatCapacity() {
-		return this.seatCapacity;
+		return seatCapacity;
+
 	}
 
 	/**
@@ -31,7 +32,7 @@ public class Table {
 	 * @param seatCapacity
 	 */
 	public void setSeatCapacity(TableCapacity seatCapacity) {
-		this.seatCapacity = seatCapacity;
+
 	}
 
 	public TableStatus getStatus() {

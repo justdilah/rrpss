@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
-import controller.MainController;
+import controller.MainAppController;
 
-public class MainForm {
+public class MainAppUI {
 	
 	public static void main(String[] args) throws IOException, ParseException {
 		print();
@@ -15,7 +15,7 @@ public class MainForm {
 	
 	public static void print() throws IOException
 	{
-		MainController mc = new MainController();
+		MainAppController mc = new MainAppController();
 		
 		int choice = -1;
 		Scanner sc = new Scanner(System.in);
@@ -58,32 +58,38 @@ public class MainForm {
 			
 			switch (choice) {
 			
-			case 1: 
-				break;
+				case 1: 
+					break;
+					
+				case 2: 
+					break;
+					
+				case 3:
+					break; 
+					
+				case 4: 
+					mc.getMenuForm();
+					break;
+					
+				case 5:
+					mc.getPromotionForm();
+					break; 
 				
-			case 2: 
-				break;
+				case 6:
+					break;
 				
-			case 3:
-				break; 
-				
-			case 4: 
-				mc.getMenuForm();
-				break;
-				
-			case 5:
-				mc.getPromotionForm();
-				break; 
-			
-			case 6:
-				break;
-			
-			default:
-		    	System.out.println("=========================================================");
-				System.out.println("\tInvalid input. Please enter again!");
-		    	System.out.println("=========================================================");
-
+				default:
+			    	System.out.println("=========================================================");
+					System.out.println("\tInvalid input. Please enter again!");
+			    	System.out.println("=========================================================");
+			    	System.out.println("(1) Reservation");
+					System.out.println("(2) Orders ");
+					System.out.println("(3) Sales Revenue Report ");
+					System.out.println("(4) Menu");
+					System.out.println("(5) Promotion");
+					System.out.println("(6) Exit ");
+					choice = sc.nextInt();
 			}
-		}while (choice <4||choice>0);
+		}while (choice <1||choice>6);
 	}
 }

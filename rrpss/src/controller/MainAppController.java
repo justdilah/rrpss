@@ -3,14 +3,14 @@ package controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import boundary.MenuForm;
+import boundary.AlaCarteForm;
 import boundary.PromotionForm;
 
-public class MainController {
+public class MainAppController {
 	
 	// To navigate to different forms
 	public void getMenuForm() throws IOException {
-		MenuForm mf = new MenuForm();
+		AlaCarteForm mf = new AlaCarteForm();
 		mf.displayOption();
 	}
 	

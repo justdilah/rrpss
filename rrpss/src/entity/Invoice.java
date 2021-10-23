@@ -1,5 +1,8 @@
 package entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Invoice {
 
 	private int invoiceNo;
@@ -7,26 +10,16 @@ public class Invoice {
 	private Double gst;
 	private Double serviceCharge;
 	private Double discounts;
-	private String invoiceDate; // unable to use Date Datatype so need to use String
-	private String invoiceTime; // unable to use DateTime Datatype so need to use String
-
-	public void calculateSubTotal() {
-		// TODO - implement Invoice.calculateSubTotal
-		throw new UnsupportedOperationException();
-	}
-
-	public void calculateTotalPrice() {
-		// TODO - implement Invoice.calculateTotalPrice
-		throw new UnsupportedOperationException();
-	}
-
-	public void printInvoice() {
-		// TODO - implement Invoice.printInvoice
-		throw new UnsupportedOperationException();
-	}
+	private LocalDate invoiceDate;
+	private LocalDateTime invoiceTime;
+	SaleRevenueMonth monthlyreport;
 
 	public int getInvoiceNo() {
 		return this.invoiceNo;
+	}
+
+	public Double getSubTotal() {
+		return this.subTotal;
 	}
 
 	/**
@@ -35,10 +28,6 @@ public class Invoice {
 	 */
 	public void setInvoiceNo(int invoiceNo) {
 		this.invoiceNo = invoiceNo;
-	}
-
-	public Double getSubTotal() {
-		return this.subTotal;
 	}
 
 	/**
@@ -85,7 +74,7 @@ public class Invoice {
 		this.discounts = discounts;
 	}
 
-	public String getInvoiceDate() {
+	public LocalDate getInvoiceDate() {
 		return this.invoiceDate;
 	}
 
@@ -93,11 +82,11 @@ public class Invoice {
 	 * 
 	 * @param invoiceDate
 	 */
-	public void setInvoiceDate(String invoiceDate) {
+	public void setInvoiceDate(LocalDate invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
 
-	public String getInvoiceTime() {
+	public LocalDateTime getInvoiceTime() {
 		return this.invoiceTime;
 	}
 
@@ -105,7 +94,7 @@ public class Invoice {
 	 * 
 	 * @param invoiceTime
 	 */
-	public void setInvoiceTime(String invoiceTime) {
+	public void setInvoiceTime(LocalDateTime invoiceTime) {
 		this.invoiceTime = invoiceTime;
 	}
 
