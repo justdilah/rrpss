@@ -6,7 +6,7 @@ public class SetPackage {
 
 	ArrayList <Order> order;
 	private Double packPrice;
-	private ArrayList<MenuItem> packItem;
+	private ArrayList<AlaCarte> packItem;
 	private String packDesc;
 	private Date packStartDate;
 	private Date packEndDate;
@@ -23,7 +23,7 @@ public class SetPackage {
 		this.packPrice = packPrice;
 	}
 
-	public ArrayList<MenuItem> getPackItem() {
+	public ArrayList<AlaCarte> getPackItem() {
 		return this.packItem;
 	}
 
@@ -31,7 +31,7 @@ public class SetPackage {
 	 * 
 	 * @param packItem
 	 */
-	public void setPackItem(ArrayList<MenuItem> packItem) {
+	public void setPackItem(ArrayList<AlaCarte> packItem) {
 		this.packItem = packItem;
 	}
 

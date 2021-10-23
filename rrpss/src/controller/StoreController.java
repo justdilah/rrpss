@@ -30,11 +30,25 @@ public class StoreController {
 	}
 	
 	public static void write(String filename, List data) throws IOException {
-		PrintWriter out = new PrintWriter(new FileWriter(filename));
-
+//		PrintWriter out = new PrintWriter(new FileWriter(filename));
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename, true));
 		try {
 			for (int i = 0; i < data.size(); i++) {
-				out.println((String) data.get(i));
+				
+				out.write((String) data.get(i)+"\n");
+			}
+		} finally {
+			out.close();
+		}
+	}
+	
+	public static void replace(String filename, List data) throws IOException {
+		
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i) + "\n");
 			}
 		} finally {
 			out.close();

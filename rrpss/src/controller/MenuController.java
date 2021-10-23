@@ -1,27 +1,27 @@
 package controller;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import entity.MenuItem;
-import entity.MenuItemType;
+import entity.AlaCarte;
+import entity.FoodType;
+
 
 public class MenuController {
-
-	/**
-	 * 
-	 * @param menuName
-	 * @param menuDesc
-	 * @param menuPrice
-	 * @param menuType
-	 * 
-	 * 
-	 */
 	
-	MenuItem m = new MenuItem();
-	public void addFoodItem(String menuName, String menuDesc, double menuPrice, MenuItemType menuType) {
-		// TODO - implement MenuController.addFoodItem
-		throw new UnsupportedOperationException();
+	AlaCarte m = new AlaCarte();
+	
+	public void addFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
+		int last = m.getAllMenuItems().size();
+		int id = m.getAllMenuItems().get(last-1).getFoodId()+ 1;
+		
+		String foodItem = id + "," + menuName + "," + menuDesc +  "," +  menuPrice+ "," +menuType;
+		List l = new ArrayList();
+		l.add(foodItem);
+		m.saveFoodItem(l);
+		
 	}
 
 	/**
@@ -32,8 +32,13 @@ public class MenuController {
 		// TODO - implement MenuController.getFoodItem
 		throw new UnsupportedOperationException();
 	}
+	
+	public AlaCarte getFoodByName(String name) throws FileNotFoundException {
+		// TODO - implement MenuController.getFoodItem
+		return m.selectFoodByName(name);
+	}
 
-	public ArrayList<MenuItem> getAllFoodItem() throws FileNotFoundException {
+	public ArrayList<AlaCarte> getAllFoodItem() throws FileNotFoundException {
 		// TODO - implement MenuController.getAllFoodItem
 		return m.getAllMenuItems();
 	}
@@ -46,6 +51,10 @@ public class MenuController {
 	public void updateFoodItemName(int menuId, String menuName) {
 		// TODO - implement MenuController.updateFoodItemName
 		throw new UnsupportedOperationException();
+	}
+	
+	public void updateFoodItem(AlaCarte a) throws IOException {
+		m.updateFoodItem(a);
 	}
 
 	/**
@@ -71,10 +80,11 @@ public class MenuController {
 	/**
 	 * 
 	 * @param menuId
+	 * @throws IOException 
 	 */
-	public void deleteFoodItem(int menuId) {
+	public void deleteFoodItem(AlaCarte a) throws IOException {
 		// TODO - implement MenuController.deleteFoodItem
-		throw new UnsupportedOperationException();
+		m.deleteFoodItem(a);
 	}
 
 }

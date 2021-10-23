@@ -8,7 +8,7 @@ public class Order {
 	Customer customer;
 	Collection<OrderItem> orderitem;
 	Collection<SetPackage> setpack;
-	Collection<MenuItem> menuitem;
+	Collection<AlaCarte> menuitem;
 	Invoice invoice;
 	private int orderId;
 	private String timeStamp;

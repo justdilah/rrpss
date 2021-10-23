@@ -13,7 +13,7 @@ public class MainForm {
 		print();
 	}
 	
-	public static void print() throws FileNotFoundException
+	public static void print() throws IOException
 	{
 		MainController mc = new MainController();
 		
