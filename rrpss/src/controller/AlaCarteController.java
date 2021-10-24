@@ -9,7 +9,7 @@ import entity.AlaCarte;
 import entity.FoodType;
 
 
-public class MenuController {
+public class AlaCarteController {
 	
 	AlaCarte m = new AlaCarte();
 	

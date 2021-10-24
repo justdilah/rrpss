@@ -14,7 +14,7 @@ public class MainAppController {
 		mf.displayOption();
 	}
 	
-	public void getPromotionForm() {
+	public void getPromotionForm() throws IOException {
 		PromotionForm pf = new PromotionForm();
 		pf.displayOption(); 
 	}

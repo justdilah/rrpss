@@ -6,11 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import controller.MenuController;
+import controller.AlaCarteController;
 
 public class AlaCarteForm {
 		
-		MenuController mc = new MenuController();
+		AlaCarteController mc = new AlaCarteController();
 	
 		Scanner sc = new Scanner(System.in);
 
