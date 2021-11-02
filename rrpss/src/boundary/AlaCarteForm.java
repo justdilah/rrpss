@@ -14,7 +14,7 @@ public class AlaCarteForm {
 	
 		Scanner sc = new Scanner(System.in);
 
-		public void updateMenuItem() throws IOException {
+		private void updateMenuItem() throws IOException {
 			System.out.println("================================================");
 	        System.out.println("Select the Food Item you would like to update ");
 			System.out.println("================================================");
@@ -100,7 +100,7 @@ public class AlaCarteForm {
 
 		}
 		
-		public void setFoodName(AlaCarte c) throws IOException {
+		private void setFoodName(AlaCarte c) throws IOException {
 			System.out.println("Enter the new food item name");
 			Scanner scan = new Scanner(System.in);
 	        String name="";
@@ -108,7 +108,7 @@ public class AlaCarteForm {
 		    mc.updateFoodItemName(c, name);
 		}
 		
-		public void setFoodDesc(AlaCarte c) throws IOException {
+		private void setFoodDesc(AlaCarte c) throws IOException {
 			System.out.println("Enter the new food item description");
 			Scanner scan = new Scanner(System.in);
 	        String desc="";
@@ -118,7 +118,7 @@ public class AlaCarteForm {
 		}
 		
 		
-		public void deleteMenuItem() throws IOException {
+		private void deleteMenuItem() throws IOException {
 			System.out.println("================================================");
 	        System.out.println("Select the Food Item you would like to delete ");
 			System.out.println("================================================");
@@ -146,7 +146,7 @@ public class AlaCarteForm {
 			
 		}
 		
-		public FoodType foodTypeOptions() {
+		private FoodType foodTypeOptions() {
 			
 			System.out.println("Choose the food type");
 			System.out.println("1) Starters");
@@ -191,7 +191,7 @@ public class AlaCarteForm {
 		}
 	
 
-		public void insertMenuItem() throws IOException {
+		private void insertMenuItem() throws IOException {
 			System.out.println("==================================");
 			System.out.println("\t Add a food item");
 			System.out.println("==================================");
@@ -230,7 +230,7 @@ public class AlaCarteForm {
 			
 		}
 
-		public void displayMenu() throws IOException {
+		private void displayMenu() throws IOException {
 			System.out.println("==================================");
 			System.out.println("\t Menu ");
 			System.out.println("==================================");

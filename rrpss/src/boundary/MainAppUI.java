@@ -62,6 +62,7 @@ public class MainAppUI {
 					break;
 					
 				case 2: 
+					mc.getOrderForm();
 					break;
 					
 				case 3:

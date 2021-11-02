@@ -23,10 +23,6 @@ public class AlaCarteController {
 		m.saveFoodItem(l);
 		
 	}
-
-	public void getFoodItem(int menuId) {
-		throw new UnsupportedOperationException();
-	}
 	
 	public AlaCarte getFoodByName(String name) throws FileNotFoundException {
 		return m.selectFoodByName(name);
@@ -40,10 +36,6 @@ public class AlaCarteController {
 		a.setFoodName(n);;
 		m.updateFoodItem(a);
 	}
-	
-//	public void updateFoodItem(AlaCarte a) throws IOException {
-//		m.updateFoodItem(a);
-//	}
 
 	public void updateFoodItemDesc(AlaCarte a, String d) throws IOException {
 		a.setFoodDesc(d);

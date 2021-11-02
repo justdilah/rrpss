@@ -7,6 +7,15 @@ public class Person {
 	private String persAddress;
 	private String persPhoneNo;
 	private String persEmail;
+	
+	public Person() {
+		
+	}
+	
+	public Person(String name,String contact) {
+		this.persName = name;
+		this.persPhoneNo = contact;
+	}
 
 	public String getPersName() {
 		return this.persName;

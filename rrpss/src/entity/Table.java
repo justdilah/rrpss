@@ -4,16 +4,29 @@ import java.util.*;
 
 public class Table {
 
+	private static final String filename = "DataSet/Table.csv";
+	
 	private int tableNo;
 	private TableCapacity seatCapacity;
 	private TableStatus status;
 	Order order;
-	Collection<Reservation> reservation;
+	ArrayList<Reservation> reservation;
+	
 
+	
+	public Table(int no, TableCapacity seatCapacity, TableStatus ts,Order order, ArrayList<Reservation> reservation) {
+		this.tableNo = no;
+		this.seatCapacity = seatCapacity;
+		this.status = ts;
+		this.order = order;
+		this.reservation = reservation;
+	}
+	
 	public int getTableNo() {
 		return this.tableNo;
 	}
-
+	
+	
 	/**
 	 * 
 	 * @param tableNo

@@ -1,17 +1,18 @@
 package controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import boundary.AlaCarteForm;
+import boundary.OrderForm;
 import boundary.PromotionForm;
+import boundary.ReservationForm;
 
 public class MainAppController {
 	
 	// To navigate to different forms
 	public void getMenuForm() throws IOException {
-		AlaCarteForm mf = new AlaCarteForm();
-		mf.displayOption();
+		AlaCarteForm al = new AlaCarteForm();
+		al.displayOption();
 	}
 	
 	public void getPromotionForm() throws IOException {
@@ -19,10 +20,13 @@ public class MainAppController {
 		pf.displayOption(); 
 	}
 	
-	public void getOrderForm() {
+	public void getOrderForm() throws IOException {
+		OrderForm or = new OrderForm();
+		or.displayOption();
 	}
 	
 	public void getReservationForm() {
-		
+		ReservationForm r = new ReservationForm();
+		r.displayOption();
 	}
 }

@@ -55,7 +55,7 @@ public class PromotionForm {
 		}
 	}
 
-	public void insertPromotionItem() throws IOException {
+	private void insertPromotionItem() throws IOException {
 		System.out.println("Enter Promotion Set name: ");
 		Scanner scan = new Scanner(System.in);
 		String name="";
@@ -76,7 +76,7 @@ public class PromotionForm {
 		control.addPromotionSet(name, items, newdesc, price);
 	}
 	
-	public ArrayList<AlaCarte> selectAlaCarteItems() throws FileNotFoundException {
+	private ArrayList<AlaCarte> selectAlaCarteItems() throws FileNotFoundException {
 		
 		ArrayList<AlaCarte> alList = new ArrayList<>();
 		System.out.println("Select AlaCarte items to be added to Promotion Set: ");
@@ -106,7 +106,7 @@ public class PromotionForm {
 		return alList;
 	}
 
-	public void displayPromotionItem() throws IOException {
+	private void displayPromotionItem() throws IOException {
 	
 		
 		System.out.println("=================================");
@@ -149,7 +149,7 @@ public class PromotionForm {
 		
 	}
 
-	public void updatePromotionItem() throws FileNotFoundException {
+	private void updatePromotionItem() throws FileNotFoundException {
 		System.out.println("================================================");
         System.out.println("Select the Promotion Set you would like to update ");
 		System.out.println("================================================");
@@ -243,7 +243,7 @@ public class PromotionForm {
 	}
 	
 	//NEED TO CHECK IF IT IS LEFT WITH 1, WONT ALLOW
-	public ArrayList<AlaCarte> selectPromotionItemOptions(PromotionSet p) throws FileNotFoundException {
+	private ArrayList<AlaCarte> selectPromotionItemOptions(PromotionSet p) throws FileNotFoundException {
 		ArrayList<AlaCarte> alList = p.getPackItem();
 		
 		System.out.println("=================================");
@@ -294,7 +294,7 @@ public class PromotionForm {
 		
 	}
 
-	public void deletePromotionItem() throws IOException {
+	private void deletePromotionItem() throws IOException {
 		
 		System.out.println("================================================");
         System.out.println("Select the Promotion Set you would like to delete ");

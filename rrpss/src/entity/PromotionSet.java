@@ -120,6 +120,7 @@ public class PromotionSet {
 	}
 	
 	
+	// RETRIEVE THE PROMOTION SET ITEMS
 	public ArrayList<PromotionSet> getAllPromotionItems() throws FileNotFoundException {
 		ArrayList<PromotionSet> psList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
@@ -206,8 +207,8 @@ public class PromotionSet {
 	}
 	
 	//REPLACE THE ENTIRE CSV FILE 
-		public void replaceAll(List list) throws IOException {
-			StoreController.replace(filename, list);
-		}
+	private void replaceAll(List list) throws IOException {
+		StoreController.replace(filename, list);
+	}
 
 }

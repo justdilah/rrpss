@@ -30,8 +30,7 @@ public class StoreController {
 	}
 	
 	public static void write(String filename, List data) throws IOException {
-//		PrintWriter out = new PrintWriter(new FileWriter(filename));
-		BufferedWriter out = new BufferedWriter(new FileWriter(filename, true));
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
 			for (int i = 0; i < data.size(); i++) {
 				
@@ -54,4 +53,5 @@ public class StoreController {
 			out.close();
 		}
 	}
+
 }

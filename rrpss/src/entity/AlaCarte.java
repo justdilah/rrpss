@@ -11,6 +11,7 @@ import java.util.*;
 import controller.StoreController;
 
 public class AlaCarte {
+	
 	private static final String filename = "DataSet/AlaCarte.csv";
 	Collection<Order> order;
 	Collection<SetPackage> setpack;
@@ -36,10 +37,6 @@ public class AlaCarte {
 		return this.foodId;
 	}
 
-	/**
-	 * 
-	 * @param foodId
-	 */
 	public void setFoodId(int foodId) {
 		this.foodId = foodId;
 	}
@@ -60,10 +57,6 @@ public class AlaCarte {
 		return this.foodDesc;
 	}
 
-	/**
-	 * 
-	 * @param foodDesc
-	 */
 	public void setFoodDesc(String foodDesc) {
 		this.foodDesc = foodDesc;
 	}
@@ -72,10 +65,6 @@ public class AlaCarte {
 		return this.foodPrice;
 	}
 
-	/**
-	 * 
-	 * @param foodPrice
-	 */
 	public void setFoodPrice(Double foodPrice) {
 		this.foodPrice = foodPrice;
 	}
@@ -84,10 +73,6 @@ public class AlaCarte {
 		return this.foodType;
 	}
 
-	/**
-	 * 
-	 * @param foodType
-	 */
 	public void setFoodType(FoodType foodType) {
 		this.foodType = foodType;
 	}
@@ -131,6 +116,7 @@ public class AlaCarte {
 		StoreController.write(filename, list);
 	}
 	
+	//FOR DELETE
 	public void deleteFoodItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllMenuItems();
@@ -145,7 +131,7 @@ public class AlaCarte {
 				l.add(foodItem);
 			}
 		}
-		replaceAll(l);
+		StoreController.replace(filename, l);
 	}
 	
 	//FOR UPDATE 
@@ -166,13 +152,6 @@ public class AlaCarte {
 			l.add(foodItem);
 		}
 		
-		replaceAll(l);		
+		StoreController.replace(filename, l);	
 	}
-	
-	//REPLACE THE ENTIRE CSV FILE 
-		public void replaceAll(List list) throws IOException {
-			StoreController.replace(filename, list);
-		}
-	
-
 }
