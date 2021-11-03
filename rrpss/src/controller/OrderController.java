@@ -28,7 +28,7 @@ public class OrderController {
 		o.addAlaCarteOrderItemtoList(id, a, qty);
 	}
 	
-	public void setStaffID(int id) {
+	public void setStaffID(String id) {
 		o.setStaffId(id);
 	}
 	
@@ -75,9 +75,9 @@ public class OrderController {
 		throw new UnsupportedOperationException();
 	}
 
-	public void getAllOrder() {
+	public ArrayList<Order> getAllOrders() throws FileNotFoundException {
 		// TODO - implement OrderController.getAllOrder
-		throw new UnsupportedOperationException();
+		return o.getAllOrders();
 	}
 
 	/**

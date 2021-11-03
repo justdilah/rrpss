@@ -21,7 +21,6 @@ public class OrderForm {
 	Scanner sc = new Scanner(System.in);
 
 	public void displayOption() throws IOException {
-		// TODO - implement OrderForm.displayOption
 		System.out.println("=================================");
         System.out.println("\t Order Options ");
 		System.out.println("=================================");
@@ -65,7 +64,7 @@ public class OrderForm {
 		}while(choice > 4 || choice < 1);
 	}
 
-	public void insertOrder() throws IOException {
+	private void insertOrder() throws IOException {
 		System.out.println("=================================");
         System.out.println("\t Creating an Order ");
 		System.out.println("=================================");
@@ -126,10 +125,6 @@ public class OrderForm {
 				
 			}
 			
-			
-			
-			
-			
 			if(c <= al.getAllFoodItem().size()) {
 				names.add(al.getAllFoodItem().get(c-1).getFoodName());
 				or.addAlaCarteOrderItem(++counter,al.getAllFoodItem().get(c-1), qty);
@@ -153,7 +148,7 @@ public class OrderForm {
 		}
 		
 		System.out.println("Please enter your Staff ID");
-		int id = sc.nextInt();
+		String id = sc.next();
 		or.setStaffID(id);
 		
 		or.setTimeStamp(LocalTime.now());
@@ -172,49 +167,48 @@ public class OrderForm {
 		
 		
 	}
-	
-	public void showPromotionSets() {
-		
-	}
 
-	public void displayOrder() {
-		// TODO - implement OrderForm.displayOrder
-		throw new UnsupportedOperationException();
+	private void displayOrder() throws FileNotFoundException {
+			System.out.println("=========================================================");
+			System.out.println("\tOrders!");
+	    	System.out.println("=========================================================");
+	    	
+			for(int i = 0;i<or.getAllOrders().size();i++) {
+				double totalPrice = 0;
+				System.out.println("Order ID : " + or.getAllOrders().get(i).getOrderId());
+				System.out.println("Time Ordered : " + or.getAllOrders().get(i).getTimeStamp());
+				System.out.println("Payment Completed? : " + or.getAllOrders().get(i).getIsPaid());
+				System.out.println("Staff ID : " + or.getAllOrders().get(i).getStaffId());
+				for(int k=0;k<or.getAllOrders().get(i).getOrderItemList().size();k++) {
+					System.out.print(or.getAllOrders().get(i).getOrderItemList().get(k).getOrderItemName() + " ");
+					System.out.print(or.getAllOrders().get(i).getOrderItemList().get(k).getOrderItemQty());
+					totalPrice+= or.getAllOrders().get(i).getOrderItemList().get(k).getOrderItemPrice();
+				}
+				System.out.println("Total Price : " + totalPrice);
+			}
 	}
 
 	public void updateOrder() {
-		// TODO - implement OrderForm.updateOrder
-		throw new UnsupportedOperationException();
+		
 	}
 
-	public void deleteOrder() {
+	private void deleteOrder() {
 		System.out.println("================================================");
         System.out.println("Select the Order you would like to delete ");
 		System.out.println("================================================");
-//		for(int i=0;i< mc.getAllFoodItem().size() ; i++ ) {
-//			System.out.print(i+1 + ") ");
-//			System.out.print(mc.getAllFoodItem().get(i).getFoodName() + " $");
-//			System.out.print(mc.getAllFoodItem().get(i).getFoodPrice());
-//			System.out.println("");
-//		};
 		System.out.print("Please enter your choice: ");
 		int choice = sc.nextInt();
 		try {
-//			AlaCarte c = mc.getFoodByName(mc.getAllFoodItem().get(choice-1).getFoodName());
-//			mc.deleteFoodItem(c);
 			System.out.println("==================================");
-			System.out.println("Food item deleted successfully");
+			System.out.println("Order deleted successfully");
 			System.out.println("==================================");
+			
 			displayOption();
 		} catch (Exception ex) {
 			System.out.println("==================================");
 			System.out.println("Unsuccessful. Please try again");
 			System.out.println("==================================");
-//			deleteMenuItem();
 		}
-		// TODO - implement OrderForm.deleteOrder
-//		throw new UnsupportedOperationException();
-		
 	}
 
 }

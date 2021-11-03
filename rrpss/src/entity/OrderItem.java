@@ -18,9 +18,15 @@ public class OrderItem {
 	PromotionSet promoitem;
 	AlaCarte food;
 	
+	public OrderItem() {
+		
+	}
+	
 	public OrderItem(int orderItemId,PromotionSet a, int qty) {
 		this.orderItemId = orderItemId;
+		System.out.println(a.getPackName());
 		this.orderItemName = a.getPackName();
+		
 		this.promoitem = a;
 		this.orderItemQty = qty;
 		this.orderItemPrice = a.getPackPrice() * qty;
@@ -82,25 +88,42 @@ public class OrderItem {
 		this.orderItemPrice = orderItemPrice;
 	}
 	
-	public void getAllOrderItems(int orderId) {
-//		ArrayList<PromotionSet> psList= new ArrayList<>();
-//		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
-//		
-//		for (int i = 0; i < stringitems.size(); i++) {
-//			String st = (String) stringitems.get(i);
-//			StringTokenizer star = new StringTokenizer(st, ",");
-//			String id = star.nextToken().trim();
-//			String name = star.nextToken().trim();
-//			String items = star.nextToken().trim();
-//			String[] pi = items.split("@");
-//			packItems = addAlaCarteItems(pi);
-//			String desc = star.nextToken().trim();
-//			String newdesc = desc.replace('/', ',');
-//			String price = star.nextToken().trim();
-//			PromotionSet m = new PromotionSet(Integer.parseInt(id),name,packItems,newdesc,Double.valueOf(price));
-//			psList.add(m);
-//		}
-//		return psList;
+	
+	// GET ALL THE ORDER ITEMS BASED ON THAT ORDER
+	public ArrayList<OrderItem> getAllOrderItems(int id) throws FileNotFoundException {
+		PromotionSet p = new PromotionSet();
+		AlaCarte a = new AlaCarte();
+		OrderItem m;
+		ArrayList<OrderItem> itemList= new ArrayList<>();
+		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
+		
+		for (int i = 0; i < stringitems.size(); i++) {
+			String st = (String) stringitems.get(i);
+			StringTokenizer star = new StringTokenizer(st, ",");
+			String sequenceid = star.nextToken().trim();
+			String name = star.nextToken().trim();
+			String qty = star.nextToken().trim();
+			String totalPrice = star.nextToken().trim();
+			String orderId = star.nextToken().trim();
+			
+			if(Integer.parseInt(orderId) == id) {
+			
+				if(a.selectFoodByName(name)!= null) {
+					
+					AlaCarte al = a.selectFoodByName(name);					
+					a = a.selectFoodByName(name); 
+					m = new OrderItem(id,al,Integer.parseInt(qty));
+				} else {
+					p = p.selectPromotionSetByName(name);
+					m = new OrderItem(id,p,Integer.parseInt(qty));
+						
+				}
+				itemList.add(m);
+				
+			}
+		
+		}
+		return itemList;
 		
 	}
 	

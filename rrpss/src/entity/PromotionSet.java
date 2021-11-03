@@ -1,10 +1,11 @@
 package entity;
 
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-
-import controller.StoreController;
 
 public class PromotionSet {
 	
@@ -15,7 +16,7 @@ public class PromotionSet {
 	private Double packPrice;
 	private ArrayList<AlaCarte> packItems;
 	private String packDesc;
-	Collection<OrderItem> orderitem;
+//	Collection<OrderItem> orderitem;
 	
 	public PromotionSet() {
 	
@@ -88,8 +89,19 @@ public class PromotionSet {
 	 * 
 	 * @param packDesc
 	 */
+	
 	public void setPackDesc(String packDesc) {
 		this.packDesc = packDesc;
+	}
+	
+	public PromotionSet selectItemById(int id) throws FileNotFoundException {	
+		PromotionSet p = null;
+		for(int i=0;i<getAllPromotionItems().size();i++) {
+			if(getAllPromotionItems().get(i).getPackId() == id) {
+				p = getAllPromotionItems().get(i);
+			}
+		}
+		return p;
 	}
 	
 	public PromotionSet selectPromotionSetByName(String n) throws FileNotFoundException {	
@@ -103,11 +115,28 @@ public class PromotionSet {
 		return a;
 	}
 	
-	public void saveFoodItem(List list) throws IOException {
-		StoreController.write(filename, list);
+	//SAVES THE ITEM TO CSV
+	public void savePromotionSetItem(String name, ArrayList<AlaCarte> pslist, String desc, double p) throws IOException {
+		int last = getAllPromotionItems().size();
+		int id = getAllPromotionItems().get(last-1).getPackId()+ 1;
+		String packitems ="";
+		for(int i=0;i<pslist.size();i++) {
+			System.out.println(pslist.get(i).getFoodName());
+			if(i == pslist.size()-1) {
+				packitems += pslist.get(i).getFoodName();
+			} else {
+				packitems += pslist.get(i).getFoodName() + "@";
+			}	
+		}
+		
+		String item = id + "," + name + "," + packitems + "," + desc +  "," +  p;
+		List l = new ArrayList();
+		l.add(item);
+		write(filename, l);
 	}
 	
-	public ArrayList<AlaCarte> addAlaCarteItems(String[] n) throws FileNotFoundException {
+	//ADD ALACARTE ITEMS INTO A PROMOTION SET
+	private ArrayList<AlaCarte> addAlaCarteItems(String[] n) throws FileNotFoundException {
 		ArrayList<AlaCarte> al = new ArrayList<>();
 		AlaCarte a = new AlaCarte();
 		
@@ -123,7 +152,7 @@ public class PromotionSet {
 	// RETRIEVE THE PROMOTION SET ITEMS
 	public ArrayList<PromotionSet> getAllPromotionItems() throws FileNotFoundException {
 		ArrayList<PromotionSet> psList= new ArrayList<>();
-		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
+		ArrayList stringitems = (ArrayList) read(filename); 	
 		
 		for (int i = 0; i < stringitems.size(); i++) {
 			String st = (String) stringitems.get(i);
@@ -143,8 +172,8 @@ public class PromotionSet {
 	}
 	
 	
-	//FOR UPDATE 
-	public void updateFoodItem(PromotionSet a) throws IOException {
+	//FOR UPDATE
+	public void updatePromotionSet(PromotionSet a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<PromotionSet> miList = getAllPromotionItems();
 		
@@ -155,9 +184,7 @@ public class PromotionSet {
 				miList.set(i, a);
 				System.out.println(a.getPackName());
 			}
-			
-			
-					
+		
 			PromotionSet k = miList.get(i);
 			
 			String packitems ="";
@@ -176,6 +203,7 @@ public class PromotionSet {
 		replaceAll(l);		
 	}
 	
+	//DELETE THE PROMOTION SET
 	public void deletePromotionSet(PromotionSet a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<PromotionSet> miList = getAllPromotionItems();
@@ -208,7 +236,46 @@ public class PromotionSet {
 	
 	//REPLACE THE ENTIRE CSV FILE 
 	private void replaceAll(List list) throws IOException {
-		StoreController.replace(filename, list);
+		replace(filename, list);
+	}
+	
+	//READ AND WRITE TO CSV
+	private List read(String filename) throws FileNotFoundException {
+		List data = new ArrayList();
+		Scanner scanner = new Scanner(new FileInputStream(filename));
+		try {
+			while (scanner.hasNextLine()) {
+				data.add(scanner.nextLine());
+			}
+		} finally {
+			scanner.close();
+		}
+		return data;
+	}
+	
+	private void write(String filename, List data) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i)+"\n");
+			}
+		} finally {
+			out.close();
+		}
+	}
+	
+	private void replace(String filename, List data) throws IOException {
+		
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i) + "\n");
+			}
+		} finally {
+			out.close();
+		}
 	}
 
 }

@@ -70,9 +70,7 @@ public class PromotionForm {
 		desc+=can.nextLine();
 		String newdesc = desc.replace(',', '/');
 		System.out.println("enter item price: ");
-		price = sc.nextDouble();
-//		
-//		
+		price = sc.nextDouble();	
 		control.addPromotionSet(name, items, newdesc, price);
 	}
 	
@@ -236,9 +234,7 @@ public class PromotionForm {
 				updatePromotionItem();
 			}
 			
-		}while(choice > 5 || choice < 1);
-//		control.updatePromoItemName(name, desc,p);
-		
+		}while(choice > 5 || choice < 1);		
 		
 	}
 	
@@ -296,9 +292,9 @@ public class PromotionForm {
 
 	private void deletePromotionItem() throws IOException {
 		
-		System.out.println("================================================");
+		System.out.println("==================================================");
         System.out.println("Select the Promotion Set you would like to delete ");
-		System.out.println("================================================");
+		System.out.println("==================================================");
 		
 		for(int i=0;i< control.getAllPromotionSets().size() ; i++ ) {
 			System.out.print(i+1 + ") ");
@@ -308,7 +304,6 @@ public class PromotionForm {
 		
 		int option = 0;
 		do {
-			
 			System.out.print("Please enter your choice: ");		
 			option = sc.nextInt();
 			

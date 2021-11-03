@@ -14,14 +14,7 @@ public class AlaCarteController {
 	AlaCarte m = new AlaCarte();
 	
 	public void addFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
-		int last = m.getAllMenuItems().size();
-		int id = m.getAllMenuItems().get(last-1).getFoodId()+ 1;
-		String newft = menuType.toString().replace("_"," ");
-		String foodItem = id + "," + menuName + "," + menuDesc +  "," +  menuPrice+ "," +newft;
-		List l = new ArrayList();
-		l.add(foodItem);
-		m.saveFoodItem(l);
-		
+		m.saveFoodItem(menuName, menuDesc, menuPrice, menuType);
 	}
 	
 	public AlaCarte getFoodByName(String name) throws FileNotFoundException {

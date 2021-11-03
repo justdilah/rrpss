@@ -8,13 +8,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-import controller.StoreController;
-
 public class AlaCarte {
 	
 	private static final String filename = "DataSet/AlaCarte.csv";
-	Collection<Order> order;
-	Collection<SetPackage> setpack;
+//	Collection<Order> order;
+//	Collection<SetPackage> setpack;
 	private int foodId;
 	private String foodName;
 	private String foodDesc;
@@ -77,6 +75,16 @@ public class AlaCarte {
 		this.foodType = foodType;
 	}
 	
+	public AlaCarte selectItemById(int id) throws FileNotFoundException {	
+		AlaCarte a = null;
+		for(int i=0;i<getAllMenuItems().size();i++) {
+			if(getAllMenuItems().get(i).getFoodId() == id) {
+				a = getAllMenuItems().get(i);
+			}
+		}
+		return a;
+	}
+	
 	public AlaCarte selectFoodByName(String n) throws FileNotFoundException {	
 		AlaCarte a = null;
 		for(int i=0;i<getAllMenuItems().size();i++) {
@@ -92,7 +100,7 @@ public class AlaCarte {
 	// EXTRACT OUT FROM CSV FILE
 	public ArrayList<AlaCarte> getAllMenuItems() throws FileNotFoundException {
 		ArrayList<AlaCarte> miList= new ArrayList<>();
-		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
+		ArrayList stringitems = (ArrayList) read(filename); 	
 		
 		for (int i = 0; i < stringitems.size(); i++) {
 			String st = (String) stringitems.get(i);
@@ -111,9 +119,17 @@ public class AlaCarte {
 	}
 	
 	
+	
+	
 	//ADDING TO CSV FILE 
-	public void saveFoodItem(List list) throws IOException {
-		StoreController.write(filename, list);
+	public void saveFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
+		int last = getAllMenuItems().size();
+		int id = getAllMenuItems().get(last-1).getFoodId()+ 1;
+		String newft = menuType.toString().replace("_"," ");
+		String foodItem = id + "," + menuName + "," + menuDesc +  "," +  menuPrice+ "," +newft;
+		List l = new ArrayList();
+		l.add(foodItem);
+		write(filename, l);
 	}
 	
 	//FOR DELETE
@@ -131,7 +147,7 @@ public class AlaCarte {
 				l.add(foodItem);
 			}
 		}
-		StoreController.replace(filename, l);
+		replace(filename, l);
 	}
 	
 	//FOR UPDATE 
@@ -152,6 +168,45 @@ public class AlaCarte {
 			l.add(foodItem);
 		}
 		
-		StoreController.replace(filename, l);	
+		replace(filename, l);	
+	}
+	
+	//READ AND WRITE TO CSV
+	private List read(String filename) throws FileNotFoundException {
+		List data = new ArrayList();
+		Scanner scanner = new Scanner(new FileInputStream(filename));
+		try {
+			while (scanner.hasNextLine()) {
+				data.add(scanner.nextLine());
+			}
+		} finally {
+			scanner.close();
+		}
+		return data;
+	}
+	
+	private void write(String filename, List data) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i)+"\n");
+			}
+		} finally {
+			out.close();
+		}
+	}
+	
+	private void replace(String filename, List data) throws IOException {
+		
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i) + "\n");
+			}
+		} finally {
+			out.close();
+		}
 	}
 }
