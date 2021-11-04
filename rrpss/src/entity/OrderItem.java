@@ -1,12 +1,13 @@
 package entity;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-
-import controller.StoreController;
 
 public class OrderItem {
 	
@@ -117,7 +118,7 @@ public class OrderItem {
 	}
 	
 	// SELECT ORDER ITEM BY ORDER ITEM ID 
-	public OrderItem selectOrderItemById(int orderId,int orderItemId) throws FileNotFoundException {
+	public OrderItem selectOrderItemById(int orderId,int orderItemId) throws IOException {
 		OrderItem c = null;
 		
 		for(int i=0; i<getOrderItems(orderId).size();i++) {
@@ -130,12 +131,12 @@ public class OrderItem {
 	
 	
 	// GET ALL THE ORDER ITEMS BASED ON THAT ORDER
-	public ArrayList<OrderItem> getOrderItems(int id) throws FileNotFoundException {
+	public ArrayList<OrderItem> getOrderItems(int id) throws IOException {
 		PromotionSet p = new PromotionSet();
 		AlaCarte a = new AlaCarte();
 		OrderItem m;
 		ArrayList<OrderItem> itemList= new ArrayList<>();
-		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
+		ArrayList stringitems = (ArrayList) read(filename); 	
 		
 		for (int i = 0; i < stringitems.size(); i++) {
 			String st = (String) stringitems.get(i);
@@ -167,12 +168,12 @@ public class OrderItem {
 	}
 	
 	// GET ALL THE ORDER ITEMS
-	public ArrayList<OrderItem> getAllOrderItems() throws FileNotFoundException {
+	public ArrayList<OrderItem> getAllOrderItems() throws IOException {
 		PromotionSet p = new PromotionSet();
 		AlaCarte a = new AlaCarte();
 		OrderItem m;
 		ArrayList<OrderItem> itemList= new ArrayList<>();
-		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
+		ArrayList stringitems = (ArrayList) read(filename); 	
 		
 		for (int i = 0; i < stringitems.size(); i++) {
 			String st = (String) stringitems.get(i);
@@ -267,7 +268,7 @@ public class OrderItem {
 	}
 	
 	public void saveFoodItem(List list) throws IOException {
-		StoreController.write(filename, list);
+		write(filename, list);
 	}
 
 	
@@ -275,9 +276,38 @@ public class OrderItem {
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
+			out.write("SequenceID" + "," + "OrderItemName" + "," + "Qty" + "," + "Price" + "," + "OrderID" + "\n");
 			for (int i = 0; i < data.size(); i++) {
 				
 				out.write((String) data.get(i) + "\n");
+			}
+		} finally {
+			out.close();
+		}
+	}
+	
+	private List read(String filename) throws IOException {
+		List data = new ArrayList();
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String headerLine = reader.readLine();
+		String line;
+		try {
+			while ((line = reader.readLine()) != null) {
+				data.add(line);
+			}
+		} finally {
+			reader.close();
+		}
+		return data;
+	}
+	
+	private void write(String filename, List data) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
+
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i)+"\n");
 			}
 		} finally {
 			out.close();

@@ -1,6 +1,9 @@
 package boundary;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -63,45 +66,59 @@ public class OrderForm {
 			} 
 		}while(choice > 4 || choice < 1);
 	}
+	
+	public boolean isFileEmpty(File file) {
+	    return file.length() == 1;
+	}
 
 	//CREATE ORDER
 	private void insertOrder() throws IOException {
-		try {
+//		try {
 			System.out.println("=================================");
 	        System.out.println("\t Create Order ");
 			System.out.println("=================================");
 			
 			System.out.println("Please enter Table Number: ");
-			String tableNo = sc.next();
+			int tableNo = sc.nextInt();
 			
-			insertOrderItems(or.getAllOrders().size()+1, 0);
+			int index = 1;
+			
+			File newFile = new File("DataSet/Order.csv");
+			BufferedReader reader = new BufferedReader(new FileReader("DataSet/Order.csv"));
+			int counter = 0;
+			
+			while(reader.readLine()!=null) {
+				counter++;
+			}
+			
+			System.out.println(counter);
+			
+			if (counter == 1) { 
+				insertOrderItems(index, 0);
+			} else {
+				index = or.getAllOrders().size() + 1;
+				insertOrderItems(index, 0);
+			}
+					
 			
 			System.out.println("Please enter your Staff ID: ");
-			String id = sc.next();
-			or.setStaffID(id);
-			
-			or.setTimeStamp(LocalTime.now());
-			
-			or.setisPaid(false);
-			
-			or.setOrderId(or.getAllOrders().size()+1);
+			String staffid = sc.next();
 			
 			System.out.println("Please enter Customer Phone Number: ");
-			Scanner scan = new Scanner(System.in);
-			String pn = "";
-			pn+=scan.nextLine();	
-			or.addOrder(pn);
+			String phoneNum = sc.next();
+			
+			or.addOrder(index, LocalTime.now(), Integer.parseInt(staffid), false, phoneNum, tableNo);
 			
 			System.out.println("==================================");
-			System.out.println("Order deleted successfully");
+			System.out.println("Order added successfully");
 			System.out.println("==================================");
-			
-		} catch (Exception ex) {
-			System.out.println("==================================");
-			System.out.println("Unsuccessful. Please try again");
-			System.out.println("==================================");
-			insertOrder();
-		}	
+//			
+//		} catch (Exception ex) {
+//			System.out.println("==================================");
+//			System.out.println("Unsuccessful. Please try again");
+//			System.out.println("==================================");
+//			insertOrder();
+//		}	
 	}
 	
 	//INSERT ORDER ITEMS TO THE ORDER
@@ -126,26 +143,24 @@ public class OrderForm {
 		System.out.println("=================================");
 
 		for(int i=0;i<promotionSetItems.size();i++) {
-			System.out.print(promotionSetItems.size() + 1 + i+ ") "  +  promotionSetItems.get(i).getPackName());
+			System.out.print(alaCarteItems.size() + 1 + i+ ") "  +  promotionSetItems.get(i).getPackName());
 			System.out.println("");
 		}
 		
 		ArrayList<String> names = new ArrayList<>();
 		
 		System.out.println("Please enter your choice: ");
-		String c = sc.next();
+		int c = sc.nextInt();
 		
 		System.out.print("Enter the qty: ");
 		int qty = sc.nextInt();
 		
-		int choice = Integer.parseInt(c);
-		
-		if(choice <= alaCarteItems.size()) {
-			AlaCarte a = alaCarteItems.get(choice-1);
+		if(c <= alaCarteItems.size()) {
+			AlaCarte a = alaCarteItems.get(c-1);
 			names.add(a.getFoodName());
 			or.addAlaCarteOrderItem(++counter,a, qty, orderId);
 		} else {
-			PromotionSet p = promotionSetItems.get(choice-1-alaCarteItems.size());
+			PromotionSet p = promotionSetItems.get(c-1-alaCarteItems.size());
 			names.add(p.getPackName());
 			or.addPromoOrderItem(++counter,p, qty, orderId);
 		}
@@ -159,13 +174,13 @@ public class OrderForm {
 		
 		while(true) {
 			System.out.println("====================================");
-			System.out.println("Please enter # to complete the order");
+			System.out.println("Please enter 100 to complete the order");
 			System.out.println("====================================");
 			
 			System.out.println("Please enter your choice: ");
-			c = sc.next();
+			c = sc.nextInt();
 			
-			if(c.equals('#')) {
+			if(c == 100) {
 				
 				break;
 				
@@ -176,14 +191,14 @@ public class OrderForm {
 				
 			}
 			
-			choice = Integer.parseInt(c);
+	
 			
-			if(choice <= alaCarteItems.size()) {
-				names.add(alaCarteItems.get(choice-1).getFoodName());
-				or.addAlaCarteOrderItem(++counter,alaCarteItems.get(choice-1), qty, orderId);
+			if(c <= alaCarteItems.size()) {
+				names.add(alaCarteItems.get(c-1).getFoodName());
+				or.addAlaCarteOrderItem(++counter,alaCarteItems.get(c-1), qty, orderId);
 			} else {
-				names.add(promotionSetItems.get(choice-1-alaCarteItems.size()).getPackName());
-				or.addPromoOrderItem(++counter,promotionSetItems.get(choice-1-alaCarteItems.size()), qty, orderId);
+				names.add(promotionSetItems.get(c-1-alaCarteItems.size()).getPackName());
+				or.addPromoOrderItem(++counter,promotionSetItems.get(c-1-alaCarteItems.size()), qty, orderId);
 			}
 				
 			System.out.println("=================================");
@@ -196,7 +211,7 @@ public class OrderForm {
 	}
 
 	//VIEW ORDERS
-	private void displayOrder() throws FileNotFoundException {
+	private void displayOrder() throws IOException {
 			System.out.println("=========================================================");
 			System.out.println("\tDisplay Orders");
 	    	System.out.println("=========================================================");
@@ -236,18 +251,18 @@ public class OrderForm {
 		System.out.print("Please enter your choice: ");
 		
 		int choice = sc.nextInt();
-		try {			
+//		try {			
 			updateOptions(or.getAllOrders().get(choice-1));
 			System.out.println("==================================");
 			System.out.println("Order updated successfully");
 			System.out.println("==================================");
 			
 			displayOption();
-		} catch (Exception ex) {
-			System.out.println("==================================");
-			System.out.println("Unsuccessful. Please try again");
-			System.out.println("==================================");
-		}
+//		} catch (Exception ex) {
+//			System.out.println("==================================");
+//			System.out.println("Unsuccessful. Please try again");
+//			System.out.println("==================================");
+//		}
 	}
 	
 	
@@ -264,7 +279,9 @@ public class OrderForm {
 
 		switch(choice) {
 			case 1:
+				System.out.println(o.getOrderItemList().size());
 				addOrderItem(o,o.getOrderItemList().size());
+				
 				break;
 			case 2:				
 				deleteOrderItem(o);
@@ -280,8 +297,6 @@ public class OrderForm {
 		System.out.println("Select the order item to be added");
 		System.out.println("===================================");
 		insertOrderItems(o.getOrderId(),counter);
-		System.out.print("Please enter your choice: ");
-		int choice = sc.nextInt();
 		
 	}
 	

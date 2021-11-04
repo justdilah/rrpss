@@ -16,9 +16,11 @@ public class OrderController {
 	
 	Order o = new Order();
 	
-	public void addOrder(int orderId, String timeStamp, int staffId, Boolean isPaid) {
-		// TODO - implement OrderController.addOrder
-		throw new UnsupportedOperationException();
+	public void addOrder(int orderId, LocalTime timeStamp, int staffId, Boolean isPaid, String custPhoneNum, int tableNo) throws IOException {
+		String foodItem = orderId + "," + timeStamp +  "," +  staffId + "," + isPaid + "," + o.getCustIDByPhoneNum(custPhoneNum) + "," +  tableNo;
+		List l = new ArrayList();
+		l.add(foodItem);
+		o.saveOrder(l);
 	}
 		
 	public void addPromoOrderItem(int id, PromotionSet i, int qty, int orderId) throws IOException {
@@ -49,18 +51,27 @@ public class OrderController {
 		return o.getOrderId();
 	}
 	
-	public void addOrder(String pn) throws IOException {
-		String foodItem = o.getOrderId() + "," + o.getTimeStamp() +  "," +  o.getStaffId() + "," + o.getIsPaid() + "," + o.getCustIDByPhoneNum(pn);
-		List l = new ArrayList();
-		l.add(foodItem);
-		o.saveOrder(l);
+	public int getTableId() {
+		return o.getTable().getTableNo();
 	}
+	
+	public void setTableId(int id) {
+//		o.setTableId(id);
+	}
+	
+//	public void addOrder(String pn) throws IOException {
+//		String foodItem = o.getOrderId() + "," + o.getTimeStamp() +  "," +  o.getStaffId() + "," + o.getIsPaid() + "," + o.getCustIDByPhoneNum(pn);
+//		List l = new ArrayList();
+//		l.add(foodItem);
+//		o.saveOrder(l);
+//	}
 
 	/**
 	 *     
 	 * @param orderId
+	 * @throws IOException 
 	 */
-	public ArrayList<Order> getAllOrders() throws FileNotFoundException {
+	public ArrayList<Order> getAllOrders() throws IOException {
 		return o.getAllOrders();
 	}
 	

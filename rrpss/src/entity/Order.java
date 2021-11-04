@@ -1,8 +1,10 @@
 package entity;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -103,6 +105,7 @@ public class Order {
 		return this.orderItemList;
 	}
 	
+	
 	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,i,qty,orderId);
 		o.addOrderItem(orderId);
@@ -113,22 +116,25 @@ public class Order {
 		o.addOrderItem(orderId);
 	}
 	
+	// RETURN PROMOTION SET ITEMS
 	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
 		OrderItem o = new OrderItem();
 		return o.getAllPromoSets();
 	}
 	
+	// RETURN ALA CARTE ITEMS
 	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
 		OrderItem o = new OrderItem();
 		return o.getAllAlaCartItems();
 	}
+	
 	
 	public void removeOrderItemFromList(int orderId, OrderItem o) throws IOException {
 		OrderItem i = new OrderItem();
 		i.removeOrderItem(orderId,o.getOrderItemId());
 	}
 	
-	public Order selectOrderById(int id) throws FileNotFoundException {
+	public Order selectOrderById(int id) throws IOException {
 		Order o = null;
 		
 		for(int i=0; i<getAllOrders().size();i++) {
@@ -179,28 +185,30 @@ public class Order {
 	}
 	
 	// REMOVE ORDER ITEM FROM THE ORDER ITEM LIST
-	public void removeOrderItem(int orderId, int orderItemId) throws FileNotFoundException {
+	public void removeOrderItem(int orderId, int orderItemId) throws IOException {
 		ArrayList<OrderItem> orderItemList = selectOrderById(orderId).getOrderItemList();
 		orderItemList.remove(selectOrderItemById(orderItemId));
 	}
 
 	// GET ALL THE ORDERS
-	public ArrayList<Order> getAllOrders() throws FileNotFoundException {
+	public ArrayList<Order> getAllOrders() throws IOException {
 		ArrayList<Order> psList= new ArrayList<>();
-		ArrayList stringitems = (ArrayList) read(filename); 	
-		OrderItem o = new OrderItem();
-		Customer c = new Customer();
-		for (int i = 0; i < stringitems.size(); i++) {
-			String st = (String) stringitems.get(i);
-			StringTokenizer star = new StringTokenizer(st, ",");
-			String orderId = star.nextToken().trim();
-			String timeOrdered = star.nextToken().trim();
-			String staffId = star.nextToken().trim();
-			String isPaid = star.nextToken().trim();	
-			String custid = star.nextToken().trim(); 
-			Order m = new Order(Integer.parseInt(orderId),LocalTime.now(), Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)));
-			m.setOrderItemList(o.getOrderItems(Integer.parseInt(orderId)));
-			psList.add(m);
+		ArrayList stringitems = (ArrayList) read(filename);
+		if(stringitems != null) {
+			OrderItem o = new OrderItem();
+			Customer c = new Customer();
+			for (int i = 0; i < stringitems.size(); i++) {
+				String st = (String) stringitems.get(i);
+				StringTokenizer star = new StringTokenizer(st, ",");
+				String orderId = star.nextToken().trim();
+				String timeOrdered = star.nextToken().trim();
+				String staffId = star.nextToken().trim();
+				String isPaid = star.nextToken().trim();	
+				String custid = star.nextToken().trim(); 
+				Order m = new Order(Integer.parseInt(orderId),LocalTime.now(), Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)));
+				m.setOrderItemList(o.getOrderItems(Integer.parseInt(orderId)));
+				psList.add(m);
+			}
 		}
 		return psList;
 	}
@@ -232,15 +240,18 @@ public class Order {
 	}
 	
 	//READ AND WRITE TO CSV
-	private List read(String filename) throws FileNotFoundException {
+	private List read(String filename) throws IOException {
 		List data = new ArrayList();
-		Scanner scanner = new Scanner(new FileInputStream(filename));
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String headerLine = reader.readLine();
+		String line;
 		try {
-			while (scanner.hasNextLine()) {
-				data.add(scanner.nextLine());
+			while ((line = reader.readLine()) != null) {
+
+				data.add(line);
 			}
 		} finally {
-			scanner.close();
+			reader.close();
 		}
 		return data;
 	}
@@ -261,6 +272,7 @@ public class Order {
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
+			out.write("OrderID" + "," + "TimeOrdered" + "," + "StaffID" + "," + "IsPaid" + "StaffID" + "TableNo" + "\n");
 			for (int i = 0; i < data.size(); i++) {
 				
 				out.write((String) data.get(i) + "\n");
