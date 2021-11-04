@@ -1,51 +1,71 @@
 package controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import entity.Reservation;
+
 public class ReservationController {
+    
+    Reservation robj = new Reservation();
+    
+    public void addReservation(String name, String contact, int pax, LocalDate date, LocalTime time, int custid, int staffid) throws IOException 
+    {   
+        robj.saveReservation(name, contact, pax, date, time, custid, staffid);
+    }
 
-	/**
-	 * 
-	 * @param resDate
-	 * @param resTime
-	 * @param resNoPax
-	 * @param resContact
-	 * @param staffId
-	 * @param custId
-	 */
-	public void addReservation(String resDate, String resTime, int resNoPax, String resContact, int staffId, int custId) {
-		// TODO - implement TheReservationController.addReservation
-		throw new UnsupportedOperationException();
-	}
+    public Reservation getReservationByContact(String contact) throws FileNotFoundException
+    {
+        return robj.getResByContact(contact);
+        
+    }
 
-	/**
-	 * 
-	 * @param resId
-	 */
-	public void getReservation(int resId) {
-		// TODO - implement TheReservationController.getReservation
-		throw new UnsupportedOperationException();
-	}
+    public ArrayList<Reservation> getAllReservation() throws FileNotFoundException
+    {
+        return robj.getAllReservationDetails();
+    }
 
-	public void getAllReservation() {
-		// TODO - implement TheReservationController.getAllReservation
-		throw new UnsupportedOperationException();
-	}
 
-	/**
-	 * 
-	 * @param resId
-	 */
-	public void removeReservation(int resId) {
-		// TODO - implement TheReservationController.removeReservation
-		throw new UnsupportedOperationException();
-	}
+    public void removeReservation(Reservation r) throws IOException
+    {
+        robj.deleteReservation(r);
+    }
 
-	/**
-	 * 
-	 * @param resId
-	 */
-	public void checkAvailability(int resId) {
-		// TODO - implement TheReservationController.checkAvailability
-		throw new UnsupportedOperationException();
-	}
+
+//    public void checkAvailability(int pax) throws IOException 
+//    {
+//    	robj.allocateTable(pax);
+//    }
+    
+    
+    public void updateReservationPax(Reservation r, int pax) throws IOException 
+    {
+        r.setResNoPax(pax);
+        robj.updateReservation(r);
+    }
+    
+    public void updateReservationDate(Reservation r, String date) throws IOException 
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate convertdate = LocalDate.parse(date,formatter);
+        r.setResDate(convertdate);
+        robj.updateReservation(r);
+    }
+    
+    
+    public void updateReservationTime(Reservation r, String time) throws IOException 
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime converttime = LocalTime.parse(time,formatter);
+        r.setResTime(converttime);
+        robj.updateReservation(r);
+    }
+    
+    
 
 }

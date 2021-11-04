@@ -10,7 +10,7 @@ import entity.AlaCarte;
 import entity.Order;
 import entity.OrderItem;
 import entity.PromotionSet;
-import entity.TableCapacity;
+//import entity.TableCapacity;
 
 public class OrderController {
 	

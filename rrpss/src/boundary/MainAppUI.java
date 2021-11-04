@@ -1,15 +1,15 @@
 package boundary;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.*;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 import controller.MainAppController;
 
 public class MainAppUI {
 	
-	public static void main(String[] args) throws IOException, ParseException {
+	public static void main(String[] args) throws IOException 
+	{
 		print();
 	}
 	
@@ -21,15 +21,15 @@ public class MainAppUI {
 		Scanner sc = new Scanner(System.in);
 		
 		do {
-		System.out.println("=================================");
+		System.out.println("=================================");		
         System.out.println("\t Welcome to RRPSS");
 		System.out.println("=================================");
 		System.out.println("(1) Reservation");
-		System.out.println("(2) Orders ");
-		System.out.println("(3) Sales Revenue Report ");
+		System.out.println("(2) Orders");
+		System.out.println("(3) Sales Revenue Report");
 		System.out.println("(4) Menu");
 		System.out.println("(5) Promotion");
-		System.out.println("(6) Exit ");
+		System.out.println("(6) Exit");
 		
 			
 			do {
@@ -37,8 +37,8 @@ public class MainAppUI {
 					System.out.print("Please enter your choice : ");
 					choice = sc.nextInt();
 					
-				}catch(InputMismatchException e) {
-					//System.out.println("");
+				}catch(InputMismatchException e) 
+				{	
 					System.out.println("=================================");
 					System.out.println("Invalid Entry has been entered. ");
 					System.out.println("Please enter numbers only. ");
@@ -46,11 +46,11 @@ public class MainAppUI {
 			        System.out.println("\t Welcome to RRPSS");
 					System.out.println("=================================");
 					System.out.println("(1) Reservation");
-					System.out.println("(2) Orders ");
-					System.out.println("(3) Sales Revenue Report ");
+					System.out.println("(2) Orders");
+					System.out.println("(3) Sales Revenue Report");
 					System.out.println("(4) Menu");
 					System.out.println("(5) Promotion");
-					System.out.println("(6) Exit ");
+					System.out.println("(6) Exit");
 				}
 				sc.nextLine();
 			}while (choice == -1);
@@ -59,21 +59,33 @@ public class MainAppUI {
 			switch (choice) {
 			
 				case 1: 
+					mc.getReservationForm();
+//					ReservationForm rf = new ReservationForm();
+//					rf.displayOption();
 					break;
 					
 				case 2: 
 					mc.getOrderForm();
+//					OrderForm of = new OrderForm();
+//					of.displayOption();
 					break;
 					
 				case 3:
+					mc.getSalesRevenueMonthForm();
+//					SalesRevenueMonth srmf = new SalesRevenueMonth();
+//					srmf.displayOption();
 					break; 
 					
 				case 4: 
-					mc.getMenuForm();
+					mc.getAlaCarteForm();
+//					AlaCarteForm acf = new AlaCarteForm();
+//					acf.displayOption();
 					break;
 					
 				case 5:
 					mc.getPromotionForm();
+//					PromotionForm pf = new PromotionForm();
+//					pf.displayOption(); 
 					break; 
 				
 				case 6:
@@ -93,4 +105,6 @@ public class MainAppUI {
 			}
 		}while (choice <1||choice>6);
 	}
+	
 }
+
