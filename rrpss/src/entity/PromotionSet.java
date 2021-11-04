@@ -135,7 +135,7 @@ public class PromotionSet {
 		write(filename, l);
 	}
 	
-	//ADD ALACARTE ITEMS INTO A PROMOTION SET
+	//ADD ALACARTE ITEMS 
 	private ArrayList<AlaCarte> addAlaCarteItems(String[] n) throws FileNotFoundException {
 		ArrayList<AlaCarte> al = new ArrayList<>();
 		AlaCarte a = new AlaCarte();

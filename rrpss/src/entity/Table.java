@@ -9,17 +9,12 @@ public class Table {
 	private int tableNo;
 	private TableCapacity seatCapacity;
 	private TableStatus status;
-	Order order;
-	ArrayList<Reservation> reservation;
-	
 
 	
 	public Table(int no, TableCapacity seatCapacity, TableStatus ts,Order order, ArrayList<Reservation> reservation) {
 		this.tableNo = no;
 		this.seatCapacity = seatCapacity;
 		this.status = ts;
-		this.order = order;
-		this.reservation = reservation;
 	}
 	
 	public int getTableNo() {

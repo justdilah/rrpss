@@ -1,6 +1,8 @@
 package entity;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -22,22 +24,22 @@ public class OrderItem {
 		
 	}
 	
-	public OrderItem(int orderItemId,PromotionSet a, int qty) {
+	public OrderItem(int orderItemId,PromotionSet a, int qty, int orderId) {
 		this.orderItemId = orderItemId;
-		System.out.println(a.getPackName());
 		this.orderItemName = a.getPackName();
-		
 		this.promoitem = a;
 		this.orderItemQty = qty;
 		this.orderItemPrice = a.getPackPrice() * qty;
+		this.orderId = orderId;
 	}
 	
-	public OrderItem(int orderItemId,AlaCarte a, int qty) {
+	public OrderItem(int orderItemId,AlaCarte a, int qty, int orderId) {
 		this.orderItemId = orderItemId;
 		this.orderItemName = a.getFoodName();
 		this.food = a;
 		this.orderItemQty = qty;
 		this.orderItemPrice = a.getFoodPrice() * qty;
+		this.orderId = orderId;
 	}
 
 	public int getOrderItemId() {
@@ -88,9 +90,47 @@ public class OrderItem {
 		this.orderItemPrice = orderItemPrice;
 	}
 	
+	/**
+	 * 
+	 * @return Order ID
+	 */
+	public int getOrderId() {
+		return this.orderId;
+	}
+	
+	/**
+	 * 
+	 * @param Order ID
+	 */
+	public void setOrderId(int id) {
+		this.orderId = id;
+	}
+	
+	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
+		PromotionSet p = new PromotionSet();
+		return p.getAllPromotionItems();
+	}
+	
+	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
+		AlaCarte a = new AlaCarte();
+		return a.getAllMenuItems();
+	}
+	
+	// SELECT ORDER ITEM BY ORDER ITEM ID 
+	public OrderItem selectOrderItemById(int orderId,int orderItemId) throws FileNotFoundException {
+		OrderItem c = null;
+		
+		for(int i=0; i<getOrderItems(orderId).size();i++) {
+			if(getOrderItems(orderId).get(i).getOrderItemId() == orderItemId) {
+				c = getOrderItems(orderId).get(i);
+			}
+		}
+		return c;
+	}
+	
 	
 	// GET ALL THE ORDER ITEMS BASED ON THAT ORDER
-	public ArrayList<OrderItem> getAllOrderItems(int id) throws FileNotFoundException {
+	public ArrayList<OrderItem> getOrderItems(int id) throws FileNotFoundException {
 		PromotionSet p = new PromotionSet();
 		AlaCarte a = new AlaCarte();
 		OrderItem m;
@@ -100,7 +140,7 @@ public class OrderItem {
 		for (int i = 0; i < stringitems.size(); i++) {
 			String st = (String) stringitems.get(i);
 			StringTokenizer star = new StringTokenizer(st, ",");
-			String sequenceid = star.nextToken().trim();
+			String sequenceId = star.nextToken().trim();
 			String name = star.nextToken().trim();
 			String qty = star.nextToken().trim();
 			String totalPrice = star.nextToken().trim();
@@ -109,13 +149,12 @@ public class OrderItem {
 			if(Integer.parseInt(orderId) == id) {
 			
 				if(a.selectFoodByName(name)!= null) {
-					
 					AlaCarte al = a.selectFoodByName(name);					
 					a = a.selectFoodByName(name); 
-					m = new OrderItem(id,al,Integer.parseInt(qty));
+					m = new OrderItem(Integer.parseInt(sequenceId),al,Integer.parseInt(qty),id);
 				} else {
 					p = p.selectPromotionSetByName(name);
-					m = new OrderItem(id,p,Integer.parseInt(qty));
+					m = new OrderItem(Integer.parseInt(sequenceId),p,Integer.parseInt(qty),id);
 						
 				}
 				itemList.add(m);
@@ -127,16 +166,121 @@ public class OrderItem {
 		
 	}
 	
+	// GET ALL THE ORDER ITEMS
+	public ArrayList<OrderItem> getAllOrderItems() throws FileNotFoundException {
+		PromotionSet p = new PromotionSet();
+		AlaCarte a = new AlaCarte();
+		OrderItem m;
+		ArrayList<OrderItem> itemList= new ArrayList<>();
+		ArrayList stringitems = (ArrayList) StoreController.read(filename); 	
+		
+		for (int i = 0; i < stringitems.size(); i++) {
+			String st = (String) stringitems.get(i);
+			StringTokenizer star = new StringTokenizer(st, ",");
+			String sequenceId = star.nextToken().trim();
+			String name = star.nextToken().trim();
+			String qty = star.nextToken().trim();
+			String totalPrice = star.nextToken().trim();
+			String orderId = star.nextToken().trim();
+			
+				if(a.selectFoodByName(name)!= null) {
+					AlaCarte al = a.selectFoodByName(name);					
+					a = a.selectFoodByName(name); 
+					m = new OrderItem(Integer.parseInt(sequenceId),al,Integer.parseInt(qty),Integer.parseInt(orderId));
+				} else {
+					p = p.selectPromotionSetByName(name);
+					m = new OrderItem(Integer.parseInt(sequenceId),p,Integer.parseInt(qty),Integer.parseInt(orderId));
+						
+				}
+				itemList.add(m);
+				
+			}
+			return itemList;
+		
+		}
 	
-	public void addOrderItem() throws IOException {
+	public void addOrderItem(int orderId) throws IOException {
 		List l = new ArrayList<>();
-		String item = this.getOrderItemId() + "," + this.getOrderItemName() + "," + this.getOrderItemQty() + "," + this.getOrderItemPrice();
+		String item = this.getOrderItemId() + "," + this.getOrderItemName() + "," + this.getOrderItemQty() + "," + this.getOrderItemPrice() + "," + this.getOrderId();
 		l.add(item);
 		saveFoodItem(l);
  	}
+	
+	public void removeOrderItem(int orderId, int orderItemId) throws IOException {
+		List l = new ArrayList<>();
+		ArrayList<OrderItem> miList = getAllOrderItems();
+		
+		int size = getAllOrderItems().size();
+		
+		for(int i=0;i<size-1;i++) {
+			
+			if(miList.get(i).getOrderItemId() == orderItemId && miList.get(i).getOrderId() == orderId) {
+				miList.remove(i);
+			}
+			
+			OrderItem k = miList.get(i);
+			
+			String foodItem = k.getOrderItemId() + "," + k.getOrderItemName() + "," + k.getOrderItemQty() + "," + k.getOrderItemPrice() +  "," + k.getOrderId();
+			l.add(foodItem);
+		}
+		
+		replace(filename,l);
+	}
+	
+	public void removeEntireOrderItemList(int orderId) throws IOException {
+		List l = new ArrayList<>();
+		ArrayList<OrderItem> miList = getAllOrderItems();
+		
+		int size = getAllOrderItems().size();
+		
+		for(int i=0;i<size;i++) {
+			System.out.println(miList.get(i).getOrderItemName());
+			if(miList.get(i).getOrderId() != orderId) {
+				OrderItem k = miList.get(i);
+				
+				String foodItem = k.getOrderItemId() + "," + k.getOrderItemName() + "," + k.getOrderItemQty() + "," + k.getOrderItemPrice() +  "," + k.getOrderId();
+				l.add(foodItem);
+			}
+		}
+		
+		replace(filename,l);
+	}
+	
+	public void addOrderItem(int orderId, int orderItemId) throws IOException {
+		List l = new ArrayList<>();
+		ArrayList<OrderItem> miList = getOrderItems(orderId);
+		OrderItem o = new OrderItem();
+	
+		for(int i=0;i<getOrderItems(orderId).size()-1;i++) {
+			
+			
+			if(getOrderItems(orderId).get(i).getOrderItemId() == orderItemId) {
+				miList.add(getOrderItems(orderId).get(i));
+			}
+					
+			OrderItem k = miList.get(i);
+			String foodItem = k.getOrderItemId() + "," + k.getOrderItemName() + "," + k.getOrderItemQty() + "," + k.getOrderItemPrice() +  "," + orderId;
+			l.add(foodItem);
+		}
+		
+		replace(filename,l);
+	}
 	
 	public void saveFoodItem(List list) throws IOException {
 		StoreController.write(filename, list);
 	}
 
+	
+	private void replace(String filename, List data) throws IOException {
+		
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i) + "\n");
+			}
+		} finally {
+			out.close();
+		}
+	}
 }
