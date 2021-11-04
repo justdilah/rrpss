@@ -142,7 +142,6 @@ public class ReservationForm {
 		name = c1.getPersName();
 		
 		
-		
 		print("Enter Date of Reservation (yyyy-MM-dd) format: ");
 		date = sc.nextLine();
 		
@@ -154,6 +153,8 @@ public class ReservationForm {
 		// to check if the reservation.csv have the same date and time +-2hr is occupied anot
 		
 		// else cannot insert 
+		
+		
 		
 		
 		
