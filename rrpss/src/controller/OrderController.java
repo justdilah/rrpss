@@ -2,6 +2,7 @@ package controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ public class OrderController {
 	
 	Order o = new Order();
 	
-	public void addOrder(int orderId, LocalTime timeStamp, int staffId, Boolean isPaid, String custPhoneNum, int tableNo) throws IOException {
-		String foodItem = orderId + "," + timeStamp +  "," +  staffId + "," + isPaid + "," + o.getCustIDByPhoneNum(custPhoneNum) + "," +  tableNo;
+	public void addOrder(int orderId, LocalTime timeStamp,LocalDate date, int staffId, Boolean isPaid, String custPhoneNum, int tableNo) throws IOException {
+		String foodItem = orderId + "," + timeStamp +  "," + date +  "," +  staffId + "," + isPaid + "," + o.getCustIDByPhoneNum(custPhoneNum) + "," +  tableNo;
 		List l = new ArrayList();
 		l.add(foodItem);
 		o.saveOrder(l);

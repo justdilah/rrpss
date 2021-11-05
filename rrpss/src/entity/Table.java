@@ -152,6 +152,27 @@ public class Table {
 //	}
 	
 	
+	public Boolean tableExists(int tableNo) throws FileNotFoundException {
+		for(int i=0; i<getAllTableDetails().size();i++) {
+
+			if(getAllTableDetails().get(i).getTableNo() == tableNo) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Table getTableById(int tableNo) throws FileNotFoundException {
+		Table t = null;
+		for(int i=0; i<getAllTableDetails().size();i++) {
+
+			if(getAllTableDetails().get(i).getTableNo() == tableNo) {
+				t = getAllTableDetails().get(i);
+			}
+		}
+		return t;
+	}
+	
 	// csv
 	public ArrayList<Table> getAllTableDetails() throws FileNotFoundException
 	{
@@ -172,7 +193,8 @@ public class Table {
 		}
 		return tlist;	
 	}
-
+	
+	
 	
 	// csv
 	public Table getAllVacantTableByCapacity(TableCapacity cap) throws FileNotFoundException

@@ -1,2 +1,1 @@
-OrderID,TimeOrdered,StaffID,IsPaidStaffIDTableNo
-1,23:53:37.437456,3300,false,20003
+OrderID,TimeOrdered,DateOrdered,StaffID,IsPaidStaffIDTableNo

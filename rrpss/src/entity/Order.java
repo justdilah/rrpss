@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import controller.StoreController;
@@ -17,13 +19,14 @@ public class Order {
 	
 	private int orderId;
 	private LocalTime timeStamp;
+	private LocalDate date;
 	private Boolean isPaid;
 	private String staffId;
 	Staff waiter;
 	Customer customer;
 	Table table;
 	ArrayList <OrderItem> orderItemList; 
-	Invoice invoice;
+//	Invoice invoice;
 	
 	
 	public Order() {
@@ -36,12 +39,14 @@ public class Order {
 		this.staffId = staffid;
 	}
 	
-	public Order(int id, LocalTime timeStamp, Boolean isPaid, String staffId, Customer cust) {
+	public Order(int id, LocalTime timeStamp, LocalDate date, Boolean isPaid, String staffId, Customer cust, Table t) {
 		this.orderId = id;
 		this.timeStamp = timeStamp;
 		this.isPaid = isPaid;
 		this.staffId = staffId;
 		this.customer = cust;
+		this.table = t;
+		this.date = date;
 	}
 
 	public int getOrderId() {
@@ -70,6 +75,18 @@ public class Order {
 	 */
 	public void setTimeStamp(LocalTime t) {
 		this.timeStamp = t;
+	}
+	
+	public LocalDate getDate() {
+		return this.date;
+	}	
+	
+	/**
+	 * 
+	 * @param t
+	 */
+	public void setDate(LocalDate t) {
+		this.date = t;
 	}
 
 	public String getStaffId() {
@@ -194,7 +211,8 @@ public class Order {
 	public ArrayList<Order> getAllOrders() throws IOException {
 		ArrayList<Order> psList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename);
-		if(stringitems != null) {
+		Table t = new Table();
+		if(stringitems.size() > 0) {
 			OrderItem o = new OrderItem();
 			Customer c = new Customer();
 			for (int i = 0; i < stringitems.size(); i++) {
@@ -202,13 +220,19 @@ public class Order {
 				StringTokenizer star = new StringTokenizer(st, ",");
 				String orderId = star.nextToken().trim();
 				String timeOrdered = star.nextToken().trim();
+				String dateOrdered = star.nextToken().trim();
 				String staffId = star.nextToken().trim();
 				String isPaid = star.nextToken().trim();	
 				String custid = star.nextToken().trim(); 
-				Order m = new Order(Integer.parseInt(orderId),LocalTime.now(), Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)));
+				String tableNo = star.nextToken().trim();
+				int no = Integer.parseInt(tableNo);
+				LocalTime isoTime = LocalTime.parse(timeOrdered, DateTimeFormatter.ISO_LOCAL_TIME);
+				Order m = new Order(Integer.parseInt(orderId),isoTime,LocalDate.parse(dateOrdered), Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)),t.getTableById(no));
 				m.setOrderItemList(o.getOrderItems(Integer.parseInt(orderId)));
 				psList.add(m);
 			}
+		} else {
+			psList = null;
 		}
 		return psList;
 	}
@@ -272,7 +296,7 @@ public class Order {
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
-			out.write("OrderID" + "," + "TimeOrdered" + "," + "StaffID" + "," + "IsPaid" + "StaffID" + "TableNo" + "\n");
+			out.write("OrderID" + "," + "TimeOrdered" + "," + "DateOrdered" + "," + "StaffID" + "," + "IsPaid" + "StaffID" + "TableNo" + "\n");
 			for (int i = 0; i < data.size(); i++) {
 				
 				out.write((String) data.get(i) + "\n");

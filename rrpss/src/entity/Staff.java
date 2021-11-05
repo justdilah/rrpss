@@ -63,6 +63,13 @@ public class Staff extends Person {
 		}
 		return c;
 	}
+	
+	public Boolean isIdExists(int id) throws FileNotFoundException {
+		if(getStaffById(id)!=null) {
+			return true;
+		}
+		return false;
+	}
 
 	public ArrayList<Staff> getAllStaffDetails() throws FileNotFoundException
 	{

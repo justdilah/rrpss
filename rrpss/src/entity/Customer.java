@@ -44,6 +44,13 @@ public class Customer extends Person {
 	public void setMembership(Boolean membership) {
 		this.membership = membership;
 	}
+	
+	public Boolean custExists(String contact) throws FileNotFoundException {
+		if(getCustByContact(contact)!=null) {
+			return true;
+		}
+		return false;
+	}
 
 	public Customer getCustById(int id) throws FileNotFoundException
 	{
