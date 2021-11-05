@@ -89,7 +89,7 @@ public class PromotionSet {
 	 * 
 	 * @param packDesc
 	 */
-	
+
 	public void setPackDesc(String packDesc) {
 		this.packDesc = packDesc;
 	}
@@ -121,7 +121,6 @@ public class PromotionSet {
 		int id = getAllPromotionItems().get(last-1).getPackId()+ 1;
 		String packitems ="";
 		for(int i=0;i<pslist.size();i++) {
-			System.out.println(pslist.get(i).getFoodName());
 			if(i == pslist.size()-1) {
 				packitems += pslist.get(i).getFoodName();
 			} else {
@@ -182,7 +181,6 @@ public class PromotionSet {
 			
 			if(getAllPromotionItems().get(i).getPackId() == a.getPackId()) {
 				miList.set(i, a);
-				System.out.println(a.getPackName());
 			}
 		
 			PromotionSet k = miList.get(i);
@@ -213,7 +211,6 @@ public class PromotionSet {
 			
 			if(getAllPromotionItems().get(i).getPackId() == a.getPackId()) {
 				miList.remove(i);
-				System.out.println(a.getPackName());
 			}
 					
 			PromotionSet k = miList.get(i);
