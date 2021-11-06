@@ -24,13 +24,8 @@ public class InvoiceForm {
 	TableController tc = new TableController();
 	CustomerController cc = new CustomerController();
 	
-	public void print(String message)
-	{
-	    System.out.println(message);
-	}
-	
 	public void displayOption() throws IOException {
-		
+		printInvoice();
 	}
 
 	public void printInvoice() throws IOException {
@@ -78,7 +73,13 @@ public class InvoiceForm {
 		
 		double st = 0;
 		print("Order Items : ");
-		int counter = 8000;
+		int counter = 0;
+		if(ivc.checkFileEmpty() > 0) {
+			counter = 8000;
+		} else {
+			
+		}
+		
 		for(int k=0;k<orders.size();k++) {
 			ArrayList<OrderItem> orderItemList = orders.get(k).getOrderItemList();
 			orders.get(k).setIsPaid(true);
@@ -133,6 +134,11 @@ public class InvoiceForm {
 		//TABLE NUMBER BECOMES ZERO?? 
 		//SAVE THIS IN THE Invoice.csv
 		
+	}
+	
+	public void print(String message)
+	{
+	    System.out.println(message);
 	}
 
 }

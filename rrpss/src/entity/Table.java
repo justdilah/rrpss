@@ -162,7 +162,7 @@ public class Table {
 		return false;
 	}
 	
-	public Table getTableById(int tableNo) throws FileNotFoundException {
+	public Table getTableByTableNo(int tableNo) throws FileNotFoundException {
 		Table t = null;
 		for(int i=0; i<getAllTableDetails().size();i++) {
 
@@ -238,7 +238,7 @@ public class Table {
 	public Boolean checkTableReserved(int tableNo) throws FileNotFoundException {
 
 	
-		if(getTableById(tableNo).getStatus().equals(TableStatus.RESERVED)) 
+		if(getTableByTableNo(tableNo).getStatus().equals(TableStatus.RESERVED)) 
 		{
 			return true;
 		}
@@ -259,7 +259,7 @@ public class Table {
 				t = TableStatus.RESERVED;
 				break;
 		}
-		Table table = getTableById(tableNo);
+		Table table = getTableByTableNo(tableNo);
 		table.setStatus(t);
 		updateTableStatus(table);
 		
