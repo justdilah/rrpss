@@ -80,5 +80,9 @@ public class InvoiceController {
 		i.saveInvoice(l);
 	}
 	
+	public ArrayList<Invoice> getAllInvoice() throws IOException {
+		return i.getAllInvoice();
+	}
+	
 
 }

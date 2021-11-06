@@ -74,10 +74,10 @@ public class InvoiceForm {
 		double st = 0;
 		print("Order Items : ");
 		int counter = 0;
-		if(ivc.checkFileEmpty() > 0) {
+		if(ivc.checkFileEmpty() == 1) {
 			counter = 8000;
 		} else {
-			
+			counter = ivc.getAllInvoice().size() + 1;
 		}
 		
 		for(int k=0;k<orders.size();k++) {
