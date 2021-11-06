@@ -50,6 +50,7 @@ public class PromotionForm {
 					break;
 				case 5:
 					sc.close();
+					MainAppUI.print();
 					break;
 			}
 		}catch(NumberFormatException e)
