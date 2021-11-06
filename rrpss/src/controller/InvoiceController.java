@@ -80,6 +80,5 @@ public class InvoiceController {
 		i.saveInvoice(l);
 	}
 	
-	public void 
 
 }
