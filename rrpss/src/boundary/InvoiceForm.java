@@ -61,6 +61,7 @@ public class InvoiceForm {
 			orders = ivc.getUnpaidOrdersByTableNo(table);
 			
 			cust = or.getUnpaidOrders().get(0).getCust();
+			//CONSIDERING UNPAID ORDERS UNDER 1 TABLE
 			String staffID = or.getUnpaidOrders().get(0).getStaffId();
 			
 			double subTotalPrice = 0;
@@ -84,6 +85,8 @@ public class InvoiceForm {
 				int last = ivc.getAllInvoice().size() - 1;
 				counter = ivc.getAllInvoice().get(last).getInvoiceNo() + 1;
 			}
+			
+			
 			
 			for(int k=0;k<orders.size();k++) {
 				ArrayList<OrderItem> orderItemList = orders.get(k).getOrderItemList();
