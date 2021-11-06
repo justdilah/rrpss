@@ -299,7 +299,7 @@ public class Order {
 				miList.remove(i);
 			} else {
 				Order k = miList.get(i);
-				String foodItem = k.getOrderId() + "," + k.getTimeStamp() + "," + k.getDate() + k.getStaffId() + "," + k.getIsPaid() +  "," + k.getCust().getCustId();
+				String foodItem = k.getOrderId() + "," + k.getTimeStamp() + "," + k.getDate() +"," + k.getStaffId() + "," + k.getIsPaid() +  "," + k.getCust().getCustId() + "," + k.getTable().getTableNo();
 				l.add(foodItem);
 			}
 			
