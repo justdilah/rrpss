@@ -1,8 +1,10 @@
 package entity;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,14 +47,14 @@ public class Customer extends Person {
 		this.membership = membership;
 	}
 	
-	public Boolean custExists(String contact) throws FileNotFoundException {
+	public Boolean custExists(String contact) throws IOException {
 		if(getCustByContact(contact)!=null) {
 			return true;
 		}
 		return false;
 	}
 
-	public Customer getCustById(int id) throws FileNotFoundException
+	public Customer getCustById(int id) throws IOException
 	{
 		Customer c = null;
 
@@ -66,7 +68,7 @@ public class Customer extends Person {
 		return c;
 	}
 
-	public Customer getCustByContact(String contact) throws FileNotFoundException  
+	public Customer getCustByContact(String contact) throws IOException  
 	{
 		Customer c = null;
 
@@ -81,7 +83,7 @@ public class Customer extends Person {
 		return c;
 	}
 	
-	public Boolean isMember(int custID) throws FileNotFoundException {
+	public Boolean isMember(int custID) throws IOException {
 
 		for(int i=0; i<getAllCustomerDetails().size();i++) {
 
@@ -93,8 +95,31 @@ public class Customer extends Person {
 		}
 		return false;
 	}
+	
+	public void updateMembership(Customer c) throws IOException {
+		List l = new ArrayList<>();
+		ArrayList<Customer> miList = getAllCustomerDetails();
+		
+		OrderItem item = new OrderItem();
+		
+		int size = getAllCustomerDetails().size();
+		
+		for(int i=0;i<size;i++) {
+			
+			if(miList.get(i).getCustId() == c.getCustId()) {
+				miList.set(i, c);
+			} 
+			
+			Customer k = miList.get(i);
+			String cust = k.getCustId() + "," + k.getPersName() +  "," + k.getPersPhoneNo() +  "," +  k.getMembership();
+			l.add(cust);
+			
+			
+		}
+		replace(filename,l);
+	}
 
-	public ArrayList<Customer> getAllCustomerDetails() throws FileNotFoundException 
+	public ArrayList<Customer> getAllCustomerDetails() throws IOException 
 	{
 		ArrayList<Customer> clist= new ArrayList<>();
 		ArrayList stringitems = (ArrayList)read(filename); 	
@@ -152,15 +177,18 @@ public class Customer extends Person {
 	}
 
 	//READ AND WRITE TO CSV
-	private List read(String filename) throws FileNotFoundException {
+	private List read(String filename) throws IOException {
 		List data = new ArrayList();
-		Scanner scanner = new Scanner(new FileInputStream(filename));
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String headerLine = reader.readLine();
+		String line;
 		try {
-			while (scanner.hasNextLine()) {
-				data.add(scanner.nextLine());
+			while ((line = reader.readLine()) != null) {
+
+				data.add(line);
 			}
 		} finally {
-			scanner.close();
+			reader.close();
 		}
 		return data;
 	}
@@ -178,16 +206,17 @@ public class Customer extends Person {
 	}
 
 	private void replace(String filename, List data) throws IOException {
-
+		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
+			out.write("CustID" + "," + "Name" + "," + "PhoneNum" + "," + "isMember" +"\n");
 			for (int i = 0; i < data.size(); i++) {
-
+				
 				out.write((String) data.get(i) + "\n");
 			}
 		} finally {
 			out.close();
 		}
-	}	
+	}
 
 }

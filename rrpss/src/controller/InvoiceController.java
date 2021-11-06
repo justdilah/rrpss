@@ -7,13 +7,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Invoice;
+import entity.Order;
+import entity.OrderItem;
+import entity.Table;
 
 public class InvoiceController {
-
+	OrderController or = new OrderController();
 	Invoice i = new Invoice();
 	public int calculateSubTotal() {
 		// TODO - implement InvoiceController.calculateSubTotal
 		throw new UnsupportedOperationException();
+	}
+	
+	public ArrayList<Order> getUnpaidOrdersByTableNo(Table table) throws IOException {
+		ArrayList<Order> orders = new ArrayList<>();
+		int checker = 0;
+		for(int k=0;k<or.getUnpaidOrders().size();k++) {
+			if(or.getUnpaidOrders().get(k).getTable().getTableNo() == table.getTableNo()) {
+				orders.add(or.getUnpaidOrders().get(k));
+				checker++;
+			}
+		}
+		if(checker == 0) {
+			orders = null;
+		}
+		return orders;
+	}
+	
+//	public ArrayList<Table>
+	
+	
+	public double calculateSubTotalPriceOrder(ArrayList<OrderItem> itemList) {
+		double subTotalPrice = 0;
+		for(int i=0;i<itemList.size();i++) {
+			subTotalPrice += itemList.get(i).getOrderItemPrice();
+		}
+		return subTotalPrice;
+	}
+	
+	public double calculateDiscount(double subTotalPrice) {
+		return 0.10 * subTotalPrice;
+	}
+	
+	public double calculateGst(double subTotalPrice) {
+		return 0.07 * subTotalPrice;
 	}
 
 	public int calculateTotalPrice() {

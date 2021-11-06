@@ -11,7 +11,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import controller.CustomerController;
 import controller.OrderController;
+import controller.StaffController;
+import controller.TableController;
 import entity.AlaCarte;
 import entity.Customer;
 import entity.Order;
@@ -23,6 +26,9 @@ import entity.Table;
 public class OrderForm {
 	
 	OrderController or = new OrderController();
+	CustomerController cc = new CustomerController();
+	TableController tc = new TableController();
+	StaffController scontrol = new StaffController();
 	
 	Scanner sc = new Scanner(System.in);
 	
@@ -83,8 +89,8 @@ public class OrderForm {
 			String tableNo = sc.nextLine();
 			
 			int no = Integer.parseInt(tableNo);
-			Table t = new Table();
-			while(!t.tableExists(no) || !t.checkTableReserved(no)) {
+		
+			while(!tc.tableExists(no) || !tc.checkTableReserved(no)) {
 				System.out.println("Table Number does not exist or is not reserved");
 				System.out.println("Please Try again");
 				System.out.println("Please enter Table Number: ");
@@ -137,7 +143,7 @@ public class OrderForm {
 			System.out.println("==================================");
 			System.out.println("Order added successfully");
 			System.out.println("==================================");
-			t.updateTableStatusString("OCCUPIED", no);
+			tc.updateTableStatusString("OCCUPIED", no);
 			
 //		} catch (Exception ex) {
 //			System.out.println("==================================");

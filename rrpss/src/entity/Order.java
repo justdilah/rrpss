@@ -1,4 +1,4 @@
-package entity;
+ package entity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,11 +12,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import controller.OrderController;
+import controller.OrderItemController;
 import controller.StoreController;
 
 public class Order {
-	private static final String filename = "DataSet/Order.csv";
 	
+	OrderItemController oiControl = new OrderItemController();
+	
+	private static final String filename = "DataSet/Order.csv";
 	private int orderId;
 	private LocalTime timeStamp;
 	private LocalDate date;
@@ -141,24 +145,22 @@ public class Order {
 	
 	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,i,qty,orderId);
-		o.addOrderItem(orderId);
+		oiControl.addOrderItem(o);
 	}
 	
 	public void addAlaCarteOrderItemtoList(int id, AlaCarte a, int qty,int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,a,qty, orderId);
-		o.addOrderItem(orderId);
+		oiControl.addOrderItem(o);
 	}
 	
 	// RETURN PROMOTION SET ITEMS
 	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
-		OrderItem o = new OrderItem();
-		return o.getAllPromoSets();
+		return oiControl.getAllPromoSets();
 	}
 	
 	// RETURN ALA CARTE ITEMS
 	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
-		OrderItem o = new OrderItem();
-		return o.getAllAlaCartItems();
+		return oiControl.getAllAlaCartItems();
 	}
 	
 	
@@ -179,7 +181,7 @@ public class Order {
 		return o;
 	}
 	
-	public int getCustIDByPhoneNum(String contact) throws FileNotFoundException {
+	public int getCustIDByPhoneNum(String contact) throws IOException {
 		Customer c = new Customer();
 		
 		for(int i=0; i<c.getAllCustomerDetails().size();i++) {

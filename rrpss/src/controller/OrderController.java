@@ -102,5 +102,10 @@ public class OrderController {
 		i.removeOrderItem(orderId, orderItemId);
 	}
 	
+	
+	public void replaceOrder(Order or) throws IOException { 
+		o.replaceOrder(or);
+	}
+	
 
 }

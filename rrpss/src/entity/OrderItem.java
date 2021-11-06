@@ -199,9 +199,9 @@ public class OrderItem {
 		
 		}
 	
-	public void addOrderItem(int orderId) throws IOException {
+	public void addOrderItem(OrderItem o) throws IOException {
 		List l = new ArrayList<>();
-		String item = this.getOrderItemId() + "," + this.getOrderItemName() + "," + this.getOrderItemQty() + "," + this.getOrderItemPrice() + "," + this.getOrderId();
+		String item = o.getOrderItemId() + "," + o.getOrderItemName() + "," + o.getOrderItemQty() + "," + o.getOrderItemPrice() + "," + o.getOrderId();
 		l.add(item);
 		saveFoodItem(l);
  	}

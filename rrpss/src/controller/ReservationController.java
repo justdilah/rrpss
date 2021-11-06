@@ -19,13 +19,13 @@ public class ReservationController {
         robj.saveReservation(name, contact, pax, date, time, custid, staffid);
     }
 
-    public Reservation getReservationByContact(String contact) throws FileNotFoundException
+    public Reservation getReservationByContact(String contact) throws NumberFormatException, IOException
     {
         return robj.getResByContact(contact);
         
     }
 
-    public ArrayList<Reservation> getAllReservation() throws FileNotFoundException
+    public ArrayList<Reservation> getAllReservation() throws NumberFormatException, IOException
     {
         return robj.getAllReservationDetails();
     }

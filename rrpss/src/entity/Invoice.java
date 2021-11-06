@@ -155,6 +155,14 @@ public class Invoice {
 		write(filename,l);
 	}
 	
+	public void updateStatus(Table table, Order order) throws IOException {
+		Table t = new Table();
+		Order o = new Order();
+		t.updateTableStatusString("VACANT",table.getTableNo());
+		order.setIsPaid(true);
+		
+	}
+	
 	public ArrayList<Invoice> getAllInvoice() throws IOException {
 		ArrayList<Invoice> invoiceList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename);

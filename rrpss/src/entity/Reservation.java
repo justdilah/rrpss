@@ -147,7 +147,7 @@ public class Reservation {
 	}
 
 
-	public Reservation getResByContact(String contact) throws FileNotFoundException 
+	public Reservation getResByContact(String contact) throws NumberFormatException, IOException 
 	{	
 		Reservation r = new Reservation();
 
@@ -162,7 +162,7 @@ public class Reservation {
 
 
 	// csv
-	public ArrayList<Reservation> getAllReservationDetails() throws FileNotFoundException
+	public ArrayList<Reservation> getAllReservationDetails() throws NumberFormatException, IOException
 	{
 		ArrayList<Reservation> rlist= new ArrayList<>();
 		ArrayList stringitems = (ArrayList)read(filename); 	
