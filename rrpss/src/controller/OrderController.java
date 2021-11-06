@@ -16,6 +16,7 @@ import entity.PromotionSet;
 public class OrderController {
 	
 	Order o = new Order();
+	OrderItem oi = new OrderItem();
 	
 	public void addOrder(int orderId, LocalTime timeStamp,LocalDate date, int staffId, Boolean isPaid, String custPhoneNum, int tableNo) throws IOException {
 		String foodItem = orderId + "," + timeStamp +  "," + date +  "," +  staffId + "," + isPaid + "," + o.getCustIDByPhoneNum(custPhoneNum) + "," +  tableNo;
@@ -25,40 +26,42 @@ public class OrderController {
 	}
 		
 	public void addPromoOrderItem(int id, PromotionSet i, int qty, int orderId) throws IOException {
-		o.addPromoOrderItemtoList(id, i, qty,orderId);
+		OrderItem o = new OrderItem(id,i,qty,orderId);
+		oi.addOrderItem(o);
 	}
 	
 	public void addAlaCarteOrderItem(int id, AlaCarte a, int qty, int orderId) throws IOException {
-		o.addAlaCarteOrderItemtoList(id, a, qty, orderId);
+		OrderItem o = new OrderItem(id,a,qty,orderId);
+		oi.addOrderItem(o);
 	}
 	
-	public void setStaffID(String id) {
-		o.setStaffId(id);
-	}
+//	public void setStaffID(String id) {
+//		o.setStaffId(id);
+//	}
+//	
+//	public void setTimeStamp(LocalTime t) {
+//		o.setTimeStamp(t);
+//	}
+//	
+//	public void setisPaid(Boolean b) {
+//		o.setIsPaid(b);
+//	}
+//	
+//	public void setOrderId(int id) {
+//		o.setOrderId(id);
+//	}
+//	
+//	public int getOrderId() {
+//		return o.getOrderId();
+//	}
 	
-	public void setTimeStamp(LocalTime t) {
-		o.setTimeStamp(t);
-	}
+//	public int getTableId() {
+//		return o.getTable().getTableNo();
+//	}
 	
-	public void setisPaid(Boolean b) {
-		o.setIsPaid(b);
-	}
-	
-	public void setOrderId(int id) {
-		o.setOrderId(id);
-	}
-	
-	public int getOrderId() {
-		return o.getOrderId();
-	}
-	
-	public int getTableId() {
-		return o.getTable().getTableNo();
-	}
-	
-	public void setTableId(int id) {
-//		o.setTableId(id);
-	}
+//	public void setTableId(int id) {
+////		o.setTableId(id);
+//	}
 	
 	/**
 	 *     
@@ -72,31 +75,12 @@ public class OrderController {
 	public ArrayList<Order> getUnpaidOrders() throws IOException {
 		return o.getUnpaidOrders();
 	}
-	
-	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
-		return o.getAllPromoSets();
-	}
-	
-	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
-		return o.getAllAlaCartItems();
-	}
-	
 
-	/**
-	 * 
-	 * @param orderId
-	 * @throws IOException 
-	 */
 	public void deleteOrder(int orderId) throws IOException {
 		// TODO - implement OrderController.deleteOrder
 		o.deleteOrder(orderId);
 	}
 	
-	/**
-	 * 
-	 * @param orderItemId
-	 * @throws IOException 
-	 */
 	public void removeOrderItem(int orderId, int orderItemId) throws IOException {
 		OrderItem i = new OrderItem();
 		i.removeOrderItem(orderId, orderItemId);
@@ -105,6 +89,44 @@ public class OrderController {
 	
 	public void replaceOrder(Order or) throws IOException { 
 		o.replaceOrder(or);
+	}
+	
+	
+//	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
+//		OrderItem o = new OrderItem(id,i,qty,orderId);
+//		oi.addOrderItem(o);
+//	}
+//	
+//	public void addAlaCarteOrderItemtoList(int id, AlaCarte a, int qty,int orderId) throws IOException {
+//		OrderItem o = new OrderItem(id,a,qty, orderId);
+//		oi.addOrderItem(o);
+//	}
+//	
+	
+	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
+		return oi.getAllPromoSets();
+	}
+	
+	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
+		return oi.getAllAlaCartItems();
+	}
+	
+	//RETRIEVE ALL ORDER ITEMS
+	public ArrayList<OrderItem> getAllOrderItems() throws IOException {
+		return oi.getAllOrderItems();
+	}
+	
+	//ORDER ITEMS
+	public void addOrderItem(OrderItem o) throws IOException {
+		oi.addOrderItem(o);
+	}
+	
+	public void removeEntireOrderItemList(int orderId) throws IOException {
+		oi.removeEntireOrderItemList(orderId);
+	}
+	
+	public void addOrderItem(int orderId, int orderItemId) throws IOException {
+	    oi.addOrderItem(orderId, orderItemId);
 	}
 	
 

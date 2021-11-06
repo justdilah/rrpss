@@ -163,6 +163,7 @@ public class Invoice {
 		
 	}
 	
+	//RETRIEVE ALL THE INVOICE RECORDS 
 	public ArrayList<Invoice> getAllInvoice() throws IOException {
 		ArrayList<Invoice> invoiceList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename);

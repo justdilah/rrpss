@@ -17,10 +17,6 @@ import entity.Table;
 public class InvoiceController {
 	OrderController or = new OrderController();
 	Invoice i = new Invoice();
-//	public int calculateSubTotal() {
-//		// TODO - implement InvoiceController.calculateSubTotal
-//		throw new UnsupportedOperationException();
-//	}
 	
 	public int checkFileEmpty() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader("DataSet/Invoice.csv"));

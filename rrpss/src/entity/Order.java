@@ -1,6 +1,7 @@
  package entity;
 
 import java.io.BufferedReader;
+
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,13 +13,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import controller.OrderController;
-import controller.OrderItemController;
-import controller.StoreController;
 
 public class Order {
-	
-	OrderItemController oiControl = new OrderItemController();
 	
 	private static final String filename = "DataSet/Order.csv";
 	private int orderId;
@@ -143,31 +139,31 @@ public class Order {
 		return unpaidList;
 	}
 	
-	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
-		OrderItem o = new OrderItem(id,i,qty,orderId);
-		oiControl.addOrderItem(o);
-	}
-	
-	public void addAlaCarteOrderItemtoList(int id, AlaCarte a, int qty,int orderId) throws IOException {
-		OrderItem o = new OrderItem(id,a,qty, orderId);
-		oiControl.addOrderItem(o);
-	}
+//	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
+//		OrderItem o = new OrderItem(id,i,qty,orderId);
+//		oiControl.addOrderItem(o);
+//	}
+//	
+//	public void addAlaCarteOrderItemtoList(int id, AlaCarte a, int qty,int orderId) throws IOException {
+//		OrderItem o = new OrderItem(id,a,qty, orderId);
+//		oiControl.addOrderItem(o);
+//	}
 	
 	// RETURN PROMOTION SET ITEMS
-	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
-		return oiControl.getAllPromoSets();
-	}
+//	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
+//		return oiControl.getAllPromoSets();
+//	}
+//	
+//	// RETURN ALA CARTE ITEMS
+//	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
+//		return oiControl.getAllAlaCartItems();
+//	}
 	
-	// RETURN ALA CARTE ITEMS
-	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
-		return oiControl.getAllAlaCartItems();
-	}
 	
-	
-	public void removeOrderItemFromList(int orderId, OrderItem o) throws IOException {
-		OrderItem i = new OrderItem();
-		i.removeOrderItem(orderId,o.getOrderItemId());
-	}
+//	public void removeOrderItemFromList(int orderId, OrderItem o) throws IOException {
+//		OrderItem i = new OrderItem();
+//		i.removeOrderItem(orderId,o.getOrderItemId());
+//	}
 	
 	public Order selectOrderById(int id) throws IOException {
 		Order o = null;

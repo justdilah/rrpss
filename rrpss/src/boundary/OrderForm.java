@@ -85,18 +85,22 @@ public class OrderForm {
 			System.out.println("=================================");
 	        System.out.println("\t Create Order ");
 			System.out.println("=================================");
-			System.out.println("Please enter Table Number: ");
-			String tableNo = sc.nextLine();
-			
-			int no = Integer.parseInt(tableNo);
-		
-			while(!tc.tableExists(no) || !tc.checkTableReserved(no)) {
-				System.out.println("Table Number does not exist or is not reserved");
-				System.out.println("Please Try again");
-				System.out.println("Please enter Table Number: ");
-				tableNo = sc.nextLine();
-				no = Integer.parseInt(tableNo);
+			System.out.println("Please select Table Number: ");
+
+			for(int i=0;i<tc.getAllReservedTables().size();i++) {
+				System.out.println(i+1 + ") Table No " + tc.getAllReservedTables().get(i).getTableNo());
 			}
+			String no = sc.nextLine();
+			Table t = tc.getAllReservedTables().get(Integer.parseInt(no)-1);
+			
+		
+//			while(!tc.tableExists(no) || !tc.checkTableReserved(no)) {
+//				System.out.println("Table Number does not exist or is not reserved");
+//				System.out.println("Please Try again");
+//				System.out.println("Please enter Table Number: ");
+//				tableNo = sc.nextLine();
+//				no = Integer.parseInt(tableNo);
+//			}
 			
 			int index = 1;
 			
@@ -139,11 +143,11 @@ public class OrderForm {
 			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			or.addOrder(index, 
-			LocalTime.parse(LocalTime.now().format(formatter)),LocalDate.now(), staffid, false, phoneNum, no);
+			LocalTime.parse(LocalTime.now().format(formatter)),LocalDate.now(), staffid, false, phoneNum, t.getTableNo());
 			System.out.println("==================================");
 			System.out.println("Order added successfully");
 			System.out.println("==================================");
-			tc.updateTableStatusString("OCCUPIED", no);
+			tc.updateTableStatusString("OCCUPIED", t.getTableNo());
 			
 //		} catch (Exception ex) {
 //			System.out.println("==================================");

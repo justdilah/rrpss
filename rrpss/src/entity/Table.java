@@ -235,6 +235,27 @@ public class Table {
 		return tableList;
 	}
 	
+	public ArrayList<Table> getAllRservedTables() throws FileNotFoundException
+	{
+		ArrayList<Table> tableList = new ArrayList<>();
+		
+		int checker = 0;
+
+		for(int i=0; i<getAllTableDetails().size();i++) 
+		{
+				if(getAllTableDetails().get(i).getStatus().equals(TableStatus.RESERVED)) 
+				{
+					tableList.add(getAllTableDetails().get(i));
+					checker++;
+				}
+		}
+		
+		if(checker == 0) {
+			tableList = null;
+		}
+		return tableList;
+	}
+	
 	public Boolean checkTableReserved(int tableNo) throws FileNotFoundException {
 
 	
