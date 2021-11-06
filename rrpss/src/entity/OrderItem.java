@@ -120,7 +120,6 @@ public class OrderItem {
 	// SELECT ORDER ITEM BY ORDER ITEM ID 
 	public OrderItem selectOrderItemById(int orderId,int orderItemId) throws IOException {
 		OrderItem c = null;
-		
 		for(int i=0; i<getOrderItems(orderId).size();i++) {
 			if(getOrderItems(orderId).get(i).getOrderItemId() == orderItemId) {
 				c = getOrderItems(orderId).get(i);
@@ -235,7 +234,6 @@ public class OrderItem {
 		int size = getAllOrderItems().size();
 		
 		for(int i=0;i<size;i++) {
-			System.out.println(miList.get(i).getOrderItemName());
 			if(miList.get(i).getOrderId() != orderId) {
 				OrderItem k = miList.get(i);
 				

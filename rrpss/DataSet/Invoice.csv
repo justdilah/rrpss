@@ -1,0 +1,2 @@
+﻿InvoiceID,OrderID,DateOrdered,SubTotal,discount,GST,StaffID,TableNo
+8000,1,2021-11-06,70.5,7.050000000000001,4.9350000000000005,50001,3

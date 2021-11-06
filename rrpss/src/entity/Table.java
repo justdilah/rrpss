@@ -173,6 +173,8 @@ public class Table {
 		return t;
 	}
 	
+	
+	
 	// csv
 	public ArrayList<Table> getAllTableDetails() throws FileNotFoundException
 	{
@@ -210,6 +212,57 @@ public class Table {
 					}
 		}
 		return t;
+	}
+	
+	public ArrayList<Table> getAllOccupiedTables() throws FileNotFoundException
+	{
+		ArrayList<Table> tableList = new ArrayList<>();
+		
+		int checker = 0;
+
+		for(int i=0; i<getAllTableDetails().size();i++) 
+		{
+				if(getAllTableDetails().get(i).getStatus().equals(TableStatus.OCCUPIED)) 
+				{
+					tableList.add(getAllTableDetails().get(i));
+					checker++;
+				}
+		}
+		
+		if(checker == 0) {
+			tableList = null;
+		}
+		return tableList;
+	}
+	
+	public Boolean checkTableReserved(int tableNo) throws FileNotFoundException {
+
+	
+		if(getTableById(tableNo).getStatus().equals(TableStatus.RESERVED)) 
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public void updateTableStatusString(String status,int tableNo) throws IOException 
+	{
+		TableStatus t = null;
+		switch(status) {
+			case "OCCUPIED":
+				t = TableStatus.OCCUPIED;
+				break;
+			case "VACANT":
+				t = TableStatus.VACANT;
+				break;
+			case "RESERVED":
+				t = TableStatus.RESERVED;
+				break;
+		}
+		Table table = getTableById(tableNo);
+		table.setStatus(t);
+		updateTableStatus(table);
+		
 	}
 
 

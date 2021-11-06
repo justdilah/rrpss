@@ -80,6 +80,19 @@ public class Customer extends Person {
 		}
 		return c;
 	}
+	
+	public Boolean isMember(int custID) throws FileNotFoundException {
+
+		for(int i=0; i<getAllCustomerDetails().size();i++) {
+
+			if(getAllCustomerDetails().get(i).getCustId() == custID) {
+				if(getAllCustomerDetails().get(i).getMembership()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	public ArrayList<Customer> getAllCustomerDetails() throws FileNotFoundException 
 	{

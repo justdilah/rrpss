@@ -60,13 +60,6 @@ public class OrderController {
 //		o.setTableId(id);
 	}
 	
-//	public void addOrder(String pn) throws IOException {
-//		String foodItem = o.getOrderId() + "," + o.getTimeStamp() +  "," +  o.getStaffId() + "," + o.getIsPaid() + "," + o.getCustIDByPhoneNum(pn);
-//		List l = new ArrayList();
-//		l.add(foodItem);
-//		o.saveOrder(l);
-//	}
-
 	/**
 	 *     
 	 * @param orderId
@@ -74,6 +67,10 @@ public class OrderController {
 	 */
 	public ArrayList<Order> getAllOrders() throws IOException {
 		return o.getAllOrders();
+	}
+	
+	public ArrayList<Order> getUnpaidOrders() throws IOException {
+		return o.getUnpaidOrders();
 	}
 	
 	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {

@@ -1,1 +1,2 @@
-OrderID,TimeOrdered,DateOrdered,StaffID,IsPaidStaffIDTableNo
+OrderID,TimeOrdered,DateOrdered,StaffID,IsPaid,CustID,TableNo
+1,14:35,2021-11-0650001,false,20003

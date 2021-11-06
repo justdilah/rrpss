@@ -29,7 +29,8 @@ public class MainAppUI {
 		System.out.println("(3) Sales Revenue Report");
 		System.out.println("(4) Menu");
 		System.out.println("(5) Promotion");
-		System.out.println("(6) Exit");
+		System.out.println("(6) Payment");
+		System.out.println("(7) Exit");
 		
 			
 			do {
@@ -89,6 +90,10 @@ public class MainAppUI {
 					break; 
 				
 				case 6:
+					mc.getInvoiceForm();
+					break;
+				
+				case 7: 
 					break;
 				
 				default:

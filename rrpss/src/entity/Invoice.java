@@ -1,22 +1,75 @@
 package entity;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class Invoice {
 
 	private int invoiceNo;
-	private Double subTotal;
-	private Double gst;
-	private Double serviceCharge;
-	private Double discounts;
+	private double subTotal;
+	private double gst;
+	private double serviceCharge;
+	private double discounts;
+	private double totalPrice;
+	private int staffID;
 	private LocalDate invoiceDate;
-	private LocalDateTime invoiceTime;
+	private LocalTime invoiceTime;
 	SaleRevenueMonth monthlyreport;
+	private int tableNo;
+	private int orderID;
 
+	private static final String filename = "DataSet/Invoice.csv";
+	
+	public Invoice() {
+		
+	}
+	
+	public Invoice(int invoiceNo,int orderID, LocalDate date, double subTotal, double discount, double gst, int staffID, int tableNo) {
+		this.invoiceDate = date;
+		this.invoiceNo = invoiceNo;
+		this.orderID = orderID;
+		this.staffID = staffID;
+		this.tableNo = tableNo;
+		this.gst = gst;
+		this.subTotal = subTotal;
+		this.discounts = discount;
+	}
+	
+	
 	public int getInvoiceNo() {
 		return this.invoiceNo;
 	}
+	
+	public int getOrderID() {
+		return this.orderID;
+	}
+	
+	public LocalDate getDate() {
+		return this.invoiceDate;
+	}
+	
+	public double getTotalPrice() {
+		return this.totalPrice;
+	}
+	
+	public int getStaffID() {
+		return this.staffID;
+	}
+	
+	public int getTableNo() {
+		return this.tableNo;
+	}
+	
 
 	public Double getSubTotal() {
 		return this.subTotal;
@@ -86,7 +139,7 @@ public class Invoice {
 		this.invoiceDate = invoiceDate;
 	}
 
-	public LocalDateTime getInvoiceTime() {
+	public LocalTime getInvoiceTime() {
 		return this.invoiceTime;
 	}
 
@@ -94,8 +147,79 @@ public class Invoice {
 	 * 
 	 * @param invoiceTime
 	 */
-	public void setInvoiceTime(LocalDateTime invoiceTime) {
+	public void setInvoiceTime(LocalTime invoiceTime) {
 		this.invoiceTime = invoiceTime;
 	}
+	
+	public void saveInvoice(List l) throws IOException {
+		write(filename,l);
+	}
+	
+	public ArrayList<Invoice> getAllInvoice() throws IOException {
+		ArrayList<Invoice> invoiceList= new ArrayList<>();
+		ArrayList stringitems = (ArrayList) read(filename);
+		if(stringitems.size() > 0) {
+			OrderItem o = new OrderItem();
+			Customer c = new Customer();
+			for (int i = 0; i < stringitems.size(); i++) {
+				String st = (String) stringitems.get(i);
+				StringTokenizer star = new StringTokenizer(st, ",");
+				String invoiceId = star.nextToken().trim();
+				String orderId = star.nextToken().trim();
+				String dateOrdered = star.nextToken().trim();
+				String totalPrice = star.nextToken().trim();
+				String staffId = star.nextToken().trim();	
+				Invoice p = new Invoice();
+				invoiceList.add(p);
+			}
+		} else {
+			invoiceList = null;
+		}
+		return invoiceList;
+	}
+	
+	private List read(String filename) throws IOException {
+		List data = new ArrayList();
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String headerLine = reader.readLine();
+		String line;
+		try {
+			while ((line = reader.readLine()) != null) {
+
+				data.add(line);
+			}
+		} finally {
+			reader.close();
+		}
+		return data;
+	}
+	
+	
+	
+	//READ AND WRITE TO CSV
+	private void write(String filename, List data) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
+		try {
+			for (int i = 0; i < data.size(); i++) {
+				
+				out.write((String) data.get(i)+"\n");
+			}
+		} finally {
+			out.close();
+		}
+	}
+	
+//	private void replace(String filename, List data) throws IOException {
+//		
+//		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+//		try {
+//			out.write("InvoiceID" + "," + "OrderID" + "," + "TotalPrice" + "," + "DateOrdered" + "," + "StaffID" + "\n");
+//			for (int i = 0; i < data.size(); i++) {
+//				out.write((String) data.get(i) + "\n");
+//			}
+//		} finally {
+//			out.close();
+//		}
+//	}
 
 }

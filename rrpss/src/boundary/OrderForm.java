@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -74,19 +75,21 @@ public class OrderForm {
 	
 	//CREATE ORDER
 	private void insertOrder() throws IOException {
-		try {
+//		try {
 			System.out.println("=================================");
 	        System.out.println("\t Create Order ");
 			System.out.println("=================================");
 			System.out.println("Please enter Table Number: ");
-			int tableNo = sc.nextInt();
+			String tableNo = sc.nextLine();
 			
+			int no = Integer.parseInt(tableNo);
 			Table t = new Table();
-			while(!t.tableExists(tableNo)) {
-				System.out.println("Table Number does not exist");
+			while(!t.tableExists(no) || !t.checkTableReserved(no)) {
+				System.out.println("Table Number does not exist or is not reserved");
 				System.out.println("Please Try again");
 				System.out.println("Please enter Table Number: ");
-				tableNo = sc.nextInt();
+				tableNo = sc.nextLine();
+				no = Integer.parseInt(tableNo);
 			}
 			
 			int index = 1;
@@ -128,17 +131,20 @@ public class OrderForm {
 				phoneNum = sc.next();
 			}
 			
-			or.addOrder(index, LocalTime.now(),LocalDate.now(), staffid, false, phoneNum, tableNo);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+			or.addOrder(index, 
+			LocalTime.parse(LocalTime.now().format(formatter)),LocalDate.now(), staffid, false, phoneNum, no);
 			System.out.println("==================================");
 			System.out.println("Order added successfully");
 			System.out.println("==================================");
+			t.updateTableStatusString("OCCUPIED", no);
 			
-		} catch (Exception ex) {
-			System.out.println("==================================");
-			System.out.println("Unsuccessful. Please try again");
-			System.out.println("==================================");
-			insertOrder();
-		}	
+//		} catch (Exception ex) {
+//			System.out.println("==================================");
+//			System.out.println("Unsuccessful. Please try again");
+//			System.out.println("==================================");
+//			insertOrder();
+//		}	
 	}
 	
 	//INSERT ORDER ITEMS TO THE ORDER
@@ -193,13 +199,13 @@ public class OrderForm {
 		
 		while(true) {
 			System.out.println("====================================");
-			System.out.println("Please enter 100 to complete the order");
+			System.out.println("Please enter 0 to complete the order");
 			System.out.println("====================================");
 			
 			System.out.println("Please enter your choice: ");
 			c = sc.nextInt();
 			
-			if(c == 100) {
+			if(c == 0) {
 				break;
 			} else {
 				System.out.print("Enter the qty: ");
@@ -246,7 +252,7 @@ public class OrderForm {
 						System.out.println();
 						totalPrice+= orderItemList.get(k).getOrderItemPrice();
 					}
-					System.out.println("Total Price : " + totalPrice);
+					System.out.println("Sub Total Price : " + totalPrice);
 				}
 	    	} else {
 	    		System.out.println("================================================");
@@ -263,10 +269,10 @@ public class OrderForm {
         System.out.println("Select the Order you would like to update ");
 		System.out.println("================================================");
 		
-		if(or.getAllOrders() != null) {
-			for(int i=0;i<or.getAllOrders().size() ; i++ ) {
+		if(or.getUnpaidOrders() != null) {
+			for(int i=0;i<or.getUnpaidOrders().size() ; i++ ) {
 				System.out.print(i+1 + ") ");
-				System.out.print(or.getAllOrders().get(i).getOrderId());
+				System.out.print(or.getUnpaidOrders().get(i).getOrderId());
 				System.out.println("");
 			};
 			
@@ -274,7 +280,7 @@ public class OrderForm {
 			
 			int choice = sc.nextInt();
 			try {			
-				updateOptions(or.getAllOrders().get(choice-1));
+				updateOptions(or.getUnpaidOrders().get(choice-1));
 				System.out.println("==================================");
 				System.out.println("Order updated successfully");
 				System.out.println("==================================");
@@ -352,29 +358,29 @@ public class OrderForm {
         System.out.println("Select the Order you would like to delete ");
 		System.out.println("================================================");
 		
-		if(or.getAllOrders() != null) {
-			for(int i=0;i<or.getAllOrders().size() ; i++ ) {
+		int size = 0;
+		if(or.getUnpaidOrders() == null) {
+			size = 0;
+		} else {
+			size = or.getUnpaidOrders().size();
+		}
+		
+		if(or.getUnpaidOrders() != null) {
+			for(int i=0;i<or.getUnpaidOrders().size() ; i++ ) {
 				System.out.print(i+1 + ") ");
-				System.out.print(or.getAllOrders().get(i).getOrderId());
-				System.out.println("");
+				System.out.print(or.getUnpaidOrders().get(i).getOrderId());
+				System.out.println();
 			};
 			System.out.print("Please enter your choice: ");
 			int choice = sc.nextInt();
 			do {
-				try {
-					or.deleteOrder(or.getAllOrders().get(choice-1).getOrderId());
+			
+					or.deleteOrder(or.getUnpaidOrders().get(choice-1).getOrderId());
 					System.out.println("==================================");
 					System.out.println("Order deleted successfully");
 					System.out.println("==================================");
-					
-					displayOption();
-				} catch (Exception ex) {
-					System.out.println("==================================");
-					System.out.println("Unsuccessful. Please try again");
-					System.out.println("==================================");
-					deleteOrder();
-				}
-			} while (choice > or.getAllOrders().size() || choice < 1);
+				
+			} while (choice > size || choice < 1);
 		} else {
 			System.out.println("================================================");
 	        System.out.println("There are no orders to be deleted ");

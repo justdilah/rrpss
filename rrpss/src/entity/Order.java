@@ -26,7 +26,7 @@ public class Order {
 	Customer customer;
 	Table table;
 	ArrayList <OrderItem> orderItemList; 
-//	Invoice invoice;
+	Invoice invoice;
 	
 	
 	public Order() {
@@ -47,6 +47,7 @@ public class Order {
 		this.customer = cust;
 		this.table = t;
 		this.date = date;
+		Invoice invoice = new Invoice();
 	}
 
 	public int getOrderId() {
@@ -68,7 +69,6 @@ public class Order {
 	public LocalTime getTimeStamp() {
 		return this.timeStamp;
 	}	
-	
 	/**
 	 * 
 	 * @param t
@@ -122,6 +122,22 @@ public class Order {
 		return this.orderItemList;
 	}
 	
+	public ArrayList<Order> getUnpaidOrders() throws IOException {
+		ArrayList<Order> unpaidList = new ArrayList<>();
+		int counter = 0;
+		if(getAllOrders() != null) {
+			for(int i=0;i<getAllOrders().size();i++) {
+				if(getAllOrders().get(i).getIsPaid() == false) {
+					counter++;
+					unpaidList.add(getAllOrders().get(i));
+				}
+			}
+		}
+		if(counter==0) {
+			unpaidList = null;
+		}
+		return unpaidList;
+	}
 	
 	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,i,qty,orderId);
@@ -201,6 +217,30 @@ public class Order {
 		write(filename, list);
 	}
 	
+	public void replaceOrder(Order o) throws IOException {
+		
+		List l = new ArrayList<>();
+		ArrayList<Order> miList = getAllOrders();
+		
+		OrderItem item = new OrderItem();
+		
+		int size = getAllOrders().size();
+		
+		for(int i=0;i<size;i++) {
+			
+			if(miList.get(i).getOrderId() == o.getOrderId()) {
+				miList.set(i, o);
+			} 
+			
+			Order k = miList.get(i);
+			String order = k.getOrderId() + "," + k.getTimeStamp() +  "," + k.getDate() +  "," +  k.getStaffId() + "," + k.getIsPaid() + "," + k.getCust().getCustId() + "," +  k.getTable().getTableNo();
+			l.add(order);
+			
+			
+		}
+		replace(filename,l);
+	}
+	
 	// REMOVE ORDER ITEM FROM THE ORDER ITEM LIST
 	public void removeOrderItem(int orderId, int orderItemId) throws IOException {
 		ArrayList<OrderItem> orderItemList = selectOrderById(orderId).getOrderItemList();
@@ -226,8 +266,13 @@ public class Order {
 				String custid = star.nextToken().trim(); 
 				String tableNo = star.nextToken().trim();
 				int no = Integer.parseInt(tableNo);
-				LocalTime isoTime = LocalTime.parse(timeOrdered, DateTimeFormatter.ISO_LOCAL_TIME);
-				Order m = new Order(Integer.parseInt(orderId),isoTime,LocalDate.parse(dateOrdered), Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)),t.getTableById(no));
+				
+				DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
+				LocalTime converttime = LocalTime.parse(timeOrdered,tformatter);
+				
+				LocalDate date = LocalDate.parse(dateOrdered);
+				
+				Order m = new Order(Integer.parseInt(orderId),converttime,date, Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)),t.getTableById(no));
 				m.setOrderItemList(o.getOrderItems(Integer.parseInt(orderId)));
 				psList.add(m);
 			}
@@ -254,7 +299,7 @@ public class Order {
 				miList.remove(i);
 			} else {
 				Order k = miList.get(i);
-				String foodItem = k.getOrderId() + "," + k.getTimeStamp() + "," + k.getStaffId() + "," + k.getIsPaid() +  "," + k.getCust().getCustId();
+				String foodItem = k.getOrderId() + "," + k.getTimeStamp() + "," + k.getDate() + k.getStaffId() + "," + k.getIsPaid() +  "," + k.getCust().getCustId();
 				l.add(foodItem);
 			}
 			
@@ -296,7 +341,7 @@ public class Order {
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
-			out.write("OrderID" + "," + "TimeOrdered" + "," + "DateOrdered" + "," + "StaffID" + "," + "IsPaid" + "StaffID" + "TableNo" + "\n");
+			out.write("OrderID" + "," + "TimeOrdered" + "," + "DateOrdered" + "," + "StaffID" + "," + "IsPaid" + "," +  "CustID" + "," +  "TableNo" + "\n");
 			for (int i = 0; i < data.size(); i++) {
 				
 				out.write((String) data.get(i) + "\n");
