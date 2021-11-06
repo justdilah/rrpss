@@ -23,40 +23,46 @@ public class PromotionForm {
 	private static final DecimalFormat df = new DecimalFormat("0.00");
 
 	public void displayOption() throws IOException {
-		print("=================================");
-		print("\t Promotion Menu Options ");
-		print("=================================");
-		print("(1) Display Promotion Set ");
-		print("(2) Insert Promotion Set ");
-		print("(3) Update Promotion Set ");
-		print("(4) Delete Promotion Set ");
-		print("(5) Return to Main Menu");
-
-		try {
-			int choice = Integer.parseInt(sc.nextLine());
-
-			switch (choice) {
-				case 1:
-					displayPromotionItem();
-					break;
-				case 2:
-					insertPromotionItem();
-					break;
-				case 3:
-					updatePromotionItem();
-					break;
-				case 4:
-					deletePromotionItem();
-					break;
-				case 5:
-					sc.close();
-					MainAppUI.print();
-					break;
-			}
-		}catch(NumberFormatException e)
-		{
-			print("Choice is of invalid format, please enter a valid choice");
-		}
+		int choice = -1;
+		do {
+			print("=================================");
+			print("\t Promotion Menu Options ");
+			print("=================================");
+			print("(1) Display Promotion Set ");
+			print("(2) Insert Promotion Set ");
+			print("(3) Update Promotion Set ");
+			print("(4) Delete Promotion Set ");
+			print("(5) Return to Main Menu");
+			print("Please enter your choice: ");
+	
+			do {
+				try {
+					choice = Integer.parseInt(sc.nextLine());
+		
+					switch (choice) {
+						case 1:
+							displayPromotionItem();
+							break;
+						case 2:
+							insertPromotionItem();
+							break;
+						case 3:
+							updatePromotionItem();
+							break;
+						case 4:
+							deletePromotionItem();
+							break;
+						case 5:
+							MainAppUI.print();
+							sc.close();
+							break;
+					}
+				}catch(NumberFormatException e)
+				{
+					print("Choice is of invalid format, please enter a valid choice");
+				}
+			} while (choice == -1);
+		} while (choice > 5 || choice < 1);
 	}
 
 	private void displayPromotionItem() throws IOException {
@@ -441,6 +447,7 @@ public class PromotionForm {
 			for (int i = 0; i < p.getPackItem().size(); i++)
 				System.out.printf(format, p.getPackItem().get(i).getFoodName(), "$" + p.getPackItem().get(i).getFoodPrice());
 			print("");
+			print("Press 0 to end update to the list");
 			print("1) Add Ala Carte item in the promotion set");
 			print("2) Delete an Ala Carte item in the promotion set");
 			print("Please enter your choice :");
