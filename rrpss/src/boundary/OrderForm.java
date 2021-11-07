@@ -1,20 +1,15 @@
 package boundary;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import controller.CustomerController;
-import controller.OrderController;
-import controller.StaffController;
-import controller.TableController;
+import controller.*;
 import entity.AlaCarte;
 import entity.Customer;
 import entity.Order;
@@ -24,376 +19,718 @@ import entity.Staff;
 import entity.Table;
 
 public class OrderForm {
-	
-	OrderController or = new OrderController();
-	CustomerController cc = new CustomerController();
-	TableController tc = new TableController();
-	StaffController scontrol = new StaffController();
-	
-	Scanner sc = new Scanner(System.in);
-	
-	//SHOW ORDER
-	public void displayOption() throws IOException {
-		System.out.println("=================================");
-        System.out.println("\t Order Options ");
-		System.out.println("=================================");
-		System.out.println("1) Display Orders ");
-		System.out.println("2) Create an Order ");
-		System.out.println("3) Update an Order ");
-		System.out.println("4) Delete an Order ");
-		System.out.println("5) Back");
-		
-		System.out.println("Please enter your choice: ");
-		
-		Scanner sc = new Scanner(System.in);
-		int choice = sc.nextInt();
-		do {
-			switch(choice) {
-			case 1:
-				displayOrder();
-				break;
-			case 2:				
-				insertOrder();
-				break;
-			case 3:
-				updateOrder();
-				break;
-			case 4:
-				deleteOrder();
-				break;
-			case 5:
-				MainAppUI.print();
-				break;
-			default:
-				System.out.println("=========================================================");
-				System.out.println("\tInvalid input. Please try again!");
-		    	System.out.println("=========================================================");
-				System.out.println("1) Display Orders ");
-				System.out.println("2) Create an Order ");
-				System.out.println("3) Update an Order ");
-				System.out.println("4) Delete an Order ");
-				System.out.println("5) Back");
-				choice = sc.nextInt();
-				break;
-			} 
-		}while(choice > 4 || choice < 1);
-	}
-	
-	//CREATE ORDER
-	private void insertOrder() throws IOException {
-//		try {
-			System.out.println("=================================");
-	        System.out.println("\t Create Order ");
-			System.out.println("=================================");
-			System.out.println("Please enter Table Number: ");
-			String tableNo = sc.nextLine();
-			
-			int no = Integer.parseInt(tableNo);
-		
-			while(!tc.tableExists(no) || !tc.checkTableReserved(no)) {
-				System.out.println("Table Number does not exist or is not reserved");
-				System.out.println("Please Try again");
-				System.out.println("Please enter Table Number: ");
-				tableNo = sc.nextLine();
-				no = Integer.parseInt(tableNo);
-			}
-			
-			int index = 1;
-			
-			BufferedReader reader = new BufferedReader(new FileReader("DataSet/Order.csv"));
-			int counter = 0;
-			
-			while(reader.readLine()!=null) {
-				counter++;
-			}
-	
-			if (counter == 1) { 
-				insertOrderItems(index, 0);
-			} else {
-				index = or.getAllOrders().size() + 1;
-				insertOrderItems(index, 0);
-			}
-					
-			
-			System.out.println("Please enter your Staff ID: ");
-			int staffid = sc.nextInt();
-			Staff s = new Staff();
-			
-			while(!s.isIdExists(staffid)) {
-				System.out.println("Staff ID does not exist");
-				System.out.println("Please Try again");
-				System.out.println("Please enter your Staff ID: ");
-				staffid = sc.nextInt();
-			}
-			
-			System.out.println("Please enter Customer Phone Number: ");
-			String phoneNum = sc.next();
-			
-			Customer c = new Customer();
-			while(!c.custExists(phoneNum)) {
-				System.out.println("Phone Number does not exist");
-				System.out.println("Please Try again");
-				System.out.println("Please enter Customer Phone Number: ");
-				phoneNum = sc.next();
-			}
-			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-			or.addOrder(index, 
-			LocalTime.parse(LocalTime.now().format(formatter)),LocalDate.now(), staffid, false, phoneNum, no);
-			System.out.println("==================================");
-			System.out.println("Order added successfully");
-			System.out.println("==================================");
-			tc.updateTableStatusString("OCCUPIED", no);
-			
-//		} catch (Exception ex) {
-//			System.out.println("==================================");
-//			System.out.println("Unsuccessful. Please try again");
-//			System.out.println("==================================");
-//			insertOrder();
-//		}	
-	}
-	
-	//INSERT ORDER ITEMS TO THE ORDER
-	private void insertOrderItems(int orderId, int counter) throws IOException {
-		System.out.println("Select Menu Items ");
-		System.out.println("=================================");
-        System.out.println("\t Ala Carte Items ");
-		System.out.println("=================================");
-		
-		ArrayList<AlaCarte> alaCarteItems = or.getAllAlaCartItems();
-		
-		for(int i=0;i< alaCarteItems.size() ; i++ ) {
-			System.out.print(i+1 + ") ");
-			System.out.print(alaCarteItems.get(i).getFoodName());
-			System.out.println();		
-		}
-		
-		ArrayList<PromotionSet> promotionSetItems = or.getAllPromoSets();
-		System.out.println("=================================");
-        System.out.println("\t Promotion Sets ");
-		System.out.println("=================================");
 
-		for(int i=0;i<promotionSetItems.size();i++) {
-			System.out.print(alaCarteItems.size() + 1 + i+ ") "  +  promotionSetItems.get(i).getPackName());
-			System.out.println();
-		}
-		
-		ArrayList<String> names = new ArrayList<>();
-		
-		System.out.println("Please enter your choice: ");
-		int c = sc.nextInt();
-		
-		System.out.print("Enter the qty: ");
-		int qty = sc.nextInt();
-		
-		if(c <= alaCarteItems.size()) {
-			AlaCarte a = alaCarteItems.get(c-1);
-			names.add(a.getFoodName());
-			or.addAlaCarteOrderItem(++counter,a, qty, orderId);
-		} else {
-			PromotionSet p = promotionSetItems.get(c-1-alaCarteItems.size());
-			names.add(p.getPackName());
-			or.addPromoOrderItem(++counter,p, qty, orderId);
-		}
-		
-		System.out.println("=================================");
-		System.out.println("Menu items that are added");
-		System.out.println("=================================");
-		for(int k = 0; k<names.size();k++) {
-			System.out.println(names.get(k));
-		}
-		
-		while(true) {
-			System.out.println("====================================");
-			System.out.println("Please enter 0 to complete the order");
-			System.out.println("====================================");
-			
-			System.out.println("Please enter your choice: ");
-			c = sc.nextInt();
-			
-			if(c == 0) {
-				break;
-			} else {
-				System.out.print("Enter the qty: ");
-				qty = sc.nextInt();
-			}
-						
-			if(c <= alaCarteItems.size()) {
-				names.add(alaCarteItems.get(c-1).getFoodName());
-				or.addAlaCarteOrderItem(++counter,alaCarteItems.get(c-1), qty, orderId);
-			} else {
-				names.add(promotionSetItems.get(c-1-alaCarteItems.size()).getPackName());
-				or.addPromoOrderItem(++counter,promotionSetItems.get(c-1-alaCarteItems.size()), qty, orderId);
-			}
-				
-			System.out.println("=================================");
-			System.out.println("Menu items that are added");
-			System.out.println("=================================");
-			for(int k = 0; k<names.size();k++) {
-				System.out.println(names.get(k));
-			}
-		}	
-	}
+    private final OrderController or = new OrderController();
+    private final OrderItemController OI = new OrderItemController();
+    private final CustomerController cc = new CustomerController();
+    private final TableController tc = new TableController();
+    private final StaffController scontrol = new StaffController();
 
-	//VIEW ORDERS
-	private void displayOrder() throws IOException {
-			System.out.println("=========================================================");
-			System.out.println("\tDisplay Orders");
-	    	System.out.println("=========================================================");
-	    	if(or.getAllOrders() != null) {
-	    		ArrayList<Order> orderList = or.getAllOrders();
-				for(int i = 0;i<orderList.size();i++) {
-					double totalPrice = 0;
-					System.out.println("Order ID : " + orderList.get(i).getOrderId());
-					System.out.println("Time Ordered : " + orderList.get(i).getTimeStamp());
-					System.out.println("Date Ordered : " + orderList.get(i).getDate());
-					System.out.println("Payment Completed? : " + orderList.get(i).getIsPaid());
-					System.out.println("Staff ID : " + orderList.get(i).getStaffId());
-					System.out.println("Table No : " + orderList.get(i).getTable().getTableNo());
-					
-					ArrayList<OrderItem> orderItemList = orderList.get(i).getOrderItemList();
-					for(int k=0;k<orderItemList.size();k++) {
-						System.out.print(orderItemList.get(k).getOrderItemName() + " ");
-						System.out.print(orderItemList.get(k).getOrderItemQty());
-						System.out.println();
-						totalPrice+= orderItemList.get(k).getOrderItemPrice();
-					}
-					System.out.println("Sub Total Price : " + totalPrice);
-				}
-	    	} else {
-	    		System.out.println("================================================");
-		        System.out.println("There are no orders to be displayed ");
-				System.out.println("================================================");
-				displayOption();
-	    	}
-			
-	}
+    private static final Scanner sc = new Scanner(System.in);
+    private static final DecimalFormat df= new DecimalFormat("0.00");
 
-	//FOR UPDATE ORDER  
-	private void updateOrder() throws IOException {
-		System.out.println("================================================");
-        System.out.println("Select the Order you would like to update ");
-		System.out.println("================================================");
-		
-		if(or.getUnpaidOrders() != null) {
-			for(int i=0;i<or.getUnpaidOrders().size() ; i++ ) {
-				System.out.print(i+1 + ") ");
-				System.out.print(or.getUnpaidOrders().get(i).getOrderId());
-				System.out.println("");
-			};
-			
-			System.out.print("Please enter your choice: ");
-			
-			int choice = sc.nextInt();
-			try {			
-				updateOptions(or.getUnpaidOrders().get(choice-1));
-				System.out.println("==================================");
-				System.out.println("Order updated successfully");
-				System.out.println("==================================");
-				
-				displayOption();
-			} catch (Exception ex) {
-				System.out.println("==================================");
-				System.out.println("Unsuccessful. Please try again");
-				System.out.println("==================================");
-			}
-		} else {
-			System.out.println("================================================");
-	        System.out.println("There are no orders to be updated ");
-			System.out.println("================================================");
-			displayOption();
-		}
-	}
-	
-	
-	//FOR UPDATE PORTION
-	private void updateOptions(Order o) throws IOException {
-		System.out.println("===================================");
-		System.out.println("Update Options");
-		System.out.println("===================================");
-		System.out.println("1) Add Order Item from Order");
-		System.out.println("2) Remove Order Item frome Order");
-		System.out.println("===================================");
-		System.out.print("Please enter your choice: ");
-		int choice = sc.nextInt();
+    public void displayOption() throws IOException{
 
-		switch(choice) {
-			case 1:
-				addOrderItem(o,o.getOrderItemList().size());
-				
-				break;
-			case 2:				
-				deleteOrderItem(o);
-				break;
-			default: 
-				break;
-		}
-	}
-	
-	//FOR UPDATE PORTION
-	private void addOrderItem(Order o, int counter) throws IOException {
-		System.out.println("===================================");
-		System.out.println("Select the order item to be added");
-		System.out.println("===================================");
-		insertOrderItems(o.getOrderId(),counter);
-		
-	}
-	
-	//FOR UPDATE PORTION
-	private void deleteOrderItem(Order o) throws IOException {
-		System.out.println("===================================");
-		System.out.println("Select the order item to be removed");
-		System.out.println("===================================");
-		
-		
-		for(int i=0;i<o.getOrderItemList().size() ; i++ ) {
-			System.out.print(i+1 + ") ");
-			System.out.print(o.getOrderItemList().get(i).getOrderItemName());
-			System.out.println("");
-		};
-		System.out.print("Please enter your choice: ");
-		int choice = sc.nextInt();
-		or.removeOrderItem(o.getOrderId(),o.getOrderItemList().get(choice-1).getOrderItemId());
-	}
-	
-	
-	
-	//DELETE ORDER - DELETES BOTH ORDER AND ORDER ITEMS RELATED TO THE ORDER
-	private void deleteOrder() throws IOException {
-		System.out.println("================================================");
-        System.out.println("Select the Order you would like to delete ");
-		System.out.println("================================================");
-		
-		int size = 0;
-		if(or.getUnpaidOrders() == null) {
-			size = 0;
-		} else {
-			size = or.getUnpaidOrders().size();
-		}
-		
-		if(or.getUnpaidOrders() != null) {
-			for(int i=0;i<or.getUnpaidOrders().size() ; i++ ) {
-				System.out.print(i+1 + ") ");
-				System.out.print(or.getUnpaidOrders().get(i).getOrderId());
-				System.out.println();
-			};
-			System.out.print("Please enter your choice: ");
-			int choice = sc.nextInt();
-			do {
-			
-					or.deleteOrder(or.getUnpaidOrders().get(choice-1).getOrderId());
-					System.out.println("==================================");
-					System.out.println("Order deleted successfully");
-					System.out.println("==================================");
-				
-			} while (choice > size || choice < 1);
-		} else {
-			System.out.println("================================================");
-	        System.out.println("There are no orders to be deleted ");
-			System.out.println("================================================");
-			displayOption();
-		}
-		
-	}
+        int choice = 0;
+        printOrderFormMenu();
+
+        print("Please enter your choice: ");
+        do{
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+                if(choice==0||choice>5)
+                    print("Choice does not exist, please enter a valid choice");
+            }catch(NumberFormatException e){
+                print("Choice is of invalid format, please enter a valid choice: ");
+            }
+        }while(choice==0||choice>5);
+
+        switch (choice) {
+            case 1 -> displayOrder();
+            case 2 -> insertOrder();
+			case 3 -> updateOrder();
+			case 4 -> deleteOrder();
+            case 5 -> MainAppUI.print();
+        }
+
+    }
+
+    //Part is not done
+    private void displayOrder(){
+
+    }
+
+    //Creation of Order
+    private void insertOrder() throws IOException{
+
+        int tableNo =0, index = 1;
+        int staffid= 0;
+        String custNo ="";
+
+        System.out.println("=================================");
+        System.out.println("\t Create Order ");
+        System.out.println("=================================");
+        System.out.println("Please enter your choice: ");
+
+
+        for(int i=0;i<tc.getAllReservedTables().size();i++) {
+            System.out.println(i+1 + ") Table No " + tc.getAllReservedTables().get(i).getTableNo());
+        }
+
+        Table t = null;
+
+        do {
+            try {
+                tableNo = Integer.parseInt(sc.nextLine());
+                t = tc.getAllReservedTables().get(tableNo - 1);
+                if (t == null)
+                    print("Table does not exist, please enter a valid table number: ");
+            }catch(NumberFormatException e){
+                print("Table Number is of invalid format, please enter a valid table number: ");
+            }
+        }while(t==null);
+
+        index = or.getIndexFromOICsv(index);
+
+        print("Please enter Staff ID: ");
+        Staff s = new Staff();
+        do {
+            try{
+                staffid = Integer.parseInt(sc.nextLine());
+                if(!s.isIdExists(staffid)) {
+                    print("Staff ID does not exist");
+                    print("Please enter a valid Staff ID: ");
+                }
+            }catch(NumberFormatException e){
+                print("Staff ID is not of valid format, please enter a valid Staff ID: ");
+            }
+        }while(!s.isIdExists(staffid));
+
+        print("Please enter Customer Phone Number: ");
+        Customer c = new Customer();
+        do{
+            custNo = sc.nextLine();
+            if(custNo.trim().isEmpty())
+                print("Customer Phone Number cannot be empty, please enter Customer Phone Number: ");
+            else if(!c.custExists(custNo))
+                print("Customer Phone Number does not exist, please enter Customer Phone Number: ");
+        }while(!c.custExists(custNo)||custNo.trim().isEmpty());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime time = LocalTime.parse(LocalTime.now().format(formatter));
+        LocalDate date = LocalDate.now();
+        or.addOrder(index,time,date,staffid,false,custNo,tableNo);
+        insertOrderItems(index,0);
+        print("==================================");
+        print("Order added successfully");
+        print("==================================");
+        t.updateTableStatusString("OCCUPIED", tableNo);
+    }
+    //insert Order Calls to insertOrderItems function
+    private void insertOrderItems(int orderId, int counter) throws IOException {
+
+        String format = "%-30s%s%n";
+        String format1 = "%-27s%s%n";
+
+        int i,c=0, indexes, qty=0, j,size;
+        boolean setter;
+
+        ArrayList<AlaCarte> alarCarteItems = or.getAllAlaCartItems();
+        ArrayList<PromotionSet> promoSetItems = or.getAllPromoSets();
+        printFoodMenu();
+        i= alarCarteItems.size()+ promoSetItems.size();
+        indexes = i-1;
+
+        print("Please enter your choice: ");
+        do{
+            try {
+                c = Integer.parseInt(sc.nextLine());
+                if (c <= 0 || c > indexes)
+                    print("Choice does not exist, please enter a valid choice: ");
+            }catch(NumberFormatException e){
+                print("Choice is of invalid format, please enter a valid choice: ");
+            }
+        }while(c<=0 || c>indexes);
+
+        print("Please enter Qty: ");
+        do{
+            try{
+                qty = Integer.parseInt(sc.nextLine());
+                if (qty<1)
+                    print("Quantity cannot be smaller than 0, please enter a valid quantity: ");
+            }catch(NumberFormatException e) {
+                print("Quantity is of invalid format, please enter a valid quantity: ");
+            }
+        }while(qty<1);
+
+        if (c<= alarCarteItems.size()){
+            AlaCarte a = alarCarteItems.get(c-1);
+            or.addAlaCarteOrderItem(++counter,a,qty,orderId);
+        }
+        else{
+            PromotionSet p =  promoSetItems.get(c-1-alarCarteItems.size());
+            or.addPromoOrderItem(++counter, p, qty,orderId);
+        }
+
+        do{
+            print("=================================");
+            print("Current items that are added");
+            print("=================================");
+            printf(format1,"Item","Quantity");
+            print("===================================");
+
+            size = or.getOrderById(orderId).getOrderItemList().size();
+            ArrayList<OrderItem> oiList = or.getOrderById(orderId).getOrderItemList();
+
+            for(j=0;j<size ; j++ ) {
+                System.out.printf(format,j+1 + ") " +oiList.get(j).getOrderItemName(),
+                        oiList.get(j).getOrderItemQty());
+            }
+            print("====================================");
+            print("Please enter 0 to stop adding");
+            print("====================================");
+
+            print("Please enter your choice: ");
+            c=0;
+            setter = false;
+            try{
+                c = Integer.parseInt(sc.nextLine());
+                if(c==0)
+                    break;
+                else if(c<0||c>indexes)
+                    print("Choice does not exist, please enter a valid choice: ");
+                else{
+
+                    if (c<= alarCarteItems.size()){
+                        AlaCarte a = alarCarteItems.get(c-1);
+                        for(j =0; j<size; j++)
+                        {
+                            if(oiList.get(j).getOrderItemName().equals(a.getFoodName()))
+                            {
+                                print("Enter Quantity");
+                                int Qty = 0;
+                                do {
+                                    try {
+                                        Qty = Integer.parseInt(sc.nextLine());
+                                        if (Qty == 0)
+                                            print("Quantity cannot be 0, please enter a valid quantity: ");
+                                    } catch (NumberFormatException e) {
+                                        print("Quantity is of invalid format, please enter a valid quantity: ");
+                                    }
+                                } while (Qty == 0);
+                                int newQty = oiList.get(j).getOrderItemQty() + Qty;
+                                OI.updateOrderItemQty(oiList.get(j), newQty);
+                                print("Item has been successfully added into the Order");
+                                setter = true;
+                                break;
+                            }
+                        }
+
+                        if(!setter){
+                            int Qty = 0;
+                            print("Enter Quantity: ");
+                            do{
+                                try
+                                {
+                                    Qty = Integer.parseInt(sc.nextLine());
+                                    if(Qty == 0)
+                                        print("Quantity cannot be 0, please enter a valid quantity: ");
+                                }catch(NumberFormatException e){
+                                    print("Quantity is of invalid format, please enter a valid quantity: ");
+                                }
+                            }while(Qty==0);
+                            or.addAlaCarteOrderItem(++counter,a,Qty,orderId);
+                            print("Item has been successfully added into the Order");
+                        }
+                    }
+                    else{
+                        PromotionSet p =  promoSetItems.get(c-1-alarCarteItems.size());
+                        for (j=0; j<size; j++) {
+                            if (oiList.get(j).getOrderItemName().equals(p.getPackName())) {
+                                print("Enter Quantity: ");
+                                int Qty = 0;
+                                do {
+                                    try {
+                                        Qty = Integer.parseInt(sc.nextLine());
+                                        if (Qty == 0)
+                                            print("Quantity cannot be 0, please enter a valid quantity");
+                                    } catch (NumberFormatException e) {
+                                        print("Quantity is of invalid format, please enter a valid quantity");
+                                    }
+                                } while (Qty == 0);
+                                int newQty = oiList.get(j).getOrderItemQty() + Qty;
+                                OI.updateOrderItemQty(oiList.get(j), newQty);
+                                print("Item has been successfully added into the Order");
+                                setter = true;
+                                break;
+                            }
+                        }
+
+                        if(!setter)
+                        {
+                            int Qty = 0;
+                            print("Enter Quantity: ");
+                            do{
+                                try
+                                {
+                                    Qty = Integer.parseInt(sc.nextLine());
+                                    if(Qty == 0)
+                                        print("Quantity cannot be 0, please enter a valid quantity");
+                                }catch(NumberFormatException e){
+                                    print("Quantity is of invalid format, please enter a valid quantity");
+                                }
+                            }while(Qty==0);
+                            or.addPromoOrderItem(++counter, p, Qty,orderId);
+                            print("Item has been successfully added into the Order");
+                        }
+                    }
+                }
+            }catch(NumberFormatException e){
+                print("Choice is not of valid format, please enter a valid choice: ");
+            }
+        }while(c!=0);
+        displayOption();
+    }
+
+    private void updateOrder() throws IOException {
+
+        String format = "%-20s%s%n";
+        int choice = 0, size = 0;
+
+        print("================================================");
+        print("Select the Order you would like to update ");
+        print("================================================");
+        if (or.getUnpaidOrders() == null)
+        {
+            print("There are no orders for updating");
+            displayOption();
+        }
+
+        Customer c;
+        size = or.getUnpaidOrders().size();
+        ArrayList<Order> uorder = or.getUnpaidOrders();
+
+        for (int i = 0; i < size; i++) {
+            c = uorder.get(i).getCust();
+            String orderId = String.valueOf(uorder.get(i).getOrderId());
+            String tableNo = String.valueOf(uorder.get(i).getTable().getTableNo());
+            print("("+(i+1)+")");
+            printf(format,"Order Id :" ,orderId);
+            printf(format,"Customer Name :" , c.getPersName());
+            printf(format,"Table No :" ,tableNo);
+            print("");
+        }
+
+        print("Enter 0 to return to the previous page");
+        print("Please enter your choice: ");
+        do {
+            try{
+                choice = Integer.parseInt(sc.nextLine());
+                if(choice<0||choice>or.getUnpaidOrders().size())
+                    print("Choice does not exist, please enter a valid choice: ");
+
+            }catch(NumberFormatException e) {
+                print("Choice is of invalid format, please enter a valid choice: ");
+            }
+        }while(choice<0||choice>or.getUnpaidOrders().size());
+
+        if (choice==0)
+            displayOption();
+
+        else
+            updateOptions(or.getUnpaidOrders().get(choice-1));
+
+
+    }
+    
+    private void updateOptions(Order o) throws IOException{
+
+        int choice = 0;
+
+        String format = "%-30s%s%n";
+        String format1 = "%-27s%s%n";
+
+        do {
+
+            print("===================================");
+            print("Current Order Items");
+            print("===================================");
+            printf(format1,"Item","Quantity");
+            print("===================================");
+
+            ArrayList<OrderItem> items = o.getOrderItemList();
+            for (OrderItem item : items) printf(format, item.getOrderItemName(), String.valueOf(item.getOrderItemQty()));
+
+
+            print("===================================");
+            print("Update Options");
+            print("===================================");
+            print("1) Add Order Item to Order");
+            print("2) Remove Order Item from Order");
+            print("Enter 0 to return to the last page");
+            print("===================================");
+            System.out.print("Please enter your choice: ");
+            do {
+                try {
+                    choice = Integer.parseInt(sc.nextLine());
+                    if (choice < 0 || choice > 2)
+                        print("Choice does not exist, please enter a valid choice: ");
+                } catch (NumberFormatException e) {
+                    print("Choice is of invalid format, please enter a valid choice: ");
+                }
+            } while (choice < 0 || choice > 2);
+
+            switch (choice) {
+                case 1 -> {
+                    addOrderItem(o, o.getOrderItemList().size());
+                }
+                case 2 -> {
+                    deleteOrderItem(o);
+                }
+            }
+        }while(choice!=0);
+        updateOrder();
+    }
+
+    //FOR UPDATE PORTION
+    private void addOrderItem(Order o, int counter) throws IOException {
+
+        int size, choice=0;
+        boolean setter;
+
+        String format = "%-30s%s%n";
+        String format1 = "%-27s%s%n";
+
+        ArrayList<AlaCarte> alarCarteItems = or.getAllAlaCartItems();
+        ArrayList<PromotionSet> promoSetItems = or.getAllPromoSets();
+
+        size= alarCarteItems.size()+ promoSetItems.size();
+
+        print("===================================");
+        print("Select the order item to be added");
+        print("===================================");
+        printFoodMenu();
+
+        print("===================================");
+        print("Current Order Items List");
+        print("===================================");
+        printf(format1,"Item","Quantity");
+        print("===================================");
+
+
+        for(int i=0;i<o.getOrderItemList().size() ; i++ ) {
+            System.out.printf(format,i+1 + ") " +o.getOrderItemList().get(i).getOrderItemName(),
+                    o.getOrderItemList().get(i).getOrderItemQty());
+        }
+
+        print("Enter 0 to return to the previous page");
+        print("Enter an option to add: ");
+
+        do{
+            try{
+                choice = Integer.parseInt(sc.nextLine());
+                if (choice<0 || choice>size)
+                    print("Choice does not exist, please enter a valid choice: ");
+                else if (choice == 0)
+                    break;
+            }catch(NumberFormatException e){
+                print("Choice is of invalid format, please enter a valid choice: ");
+            }
+        }while(choice<0 || choice>size);
+
+        setter = false;
+        if(choice!=0)
+        {
+            if (choice<= alarCarteItems.size()){
+                AlaCarte a = alarCarteItems.get(choice-1);
+                for(int i =0; i<o.getOrderItemList().size(); i++) {
+                    if (o.getOrderItemList().get(i).getOrderItemName().equals(a.getFoodName())) {
+                        print("Enter Quantity");
+                        int Qty = 0;
+                        do {
+                            try {
+                                Qty = Integer.parseInt(sc.nextLine());
+                                if (Qty == 0)
+                                    print("Quantity cannot be 0, please enter a valid quantity");
+                            } catch (NumberFormatException e) {
+                                print("Quantity is of invalid format, please enter a valid quantity");
+                            }
+                        } while (Qty == 0);
+                        int newQty = o.getOrderItemList().get(i).getOrderItemQty() + Qty;
+                        OI.updateOrderItemQty(o.getOrderItemList().get(i), newQty);
+                        print("Item has been successfully added into the Order");
+                        setter = true;
+                        break;
+                    }
+                }
+
+                if(!setter)
+                {
+                    int Qty = 0;
+                    print("Enter Quantity: ");
+                    do{
+                        try
+                        {
+                            Qty = Integer.parseInt(sc.nextLine());
+                            if(Qty == 0)
+                                print("Quantity cannot be 0, please enter a valid quantity");
+                        }catch(NumberFormatException e){
+                            print("Quantity is of invalid format, please enter a valid quantity");
+                        }
+                    }while(Qty==0);
+                    or.addAlaCarteOrderItem(++counter,a,Qty,o.getOrderId());
+                    print("Item has been successfully added into the Order");
+                }
+
+
+            }
+            else{
+                PromotionSet p =  promoSetItems.get(choice-1-alarCarteItems.size());
+                for (int i=0; i<o.getOrderItemList().size(); i++){
+                    if (o.getOrderItemList().get(i).getOrderItemName().equals(p.getPackName())){
+                        print("Enter Quantity");
+                        int Qty = 0;
+                        do {
+                            try {
+                                Qty = Integer.parseInt(sc.nextLine());
+                                if (Qty == 0)
+                                    print("Quantity cannot be 0, please enter a valid quantity");
+                            } catch (NumberFormatException e) {
+                                print("Quantity is of invalid format, please enter a valid quantity");
+                            }
+                        } while (Qty == 0);
+                        int newQty = o.getOrderItemList().get(i).getOrderItemQty() + Qty;
+                        OI.updateOrderItemQty(o.getOrderItemList().get(i), newQty);
+                        print("Item has been successfully added into the Order");
+                        setter = true;
+                        break;
+                    }
+
+                }
+                if(!setter)
+                {
+                    int Qty = 0;
+                    print("Enter Quantity: ");
+                    do{
+                        try
+                        {
+                            Qty = Integer.parseInt(sc.nextLine());
+                            if(Qty == 0)
+                                print("Quantity cannot be 0, please enter a valid quantity");
+                        }catch(NumberFormatException e){
+                            print("Quantity is of invalid format, please enter a valid quantity");
+                        }
+                    }while(Qty==0);
+                    or.addPromoOrderItem(++counter, p, Qty,o.getOrderId());
+                    print("Item has been successfully added into the Order");
+                }
+            }
+        }
+        updateOptions(or.getOrderById(o.getOrderId()));
+    }
+
+    //FOR UPDATE PORTION (Finished)
+    private void deleteOrderItem(Order o) throws IOException {
+
+        int choice = 0,  choice2 =0, qty =0;
+        String format = "%-30s%s%n";
+        String format1 = "%-27s%s%n";
+
+        print("===================================");
+        print("Select the Order item to be removed");
+        print("===================================");
+        print("===================================");
+        printf(format1,"Item","Quantity");
+        print("===================================");
+
+
+        for(int i=0;i<o.getOrderItemList().size() ; i++ ) {
+            System.out.printf(format,i+1 + ") " +o.getOrderItemList().get(i).getOrderItemName(),
+                    o.getOrderItemList().get(i).getOrderItemQty());
+        }
+        System.out.print("Please enter your choice: ");
+        do{
+            try{
+                choice = Integer.parseInt(sc.nextLine());
+                if (choice == 0)
+                    break;
+                else if(choice<0 || choice > o.getOrderItemList().size())
+                    print("Choice does not exist, please enter a valid choice: ");
+
+            }catch(NumberFormatException e){
+                print("Choice is of invalid format, please enter a valid choice: ");
+            }
+
+        }while(choice<0 || choice > o.getOrderItemList().size());
+
+        if (choice != 0) {
+            OrderItem oi = o.getOrderItemList().get(choice-1);
+            if(oi.getOrderItemQty()>1)
+            {
+                print("1) Remove food item completely");
+                print("2) Remove a qty");
+                print("Please enter your choice" );
+                do{
+                    try{
+                        choice2 = Integer.parseInt(sc.nextLine());
+                        if (choice2<=0 || choice2>2)
+                            print("Choice does not exist, please enter a valid choice: ");
+
+                    }catch(NumberFormatException e){
+                        print("Choice is of invalid format, Please enter a valid choice");
+                    }
+                }while(choice2<=0 || choice2>2);
+
+                if (choice2 == 1)
+                {
+                    or.removeOrderItem(o.getOrderId(), o.getOrderItemList().get(choice - 1).getOrderItemId());
+                    print("Order Item has been deleted successfully");
+                    updateOptions(or.getOrderById(o.getOrderId()));
+                }
+                else {
+                    print("Input quantity to be removed");
+                    do {
+                        qty = Integer.parseInt(sc.nextLine());
+                        if(qty > oi.getOrderItemQty()) {
+                            print("Entered Quantity cannot be over than Item Quantity");
+                            print("Please enter a valid Quantity");
+                        }
+                        else if(qty == 0)
+                            print("0 is not a valid Quantity, please enter a valid Quantity: ");
+                        else{
+                            int newQty = oi.getOrderItemQty() - qty;
+                            OI.updateOrderItemQty(o.getOrderItemList().get(choice-1),newQty);
+                            print("Quantity has been updated successfully");
+                        }
+                    }while(qty==0 || qty>oi.getOrderItemQty());
+                }
+            }
+            else{
+                or.removeOrderItem(o.getOrderId(), o.getOrderItemList().get(choice - 1).getOrderItemId());
+                print("Order Item has been deleted successfully");
+                updateOptions(or.getOrderById(o.getOrderId()));
+            }
+        }
+        updateOptions(or.getOrderById(o.getOrderId()));
+    }
+    
+
+    private void deleteOrder() throws IOException{
+
+        String format = "%-20s%s%n";
+        int size, choice;
+
+        size = or.getUnpaidOrders().size();
+        if(size == 0) {
+            print("================================================");
+            print("There are no orders to be deleted ");
+            print("================================================");
+            displayOption();
+        }
+
+        print("================================================");
+        print("Select the Order you would like to delete ");
+        print("================================================");
+
+        if(or.getUnpaidOrders() != null) {
+            for (int i = 0; i < size; i++) {
+                Customer c = cc.getCustByIds(or.getUnpaidOrders().get(i).getCust().getCustId());
+                print("("+(i+1)+")");
+                printf(format,"Order Id :" ,String.valueOf(or.getUnpaidOrders().get(i).getOrderId()));
+                printf(format,"Customer Name :" , c.getPersName());
+                printf(format,"Table No :" ,String.valueOf(or.getUnpaidOrders().get(i).getTable().getTableNo()));
+                print("");
+            }
+        }
+
+        print("Enter 0 to return to the previous page");
+        print("Please enter your choice: ");
+        choice = 0;
+        do{
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+                if(choice < 0 || choice>size) {
+                    print("Choice does not exist, please enter a valid choice: ");
+                }
+                else if (choice == 0)
+                    break;
+
+            }catch(NumberFormatException e){
+                print("Choice is of invalid format, please enter a valid choice: ");
+            }
+        }while(choice<0 || choice>size);
+
+        if (choice != 0) {
+            or.deleteOrder(or.getUnpaidOrders().get(choice - 1).getOrderId());
+            System.out.println("==================================");
+            System.out.println("Order deleted successfully");
+            System.out.println("==================================");
+        }
+        displayOption();
+    }
+
+    //Print Menu/Misc
+    public void printOrderFormMenu()
+    {
+        print("=================================");
+        print("\t Order Options ");
+        print("=================================");
+        print("1) Display Orders ");
+        print("2) Create an Order ");
+        print("3) Update an Order ");
+        print("4) Delete an Order ");
+        print("5) Back");
+    }
+
+    public void print(String message) {
+        System.out.println(message);
+    }
+
+    public void printf(String format,String message,String message1){
+        System.out.printf(format,message,message1);
+    }
+
+    public void printFoodMenu() throws IOException {
+
+        String format = "%-20s%s%n";
+        int i = 0, actualPrice=0;
+
+        print("===========================================");
+        print("RRPSS Menu");
+        print("===========================================");
+        print("");
+        print("===========================================");
+        print("Ala Carte Items");
+        print("===========================================");
+        ArrayList<AlaCarte> alarCarteItems = or.getAllAlaCartItems();
+        for(AlaCarte item: alarCarteItems)
+        {
+            print("["+(i+1)+"]");
+            printf(format,"Name: ",item.getFoodName());
+            printf(format, "Description: ", item.getFoodDesc());
+            System.out.printf(format, "Course Type: ", item.getFoodType());
+            printf(format,"Price: ", "$"+df.format(item.getFoodPrice()));
+            print("");
+            i++;
+        }
+        print("=================================");
+        print("Promotion Sets ");
+        print("=================================");
+        ArrayList<PromotionSet> promoSetItems = or.getAllPromoSets();
+
+        for (PromotionSet promo: promoSetItems)
+        {
+            print("["+(i+1)+"]");
+            printf(format,"Name: ", promo.getPackName());
+            printf(format,"Description: ", promo.getPackDesc());
+            printf(format,"Promotion Price: ", "$"+df.format(promo.getPackPrice()));
+            for(int j=0; j<promo.getPackItem().size();j++)
+                actualPrice+=promo.getPackItem().get(j).getFoodPrice();
+            printf(format,"Actual Price: ", "$"+df.format(actualPrice));
+            print("");
+            i++;
+        }
+
+    }
 
 }

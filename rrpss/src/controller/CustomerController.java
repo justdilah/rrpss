@@ -19,4 +19,8 @@ public class CustomerController {
 	public void updateMembership(Customer cust) throws IOException {
 		c.updateMembership(cust);
 	}
+
+	public Customer getCustByIds(int id) throws IOException{
+		return c.getCustById(id);
+	}
 }

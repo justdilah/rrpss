@@ -205,6 +205,22 @@ public class OrderItem {
 		l.add(item);
 		saveFoodItem(l);
  	}
+
+	 public void updateOrderItem(OrderItem o) throws IOException{
+		List l= new ArrayList<>();
+		ArrayList<OrderItem> oList = getAllOrderItems();
+		for (int i=0; i<oList.size();i++){
+			if(oList.get(i).getOrderItemId()==o.getOrderItemId() && oList.get(i).getOrderId() == o.getOrderId())
+			{
+				oList.set(i,o);
+			}
+
+			OrderItem oi = oList.get(i);
+			String oiitem = oi.getOrderItemId() + "," + oi.getOrderItemName() + "," + oi.getOrderItemQty() + "," + oi.getOrderItemPrice() + "," + oi.getOrderId();
+			l.add(oiitem);
+		}
+		replace(filename, l);
+	 }
 	
 	public void removeOrderItem(int orderId, int orderItemId) throws IOException {
 		List l = new ArrayList<>();

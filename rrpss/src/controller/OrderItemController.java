@@ -8,6 +8,8 @@ import entity.AlaCarte;
 import entity.OrderItem;
 import entity.PromotionSet;
 
+
+//Changes might be required || Refactoring needed
 public class OrderItemController {
 	OrderItem oi = new OrderItem();
 	
@@ -37,5 +39,11 @@ public class OrderItemController {
 	
 	public void addOrderItem(int orderId, int orderItemId) throws IOException {
 	    oi.addOrderItem(orderId, orderItemId);
+	}
+
+	public void updateOrderItemQty(OrderItem o, int qty) throws IOException
+	{
+		o.setOrderItemQty(qty);
+		oi.updateOrderItem(o);
 	}
 }
