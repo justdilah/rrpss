@@ -271,7 +271,7 @@ public class Order {
 				
 				LocalDate date = LocalDate.parse(dateOrdered);
 				
-				Order m = new Order(Integer.parseInt(orderId),converttime,date, Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)),t.getTableById(no));
+				Order m = new Order(Integer.parseInt(orderId),converttime,date, Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)),t.getTableByTableNo(no));
 				m.setOrderItemList(o.getOrderItems(Integer.parseInt(orderId)));
 				psList.add(m);
 			}
