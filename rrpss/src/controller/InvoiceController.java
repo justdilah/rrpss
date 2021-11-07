@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,9 +17,16 @@ import entity.Table;
 public class InvoiceController {
 	OrderController or = new OrderController();
 	Invoice i = new Invoice();
-	public int calculateSubTotal() {
-		// TODO - implement InvoiceController.calculateSubTotal
-		throw new UnsupportedOperationException();
+	
+	public int checkFileEmpty() throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader("DataSet/Invoice.csv"));
+		int counter = 0;
+		
+		while(reader.readLine()!=null) {
+			counter++;
+		}
+		
+		return counter;
 	}
 	
 	public ArrayList<Order> getUnpaidOrdersByTableNo(Table table) throws IOException {
@@ -65,5 +75,10 @@ public class InvoiceController {
 		l.add(invoice);
 		i.saveInvoice(l);
 	}
+	
+	public ArrayList<Invoice> getAllInvoice() throws IOException {
+		return i.getAllInvoice();
+	}
+	
 
 }

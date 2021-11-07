@@ -163,6 +163,7 @@ public class Invoice {
 		
 	}
 	
+	//RETRIEVE ALL THE INVOICE RECORDS 
 	public ArrayList<Invoice> getAllInvoice() throws IOException {
 		ArrayList<Invoice> invoiceList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename);
@@ -175,9 +176,19 @@ public class Invoice {
 				String invoiceId = star.nextToken().trim();
 				String orderId = star.nextToken().trim();
 				String dateOrdered = star.nextToken().trim();
-				String totalPrice = star.nextToken().trim();
+				LocalDate date = LocalDate.parse(dateOrdered);
+				String subTotal = star.nextToken().trim();
+				double subt = Double.parseDouble(subTotal);
+				String discount = star.nextToken().trim();
+				double dis = Double.parseDouble(discount);
+				String gst = star.nextToken().trim();
+				double gst2 = Double.parseDouble(gst);
 				String staffId = star.nextToken().trim();	
-				Invoice p = new Invoice();
+				int stId = Integer.parseInt(staffId);
+				String tableNo = star.nextToken().trim();
+				int no = Integer.parseInt(tableNo);
+				
+				Invoice p = new Invoice(Integer.parseInt(invoiceId),Integer.parseInt(orderId), date, subt, dis, gst2, stId, no);
 				invoiceList.add(p);
 			}
 		} else {

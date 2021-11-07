@@ -342,7 +342,7 @@ public class OrderForm {
 
 
     }
-    
+
     private void updateOptions(Order o) throws IOException{
 
         int choice = 0;
@@ -613,7 +613,7 @@ public class OrderForm {
         }
         updateOptions(or.getOrderById(o.getOrderId()));
     }
-    
+
 
     private void deleteOrder() throws IOException{
 

@@ -44,4 +44,10 @@ public class TableController {
 		return t.getAllRservedTables();
 	}
 	
+	public ArrayList<Table> getAllReservedTables() throws FileNotFoundException
+	{
+		return t.getAllRservedTables();
+	}
+	
+	
 }

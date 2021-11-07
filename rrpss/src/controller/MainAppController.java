@@ -7,6 +7,7 @@ import boundary.InvoiceForm;
 import boundary.OrderForm;
 import boundary.PromotionForm;
 import boundary.ReservationForm;
+import boundary.SaleRevenueMonthForm;
 
 
 
@@ -33,9 +34,9 @@ public class MainAppController {
 		r.displayOption();
 	}
 	
-	public void getSalesRevenueMonthForm() {
-//		SalesRevenueMonth r = new SalesRevenueMonth();
-//		r.displayOption();
+	public void getSalesRevenueMonthForm() throws IOException {
+		SaleRevenueMonthForm r = new SaleRevenueMonthForm();
+		r.displayOption();
 	}
 	
 	public void getInvoiceForm() throws IOException {

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.*;
-//import entity.TableCapacity;
 
 public class OrderController {
 
@@ -23,7 +22,7 @@ public class OrderController {
 		l.add(foodItem);
 		o.saveOrder(l);
 	}
-
+		
 	public void addPromoOrderItem(int id, PromotionSet i, int qty, int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,i,qty,orderId);
 		oi.addOrderItem(o);
