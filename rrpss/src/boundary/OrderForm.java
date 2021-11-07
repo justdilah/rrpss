@@ -69,6 +69,14 @@ public class OrderForm {
         System.out.println("=================================");
         System.out.println("\t Create Order ");
         System.out.println("=================================");
+
+        if(tc.getAllReservedTables() == null)
+        {
+            print("No Reserved Tables at the moment");
+            displayOption();
+        }
+
+
         System.out.println("Please enter your choice: ");
 
 
