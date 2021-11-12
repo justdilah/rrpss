@@ -2,11 +2,13 @@ package boundary;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.zip.DataFormatException;
 
 import controller.*;
 import entity.AlaCarte;
@@ -55,12 +57,14 @@ public class OrderForm {
 
     //Part is not done
     private void displayOrder() throws IOException {
-        int choice=-1;
+        int choice=-1, c=-1;
         ArrayList<Order> CurrentOrder;
         ArrayList<OrderItem>CustomerOrder;
-        String format = "%-30s%s%n";
-        String format1 = "%-30s%30s%s%n";
+        String format = "%-30s%s%n", format1 = "%-30s%-10s%s%n";
         double TotalPrice = 0;
+        LocalDate date, date2 = null;
+        boolean setter= true;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         print("=================================");
         print("\t Display Order ");
@@ -78,9 +82,12 @@ public class OrderForm {
             }
         }while(choice<0 || choice>2);
 
+        if(choice == 0)
+            displayOption();
+
         if(choice == 1)
         {
-            LocalDate date = LocalDate.now();
+            date = LocalDate.now();
             CurrentOrder = or.getCurrentDateOrder(date);
             if(CurrentOrder==null){
                 print("There are currently no orders at the moment");
@@ -89,19 +96,90 @@ public class OrderForm {
                 for (Order order: CurrentOrder){
                     printf(format,"Order ID :", String.valueOf(order.getOrderId()));
                     printf(format,"Time Ordered : " , String.valueOf(order.getTimeStamp()));
-                    printf(format,"Date Ordered : " , String.valueOf(order.getDate()));
+                    printf(format,"Date Ordered : " , order.getDate().toString().substring(8,10)+
+                            "-"+order.getDate().toString().substring(5,7)+"-"+order.getDate().toString().substring(0,4));
                     printf(format,"Payment Completed : " , String.valueOf(order.getIsPaid()));
                     printf(format,"Staff ID : " , String.valueOf(order.getStaffId()));
                     printf(format,"Table No : " , String.valueOf(order.getTable().getTableNo()));
                     CustomerOrder = or.getOrderItemByOrderId(order.getOrderId());
+                    print("=============================================");
                     System.out.printf(format1,"Order Item name","Quantity","Price");
+                    print("=============================================");
                     for (OrderItem oitem: CustomerOrder){
                         System.out.printf(format1,oitem.getOrderItemName(),oitem.getOrderItemQty(),"$"+oitem.getOrderItemPrice());
                         TotalPrice+= oitem.getOrderItemPrice();
                     }
+                    print("");
                     printf(format,"Total Price: ", "$"+TotalPrice);
+                    print("");
                 }
             }
+            print("Enter 0 to return to the previous page");
+            do {
+                try{
+                    c = Integer.parseInt(sc.nextLine());
+                    if(c!=0)
+                        print("Enter 0 to return to the previous page");
+
+                }catch(NumberFormatException e){
+                    print("Enter 0 to return to the previous page");
+                    c=-1;
+                }
+            }while(c!=0);
+
+            displayOption();
+
+        }
+        else if (choice == 2){
+            print("Please enter the date for the orders you wish to view (format: yyyy-MM-dd): ");
+            do{
+                try{
+                    date2 = LocalDate.parse(sc.nextLine(),formatter);
+                    setter = false;
+
+                }catch(Exception e){
+                    print("Date is of invalid format, please enter a valid date");
+                }
+            }while(setter);
+            CurrentOrder = or.getCurrentDateOrder(date2);
+            if(CurrentOrder==null){
+                print("There are currently no orders as of this date");
+            }
+            else{
+                for (Order order: CurrentOrder){
+                    printf(format,"Order ID :", String.valueOf(order.getOrderId()));
+                    printf(format,"Time Ordered : " , String.valueOf(order.getTimeStamp()));
+                    printf(format,"Date Ordered : " , order.getDate().toString().substring(8,10)+
+                            "-"+order.getDate().toString().substring(5,7)+"-"+order.getDate().toString().substring(0,4));
+                    printf(format,"Payment Completed : " , String.valueOf(order.getIsPaid()));
+                    printf(format,"Staff ID : " , String.valueOf(order.getStaffId()));
+                    printf(format,"Table No : " , String.valueOf(order.getTable().getTableNo()));
+                    CustomerOrder = or.getOrderItemByOrderId(order.getOrderId());
+                    print("=============================================");
+                    System.out.printf(format1,"Order Item name","Quantity","Price");
+                    print("=============================================");
+                    for (OrderItem oitem: CustomerOrder){
+                        System.out.printf(format1,oitem.getOrderItemName(),oitem.getOrderItemQty(),"$"+oitem.getOrderItemPrice());
+                        TotalPrice+= oitem.getOrderItemPrice();
+                    }
+                    print("");
+                    printf(format,"Total Price: ", "$"+TotalPrice);
+                    print("");
+                }
+            }
+            print("Enter 0 to return to the previous page");
+            do {
+                try{
+                    c = Integer.parseInt(sc.nextLine());
+                    if(c!=0)
+                        print("Enter 0 to return to the previous page");
+
+                }catch(NumberFormatException e){
+                    print("Enter 0 to return to the previous page");
+                    c=-1;
+                }
+            }while(c!=0);
+            displayOption();
         }
     }
 

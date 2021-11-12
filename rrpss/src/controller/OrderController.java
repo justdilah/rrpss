@@ -114,7 +114,7 @@ public class OrderController {
 	}
 
 	public ArrayList<OrderItem> getOrderItemByOrderId(int id) throws IOException{
-		ArrayList<OrderItem> cusOrder = null;
+		ArrayList<OrderItem> cusOrder = new ArrayList<>();
 		ArrayList<OrderItem> oi = getAllOrderItems();
 		for (OrderItem orderItem : oi) {
 			if (orderItem.getOrderId() == id)
@@ -154,11 +154,11 @@ public class OrderController {
 	}
 
 	public ArrayList<Order> getCurrentDateOrder(LocalDate date) throws IOException {
-		ArrayList<Order> CurrentDateList =  null;
+		ArrayList<Order> CurrentDateList =  new ArrayList<>();
 		ArrayList<Order> orderList = getAllOrders();
 		for(Order order: orderList)
 		{
-			if(order.getDate() == date)
+			if(order.getDate().isEqual(date))
 				CurrentDateList.add(order);
 		}
 

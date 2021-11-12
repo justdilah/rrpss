@@ -21,6 +21,7 @@ public class ReservationForm {
 	Scanner sc = new Scanner(System.in);
 	ReservationController rc = new ReservationController();
 	ResTableController rtc = new ResTableController();
+	StaffController stc = new StaffController();
 
 	String name, contact, date, time;
 	int pax;
@@ -102,43 +103,45 @@ public class ReservationForm {
 
 	public void insertReservation() throws IOException
 	{
+		int inputstaffid=0;
+
 		ResTableController rt = new ResTableController();
 		rt.createCapTable();
 
 		int limit=3;
 
-		print("Enter staff ID: ");
-		int inputstaffid = Integer.parseInt(sc.nextLine());
-
-		StaffController s = new StaffController();
-		Staff staff = new Staff();
-		staff = s.getStaffById(inputstaffid);
-
-		if (staff==null)
-		{
-			while(limit>0)
-			{
-				print("Entered wrong staffId, please try again.");
-				print("Enter staff ID: ");
+		print("Enter Staff ID: ");
+		do{
+			try{
 				inputstaffid = Integer.parseInt(sc.nextLine());
-
-				staff = new Staff();
-				staff = staff.getStaffById(inputstaffid);
-
-				if (staff==null)
+				Staff staff;
+				staff = stc.getStaffById(inputstaffid);
+				if(staff == null){
+					if(limit!=1) {
+						print("Entered wrong staffId, please try again.");
+						print("Enter staff ID: ");
+					}
 					limit--;
-				else
+				}
+				else{
 					break;
+				}
+			}catch(NumberFormatException e){
+				if (limit!=1)
+					print("Staff ID is of invalid format, please enter a valid Staff ID: ");
+				else
+					print("You have exceeded 3 tries. Action Aborted. ");
+				limit--;
 			}
 
-			if (limit==0)
-				print("you have exceeded 3 tries. action aborted.");
-			MainAppUI.print();
-			return;
+		}while(limit!=0);
 
+		if (limit == 0){
+			print("You have exceeded 3 tries. Action Aborted. ");
+			MainAppUI.print();
 		}
 
-		int staffid = s.getStaffById(inputstaffid).getStaffId();
+		int staffid = stc.getStaffById(inputstaffid).getStaffId();
 
 
 
