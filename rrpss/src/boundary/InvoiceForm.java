@@ -10,7 +10,7 @@ import java.util.Scanner;
 import controller.CustomerController;
 import controller.InvoiceController;
 import controller.OrderController;
-import controller.TableController;
+import controller.ResTableController;
 import entity.Customer;
 import entity.Invoice;
 import entity.Order;
@@ -22,7 +22,7 @@ public class InvoiceForm {
 	
 	InvoiceController  ivc= new InvoiceController();
 	OrderController or = new OrderController();
-	TableController tc = new TableController();
+	ResTableController tc = new ResTableController();
 	CustomerController cc = new CustomerController();
 	
 	public void displayOption() throws IOException {

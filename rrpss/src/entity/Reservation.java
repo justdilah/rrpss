@@ -276,7 +276,7 @@ public class Reservation {
 		try {
 			for (int i = 0; i < data.size(); i++) {
 
-				//	out.write("\n" +(String) data.get(i)+"\n");
+				//out.write("\n" +(String) data.get(i)+"\n");
 				out.write((String) data.get(i)+"\n");
 			}
 		} finally {

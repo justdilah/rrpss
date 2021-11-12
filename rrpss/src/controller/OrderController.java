@@ -22,50 +22,7 @@ public class OrderController {
 		l.add(foodItem);
 		o.saveOrder(l);
 	}
-		
-	public void addPromoOrderItem(int id, Promotion i, int qty, int orderId) throws IOException {
-		OrderItem o = new OrderItem(id,i,qty,orderId);
-		oi.addOrderItem(o);
-	}
 
-	public void addAlaCarteOrderItem(int id, AlaCarte a, int qty, int orderId) throws IOException {
-		OrderItem o = new OrderItem(id,a,qty,orderId);
-		oi.addOrderItem(o);
-	}
-
-//	public void setStaffID(String id) {
-//		o.setStaffId(id);
-//	}
-//
-//	public void setTimeStamp(LocalTime t) {
-//		o.setTimeStamp(t);
-//	}
-//
-//	public void setisPaid(Boolean b) {
-//		o.setIsPaid(b);
-//	}
-//
-//	public void setOrderId(int id) {
-//		o.setOrderId(id);
-//	}
-//
-//	public int getOrderId() {
-//		return o.getOrderId();
-//	}
-
-//	public int getTableId() {
-//		return o.getTable().getTableNo();
-//	}
-
-//	public void setTableId(int id) {
-////		o.setTableId(id);
-//	}
-
-	/**
-	 *
-	 * @param orderId
-	 * @throws IOException
-	 */
 	public ArrayList<Order> getAllOrders() throws IOException {
 		return o.getAllOrders();
 	}
@@ -87,18 +44,6 @@ public class OrderController {
 	public void replaceOrder(Order or) throws IOException {
 		o.replaceOrder(or);
 	}
-
-
-//	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
-//		OrderItem o = new OrderItem(id,i,qty,orderId);
-//		oi.addOrderItem(o);
-//	}
-//
-//	public void addAlaCarteOrderItemtoList(int id, AlaCarte a, int qty,int orderId) throws IOException {
-//		OrderItem o = new OrderItem(id,a,qty, orderId);
-//		oi.addOrderItem(o);
-//	}
-//
 
 	public ArrayList<Promotion> getAllPromoSets() throws FileNotFoundException {
 		return oi.getAllPromoSets();
@@ -168,6 +113,16 @@ public class OrderController {
 		return sorted;
 	}
 
+	public ArrayList<OrderItem> getOrderItemByOrderId(int id) throws IOException{
+		ArrayList<OrderItem> cusOrder = null;
+		ArrayList<OrderItem> oi = getAllOrderItems();
+		for (OrderItem orderItem : oi) {
+			if (orderItem.getOrderId() == id)
+				cusOrder.add(orderItem);
+		}
+		return cusOrder;
+	}
+
 
 	public Order getOrderById(int id) throws IOException {
 
@@ -180,6 +135,34 @@ public class OrderController {
 
 		}
 		return o;
+	}
+
+	public void updateOrderItemQty(OrderItem o, int qty) throws IOException
+	{
+		o.setOrderItemQty(qty);
+		oi.updateOrderItem(o);
+	}
+
+	public void addPromoOrderItem(int id, Promotion i, int qty, int orderId) throws IOException {
+		OrderItem o = new OrderItem(id,i,qty,orderId);
+		oi.addOrderItem(o);
+	}
+
+	public void addAlaCarteOrderItem(int id, AlaCarte a, int qty, int orderId) throws IOException {
+		OrderItem o = new OrderItem(id,a,qty,orderId);
+		oi.addOrderItem(o);
+	}
+
+	public ArrayList<Order> getCurrentDateOrder(LocalDate date) throws IOException {
+		ArrayList<Order> CurrentDateList =  null;
+		ArrayList<Order> orderList = getAllOrders();
+		for(Order order: orderList)
+		{
+			if(order.getDate() == date)
+				CurrentDateList.add(order);
+		}
+
+		return CurrentDateList;
 	}
 
 

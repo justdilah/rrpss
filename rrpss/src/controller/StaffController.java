@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import entity.Staff;
@@ -9,7 +8,7 @@ public class StaffController {
 	Staff s = new Staff();
 
 
-	public Boolean isIdExists(int id) throws FileNotFoundException {
+	public Boolean isIdExists(int id) throws IOException {
 		return s.isIdExists(id);
 	}
 

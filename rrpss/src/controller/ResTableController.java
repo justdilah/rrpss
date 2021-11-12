@@ -35,7 +35,29 @@ public class ResTableController {
     {
         return t.getTableByResId(id);
     }
+    
+   
+	public ArrayList<Table> getAllOccupiedTables() throws FileNotFoundException
+	{
+		return t.getAllOccupiedTables();
+	}
 
+
+	public ArrayList<Table> getAllReservedTables() throws FileNotFoundException
+	{
+		return t.getAllRservedTables();
+	}
+	
+	public ArrayList<Table> getAllReservedAndOccupiedTables() throws FileNotFoundException 
+	{
+		return t.getAllReservedAndOccupiedTables();
+	}
+	
+
+	public void updateTableStatusString(String status,int tableNo) throws IOException {
+		t.updateTableStatusString(status, tableNo);
+	}
+	
     public void updateTablePax(Table t, int resid, int tno, int pax) throws IOException
     {
 

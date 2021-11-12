@@ -1,7 +1,8 @@
 package entity;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Staff extends Person {
@@ -51,7 +52,7 @@ public class Staff extends Person {
 	}
 
 
-	public Staff getStaffById(int id) throws FileNotFoundException 
+	public Staff getStaffById(int id) throws IOException 
 	{
 		Staff c = null;
 
@@ -64,14 +65,14 @@ public class Staff extends Person {
 		return c;
 	}
 	
-	public Boolean isIdExists(int id) throws FileNotFoundException {
+	public Boolean isIdExists(int id) throws IOException {
 		if(getStaffById(id)!=null) {
 			return true;
 		}
 		return false;
 	}
 
-	public ArrayList<Staff> getAllStaffDetails() throws FileNotFoundException
+	public ArrayList<Staff> getAllStaffDetails() throws IOException
 	{
 		ArrayList<Staff> slist= new ArrayList<>();
 		ArrayList stringitems = (ArrayList)read(filename); 	
@@ -95,19 +96,23 @@ public class Staff extends Person {
 		return slist;	
 	}
 
+
 	//READ AND WRITE TO CSV
-	private List read(String filename) throws FileNotFoundException {
-		List data = new ArrayList();
-		Scanner scanner = new Scanner(new FileInputStream(filename));
-		try {
-			while (scanner.hasNextLine()) {
-				data.add(scanner.nextLine());
-			}
-		} finally {
-			scanner.close();
-		}
-		return data;
-	}
+	private List read(String filename) throws IOException {
+	    List data = new ArrayList();
+	    BufferedReader reader = new BufferedReader(new FileReader(filename));
+	    String headerLine = reader.readLine();
+	 //   System.out.println(headerLine);
+	    String line;
+	    try {
+	      while ((line = reader.readLine()) != null) {
+	        data.add(line);
+	      }
+	    } finally {
+	      reader.close();
+	    }
+	    return data;
+	  }
 
 
 

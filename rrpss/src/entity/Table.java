@@ -590,6 +590,7 @@ public class Table {
 
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
+			out.write("tablno" + "," + "tablcap" + "," + "date" + "," + "time" + "," + "status" + "," + "resid" + "\n");
 			for (int i = 0; i < data.size(); i++) {
 
 				out.write((String) data.get(i) + "\n");

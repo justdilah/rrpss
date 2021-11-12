@@ -20,9 +20,8 @@ import entity.Table;
 public class OrderForm {
 
     private final OrderController or = new OrderController();
-    private final OrderItemController OI = new OrderItemController();
     private final CustomerController cc = new CustomerController();
-    private final TableController tc = new TableController();
+    private final ResTableController tc = new ResTableController();
     private final StaffController scontrol = new StaffController();
 
     private static final Scanner sc = new Scanner(System.in);
@@ -55,9 +54,57 @@ public class OrderForm {
     }
 
     //Part is not done
-    private void displayOrder(){
+    private void displayOrder() throws IOException {
+        int choice=-1;
+        ArrayList<Order> CurrentOrder;
+        ArrayList<OrderItem>CustomerOrder;
+        String format = "%-30s%s%n";
+        String format1 = "%-30s%30s%s%n";
+        double TotalPrice = 0;
 
+        print("=================================");
+        print("\t Display Order ");
+        print("=================================");
+        print("1) Display Current Orders");
+        print("2) Display Past Orders");
+        print("Enter 0 to return to the previous page");
+        do {
+            try{
+                choice = Integer.parseInt(sc.nextLine());
+                if(choice<0 || choice>2)
+                    print("Choice does not exist, please enter a valid choice: ");
+            }catch(NumberFormatException e){
+                print("Choice is of invalid format, please enter a valid choice: ");
+            }
+        }while(choice<0 || choice>2);
+
+        if(choice == 1)
+        {
+            LocalDate date = LocalDate.now();
+            CurrentOrder = or.getCurrentDateOrder(date);
+            if(CurrentOrder==null){
+                print("There are currently no orders at the moment");
+            }
+            else{
+                for (Order order: CurrentOrder){
+                    printf(format,"Order ID :", String.valueOf(order.getOrderId()));
+                    printf(format,"Time Ordered : " , String.valueOf(order.getTimeStamp()));
+                    printf(format,"Date Ordered : " , String.valueOf(order.getDate()));
+                    printf(format,"Payment Completed : " , String.valueOf(order.getIsPaid()));
+                    printf(format,"Staff ID : " , String.valueOf(order.getStaffId()));
+                    printf(format,"Table No : " , String.valueOf(order.getTable().getTableNo()));
+                    CustomerOrder = or.getOrderItemByOrderId(order.getOrderId());
+                    System.out.printf(format1,"Order Item name","Quantity","Price");
+                    for (OrderItem oitem: CustomerOrder){
+                        System.out.printf(format1,oitem.getOrderItemName(),oitem.getOrderItemQty(),"$"+oitem.getOrderItemPrice());
+                        TotalPrice+= oitem.getOrderItemPrice();
+                    }
+                    printf(format,"Total Price: ", "$"+TotalPrice);
+                }
+            }
+        }
     }
+
 
     //Creation of Order
     private void insertOrder() throws IOException{
@@ -229,7 +276,7 @@ public class OrderForm {
                                     }
                                 } while (Qty == 0);
                                 int newQty = oiList.get(j).getOrderItemQty() + Qty;
-                                OI.updateOrderItemQty(oiList.get(j), newQty);
+                                or.updateOrderItemQty(oiList.get(j), newQty);
                                 print("Item has been successfully added into the Order");
                                 setter = true;
                                 break;
@@ -269,7 +316,7 @@ public class OrderForm {
                                     }
                                 } while (Qty == 0);
                                 int newQty = oiList.get(j).getOrderItemQty() + Qty;
-                                OI.updateOrderItemQty(oiList.get(j), newQty);
+                                or.updateOrderItemQty(oiList.get(j), newQty);
                                 print("Item has been successfully added into the Order");
                                 setter = true;
                                 break;
@@ -467,7 +514,7 @@ public class OrderForm {
                             }
                         } while (Qty == 0);
                         int newQty = o.getOrderItemList().get(i).getOrderItemQty() + Qty;
-                        OI.updateOrderItemQty(o.getOrderItemList().get(i), newQty);
+                        or.updateOrderItemQty(o.getOrderItemList().get(i), newQty);
                         print("Item has been successfully added into the Order");
                         setter = true;
                         break;
@@ -510,7 +557,7 @@ public class OrderForm {
                             }
                         } while (Qty == 0);
                         int newQty = o.getOrderItemList().get(i).getOrderItemQty() + Qty;
-                        OI.updateOrderItemQty(o.getOrderItemList().get(i), newQty);
+                        or.updateOrderItemQty(o.getOrderItemList().get(i), newQty);
                         print("Item has been successfully added into the Order");
                         setter = true;
                         break;
@@ -609,7 +656,7 @@ public class OrderForm {
                             print("0 is not a valid Quantity, please enter a valid Quantity: ");
                         else{
                             int newQty = oi.getOrderItemQty() - qty;
-                            OI.updateOrderItemQty(o.getOrderItemList().get(choice-1),newQty);
+                            or.updateOrderItemQty(o.getOrderItemList().get(choice-1),newQty);
                             print("Quantity has been updated successfully");
                         }
                     }while(qty==0 || qty>oi.getOrderItemQty());
