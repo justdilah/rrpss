@@ -214,6 +214,27 @@ public class Table {
 		return t;
 	}
 	
+	public ArrayList<Table> getAllReservedAndOccupiedTables() throws FileNotFoundException
+	{
+		ArrayList<Table> tableList = new ArrayList<>();
+		
+		int checker = 0;
+
+		for(int i=0; i<getAllTableDetails().size();i++) 
+		{
+				if(getAllTableDetails().get(i).getStatus().equals(TableStatus.OCCUPIED) || getAllTableDetails().get(i).getStatus().equals(TableStatus.RESERVED)) 
+				{
+					tableList.add(getAllTableDetails().get(i));
+					checker++;
+				}
+		}
+		
+		if(checker == 0) {
+			tableList = null;
+		}
+		return tableList;
+	}
+	
 	public ArrayList<Table> getAllOccupiedTables() throws FileNotFoundException
 	{
 		ArrayList<Table> tableList = new ArrayList<>();

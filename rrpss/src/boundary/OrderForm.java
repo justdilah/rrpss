@@ -70,7 +70,7 @@ public class OrderForm {
         System.out.println("\t Create Order ");
         System.out.println("=================================");
 
-        if(tc.getAllReservedTables() == null)
+        if(tc.getAllReservedAndOccupiedTables() == null)
         {
             print("No Reserved Tables at the moment");
             displayOption();
@@ -80,8 +80,8 @@ public class OrderForm {
         System.out.println("Please enter your choice: ");
 
 
-        for(int i=0;i<tc.getAllReservedTables().size();i++) {
-            System.out.println(i+1 + ") Table No " + tc.getAllReservedTables().get(i).getTableNo());
+        for(int i=0;i<tc.getAllReservedAndOccupiedTables().size();i++) {
+            System.out.println(i+1 + ") Table No " + tc.getAllReservedAndOccupiedTables().get(i).getTableNo());
         }
 
         Table t = null;
@@ -89,7 +89,7 @@ public class OrderForm {
         do {
             try {
                 tableNo = Integer.parseInt(sc.nextLine());
-                t = tc.getAllReservedTables().get(tableNo - 1);
+                t = tc.getAllReservedAndOccupiedTables().get(tableNo - 1);
                 if (t == null)
                     print("Table does not exist, please enter a valid table number: ");
             }catch(NumberFormatException e){
