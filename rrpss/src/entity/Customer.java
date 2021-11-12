@@ -91,6 +91,8 @@ public class Customer extends Person {
 				if(getAllCustomerDetails().get(i).getMembership()) {
 					return true;
 				}
+			} else {
+				break;
 			}
 		}
 		return false;

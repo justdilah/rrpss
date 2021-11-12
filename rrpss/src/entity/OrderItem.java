@@ -36,10 +36,10 @@ public class OrderItem {
 	
 	public OrderItem(int orderItemId,AlaCarte a, int qty, int orderId) {
 		this.orderItemId = orderItemId;
-		this.orderItemName = a.getFoodName();
+		this.orderItemName = a.getAlaCarteName();
 		this.food = a;
 		this.orderItemQty = qty;
-		this.orderItemPrice = a.getFoodPrice() * qty;
+		this.orderItemPrice = a.getAlaCartePrice() * qty;
 		this.orderId = orderId;
 	}
 
@@ -114,7 +114,7 @@ public class OrderItem {
 	
 	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
 		AlaCarte a = new AlaCarte();
-		return a.getAllMenuItems();
+		return a.getAllAlaCarteItems();
 	}
 	
 	// SELECT ORDER ITEM BY ORDER ITEM ID 

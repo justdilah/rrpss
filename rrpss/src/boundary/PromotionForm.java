@@ -104,7 +104,7 @@ public class PromotionForm {
 		print("Name: " + a.getPackName());
 		print("Food Items: ");
 		for(int j = 0;j<a.getPackItem().size();j++) {
-			print(j + 1 + ") " + a.getPackItem().get(j).getFoodName());
+			print(j + 1 + ") " + a.getPackItem().get(j).getAlaCarteName());
 		}
 
 		print("Description: " + a.getPackDesc());
@@ -169,7 +169,7 @@ public class PromotionForm {
 					{
 						for(int j=0; j<items.size();j++)
 						{
-							if(promo.getPackItem().get(i).getFoodName().equals(items.get(j).getFoodName())) {
+							if(promo.getPackItem().get(i).getAlaCarteName().equals(items.get(j).getAlaCarteName())) {
 								checker++;
 								break;
 							}
@@ -202,7 +202,7 @@ public class PromotionForm {
 
 		String newdesc = desc.replace(',', '/');
 		double checkPrice=0;
-		for (AlaCarte item : items) checkPrice += item.getFoodPrice();
+		for (AlaCarte item : items) checkPrice += item.getAlaCartePrice();
 		print("Enter Promotion Set Price (Actual Price Combined: $"+checkPrice+"):");
 
 		do {
@@ -234,7 +234,7 @@ public class PromotionForm {
 				+"\nContaining Items:" );
 
 		for (int i=0,j=1; i<items.size(); i++,j++) {
-			print("("+j+") "+items.get(i).getFoodName());
+			print("("+j+") "+items.get(i).getAlaCarteName());
 		}
 		print("Priced at: $" + price
 				+"\nHas been added to the Promotions List Successfully.");
@@ -336,7 +336,7 @@ public class PromotionForm {
 						double checkPrice = 0;
 						for (int i=0; i<items.size(); i++)
 						{
-							checkPrice+= items.get(i).getFoodPrice();
+							checkPrice+= items.get(i).getAlaCartePrice();
 						}
 						print("Enter the New Promotion Set Price\n" +
 								"(Original Price: $"+ogprice+")||(AlaCarte Combined Price: $"+checkPrice+"): ");
@@ -389,22 +389,22 @@ public class PromotionForm {
 		print("====================================================");
 		System.out.printf(format,"Food Name", "Price");
 		print("====================================================");
-		for(int j=0;j<alcontrol.getAllFoodItem().size();j++) {
-			System.out.printf(format,j+1 + ") " + alcontrol.getAllFoodItem().get(j).getFoodName(),"$"+alcontrol.getAllFoodItem().get(j).getFoodPrice());
+		for(int j=0;j<alcontrol.getAllAlaCarteItems().size();j++) {
+			System.out.printf(format,j+1 + ") " + alcontrol.getAllAlaCarteItems().get(j).getAlaCarteName(),"$"+alcontrol.getAllAlaCarteItems().get(j).getAlaCartePrice());
 		}
 
 		print("Please enter your choice: ");
 		do {
 			try {
 				c = Integer.parseInt(sc.nextLine());
-				if(c==0||c>alcontrol.getAllFoodItem().size())
+				if(c==0||c>alcontrol.getAllAlaCarteItems().size())
 					print("Choice does not exist, please enter a valid choice: ");
 			} catch (NumberFormatException e) {
 				print("Input is of invalid format, please enter a valid choice: ");
 			}
-		}while(c==0||c>alcontrol.getAllFoodItem().size());
+		}while(c==0||c>alcontrol.getAllAlaCarteItems().size());
 
-		AlaCarte a = alcontrol.getAllFoodItem().get(c-1);
+		AlaCarte a = alcontrol.getAllAlaCarteItems().get(c-1);
 		alList.add(a);
 
 		print("======================================================");
@@ -417,10 +417,10 @@ public class PromotionForm {
 				c = Integer.parseInt(sc.nextLine());
 				if (c == 0)
 					break;
-				else if (c<=-1||c>alcontrol.getAllFoodItem().size())
+				else if (c<=-1||c>alcontrol.getAllAlaCarteItems().size())
 					print("Choice does not exist, please enter a valid choice");
 				else {
-					a = alcontrol.getAllFoodItem().get(c - 1);
+					a = alcontrol.getAllAlaCarteItems().get(c - 1);
 					alList.add(a);
 				}
 			}
@@ -445,7 +445,7 @@ public class PromotionForm {
 			print("Current Promotional Set Items");
 			print("=================================");
 			for (int i = 0; i < p.getPackItem().size(); i++)
-				System.out.printf(format, p.getPackItem().get(i).getFoodName(), "$" + p.getPackItem().get(i).getFoodPrice());
+				System.out.printf(format, p.getPackItem().get(i).getAlaCarteName(), "$" + p.getPackItem().get(i).getAlaCartePrice());
 			print("");
 			print("Press 0 to end update to the list");
 			print("1) Add Ala Carte item in the promotion set");
@@ -472,9 +472,9 @@ public class PromotionForm {
 						print("====================================================");
 						System.out.printf(format1, "Food Name", "Price");
 						print("====================================================");
-						for (int i = 0; i < alcontrol.getAllFoodItem().size(); i++) {
-							System.out.printf(format1, i + 1 + ")" + alcontrol.getAllFoodItem().get(i).getFoodName(),
-									"$" + alcontrol.getAllFoodItem().get(i).getFoodPrice());
+						for (int i = 0; i < alcontrol.getAllAlaCarteItems().size(); i++) {
+							System.out.printf(format1, i + 1 + ")" + alcontrol.getAllAlaCarteItems().get(i).getAlaCarteName(),
+									"$" + alcontrol.getAllAlaCarteItems().get(i).getAlaCartePrice());
 						}
 						print("");
 						print("Press 0 to end the addition to the list");
@@ -484,10 +484,10 @@ public class PromotionForm {
 								c=Integer.parseInt(sc.nextLine());
 								if (c == 0 )
 									break;
-								else if (c<=-1||c>alcontrol.getAllFoodItem().size())
+								else if (c<=-1||c>alcontrol.getAllAlaCarteItems().size())
 									print("Choice does not exist, please enter a valid choice");
 								else {
-									alList.add(a.selectFoodByName(alcontrol.getAllFoodItem().get(c - 1).getFoodName()));
+									alList.add(a.selectFoodByName(alcontrol.getAllAlaCarteItems().get(c - 1).getAlaCarteName()));
 									print("Press 0 to end the addition to the list");
 								}
 
@@ -504,7 +504,7 @@ public class PromotionForm {
 								System.out.printf(format1, "Food Name", "Price");
 								print("====================================================");
 								for(int i=0; i< alList.size(); i++){
-									System.out.printf(format1,i + 1 + ") "+alList.get(i).getFoodName(),"$"+alList.get(i).getFoodPrice());
+									System.out.printf(format1,i + 1 + ") "+alList.get(i).getAlaCarteName(),"$"+alList.get(i).getAlaCartePrice());
 								}
 								print("Press 0 to end the deletion to the list");
 								print("Please enter your choice: ");

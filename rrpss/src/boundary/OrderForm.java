@@ -215,7 +215,7 @@ public class OrderForm {
                         AlaCarte a = alarCarteItems.get(c-1);
                         for(j =0; j<size; j++)
                         {
-                            if(oiList.get(j).getOrderItemName().equals(a.getFoodName()))
+                            if(oiList.get(j).getOrderItemName().equals(a.getAlaCarteName()))
                             {
                                 print("Enter Quantity");
                                 int Qty = 0;
@@ -454,7 +454,7 @@ public class OrderForm {
             if (choice<= alarCarteItems.size()){
                 AlaCarte a = alarCarteItems.get(choice-1);
                 for(int i =0; i<o.getOrderItemList().size(); i++) {
-                    if (o.getOrderItemList().get(i).getOrderItemName().equals(a.getFoodName())) {
+                    if (o.getOrderItemList().get(i).getOrderItemName().equals(a.getAlaCarteName())) {
                         print("Enter Quantity");
                         int Qty = 0;
                         do {
@@ -716,10 +716,10 @@ public class OrderForm {
         for(AlaCarte item: alarCarteItems)
         {
             print("["+(i+1)+"]");
-            printf(format,"Name: ",item.getFoodName());
-            printf(format, "Description: ", item.getFoodDesc());
+            printf(format,"Name: ",item.getAlaCarteName());
+            printf(format, "Description: ", item.getAlaCarteDesc());
             System.out.printf(format, "Course Type: ", item.getFoodType());
-            printf(format,"Price: ", "$"+df.format(item.getFoodPrice()));
+            printf(format,"Price: ", "$"+df.format(item.getAlaCartePrice()));
             print("");
             i++;
         }
@@ -735,7 +735,7 @@ public class OrderForm {
             printf(format,"Description: ", promo.getPackDesc());
             printf(format,"Promotion Price: ", "$"+df.format(promo.getPackPrice()));
             for(int j=0; j<promo.getPackItem().size();j++)
-                actualPrice+=promo.getPackItem().get(j).getFoodPrice();
+                actualPrice+=promo.getPackItem().get(j).getAlaCartePrice();
             printf(format,"Actual Price: ", "$"+df.format(actualPrice));
             print("");
             i++;

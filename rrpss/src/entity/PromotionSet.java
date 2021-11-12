@@ -122,9 +122,9 @@ public class PromotionSet {
 		String packitems ="";
 		for(int i=0;i<pslist.size();i++) {
 			if(i == pslist.size()-1) {
-				packitems += pslist.get(i).getFoodName();
+				packitems += pslist.get(i).getAlaCarteName();
 			} else {
-				packitems += pslist.get(i).getFoodName() + "@";
+				packitems += pslist.get(i).getAlaCarteName() + "@";
 			}	
 		}
 		
@@ -188,9 +188,9 @@ public class PromotionSet {
 			String packitems ="";
 			for(int j=0;j<k.getPackItem().size();j++) {
 				if(j == k.getPackItem().size()-1) {
-					packitems += k.getPackItem().get(j).getFoodName();
+					packitems += k.getPackItem().get(j).getAlaCarteName();
 				} else {
-					packitems += k.getPackItem().get(j).getFoodName() + "@";
+					packitems += k.getPackItem().get(j).getAlaCarteName() + "@";
 				}	
 			}
 			String newdesc = k.getPackDesc().replace(',', '/');
@@ -218,9 +218,9 @@ public class PromotionSet {
 			String packitems ="";
 			for(int j=0;j<k.getPackItem().size();j++) {
 				if(j == k.getPackItem().size()-1) {
-					packitems += k.getPackItem().get(j).getFoodName();
+					packitems += k.getPackItem().get(j).getAlaCarteName();
 				} else {
-					packitems += k.getPackItem().get(j).getFoodName() + "@";
+					packitems += k.getPackItem().get(j).getAlaCarteName() + "@";
 				}	
 			}
 			String newdesc = k.getPackDesc().replace(',', '/');
