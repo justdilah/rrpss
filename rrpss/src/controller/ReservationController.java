@@ -14,15 +14,20 @@ public class ReservationController {
     
     Reservation robj = new Reservation();
     
-    public void addReservation(String name, String contact, int pax, LocalDate date, LocalTime time, int custid, int staffid) throws IOException 
-    {   
-        robj.saveReservation(name, contact, pax, date, time, custid, staffid);
+    public void addReservation(String name, String contact, int pax, int custid, int staffid) throws IOException
+    {
+        robj.saveReservation(name, contact, pax, custid, staffid);
     }
 
     public Reservation getReservationByContact(String contact) throws NumberFormatException, IOException
     {
         return robj.getResByContact(contact);
         
+    }
+
+    public Reservation getResById(Integer id) throws IOException
+    {
+        return robj.getResById(id);
     }
 
     public ArrayList<Reservation> getAllReservation() throws NumberFormatException, IOException
@@ -37,35 +42,20 @@ public class ReservationController {
     }
 
 
-//    public void checkAvailability(int pax) throws IOException 
-//    {
-//    	robj.allocateTable(pax);
-//    }
-    
-    
     public void updateReservationPax(Reservation r, int pax) throws IOException 
     {
         r.setResNoPax(pax);
         robj.updateReservation(r);
     }
-    
-    public void updateReservationDate(Reservation r, String date) throws IOException 
+
+    public void deleteLateReservation(ArrayList<Integer> deleteList) throws IOException
     {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate convertdate = LocalDate.parse(date,formatter);
-        r.setResDate(convertdate);
-        robj.updateReservation(r);
+        robj.deleteLateReservation(deleteList);
     }
-    
-    
-    public void updateReservationTime(Reservation r, String time) throws IOException 
+
+    public void deletePastReservation(ArrayList<Integer> deleteList) throws IOException
     {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime converttime = LocalTime.parse(time,formatter);
-        r.setResTime(converttime);
-        robj.updateReservation(r);
+        robj.deletePastReservation(deleteList);
     }
-    
-    
 
 }

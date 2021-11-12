@@ -23,4 +23,16 @@ public class CustomerController {
 	public Customer getCustByIds(int id) throws IOException{
 		return c.getCustById(id);
 	}
+
+	public Customer getCustByContact(String contact) throws IOException
+	{
+		return c.getCustByContact(contact);
+	}
+
+	public void saveCustomer(String name, String contact) throws IOException
+	{
+		c.saveCustomer(name, contact);
+	}
+
+
 }
