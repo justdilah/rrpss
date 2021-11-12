@@ -11,42 +11,42 @@ import entity.FoodType;
 
 public class AlaCarteController {
 	
-	AlaCarte m = new AlaCarte();
+	AlaCarte ala = new AlaCarte();
 	
-	public void addFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
-		m.saveFoodItem(menuName, menuDesc, menuPrice, menuType);
-	}
-	
-	public AlaCarte getFoodByName(String name) throws FileNotFoundException {
-		return m.selectFoodByName(name);
-	}
-
-	public ArrayList<AlaCarte> getAllFoodItem() throws FileNotFoundException {
-		return m.getAllMenuItems();
-	}
-
-	public void updateFoodItemName(AlaCarte a, String n) throws IOException {
-		a.setFoodName(n);;
-		m.updateFoodItem(a);
-	}
-
-	public void updateFoodItemDesc(AlaCarte a, String d) throws IOException {
-		a.setFoodDesc(d);
-		m.updateFoodItem(a);
-	}
-
-	public void updateFoodItemPrice(AlaCarte a, double p) throws IOException {
-		a.setFoodPrice(p);
-		m.updateFoodItem(a);
+	public void addAlaCarte(String name, String desc, double price, FoodType type) throws IOException {
+		ala.saveFoodItem(name, desc, price, type);
 	}
 	
-	public void updateFoodItemType(AlaCarte a, FoodType p) throws IOException {
-		a.setFoodType(p);
-		m.updateFoodItem(a);
+	public AlaCarte getAlaCarteByName(String name) throws FileNotFoundException {
+		return ala.selectFoodByName(name);
+	}
+
+	public ArrayList<AlaCarte> getAllAlaCarteItems() throws FileNotFoundException {
+		return ala.getAllAlaCarteItems();
+	}
+
+	public void updateAlaCarteName(AlaCarte ac, String name) throws IOException {
+		ac.setAlaCarteName(name);;
+		ala.updateAlaCarteItem(ac);
+	}
+
+	public void updateAlaCarteDesc(AlaCarte ac, String desc) throws IOException {
+		ac.setAlaCarteDesc(desc);
+		ala.updateAlaCarteItem(ac);
+	}
+
+	public void updateAlaCartePrice(AlaCarte ac, double price) throws IOException {
+		ac.setAlaCartePrice(price);
+		ala.updateAlaCarteItem(ac);
 	}
 	
-	public void deleteFoodItem(AlaCarte a) throws IOException {
-		m.deleteFoodItem(a);
+	public void updateAlaCarteType(AlaCarte ac, FoodType type) throws IOException {
+		ac.setFoodType(type);
+		ala.updateAlaCarteItem(ac);
+	}
+	
+	public void deleteAlaCarteItem(AlaCarte a) throws IOException {
+		ala.deleteFoodItem(a);
 	}
 
 }
