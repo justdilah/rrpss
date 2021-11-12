@@ -7,12 +7,12 @@ import java.util.List;
 
 import entity.AlaCarte;
 import entity.FoodType;
-import entity.PromotionSet;
+import entity.Promotion;
 
 public class PromotionController {
 	
 	private static final String filename = "DataSet/PromotionSet.csv";
-	PromotionSet ps = new PromotionSet();
+	Promotion ps = new Promotion();
 	/**
 	 * 
 	 * @param packName
@@ -20,15 +20,15 @@ public class PromotionController {
 	 * @param packPrice
 	 */
 	
-	public void addPromotionSet(String name, ArrayList<AlaCarte> pslist, String desc, double p) throws IOException {
-		ps.savePromotionSetItem(name, pslist, desc, p);
+	public void addPromotionSet(String name, ArrayList<AlaCarte> allist, String desc, double price) throws IOException {
+		ps.savePromotionSetItem(name, allist, desc, price);
 	}
 	
-	public PromotionSet getPromotionSetByName(String n) throws FileNotFoundException {
-		return ps.selectPromotionSetByName(n);
+	public Promotion getPromotionSetByName(String name) throws FileNotFoundException {
+		return ps.selectPromotionSetByName(name);
 	}
 	
-	public ArrayList<PromotionSet> getAllPromotionSets() throws FileNotFoundException {
+	public ArrayList<Promotion> getAllPromotionSets() throws FileNotFoundException {
 		return ps.getAllPromotionItems();
 	}
 	
@@ -38,14 +38,14 @@ public class PromotionController {
 	 * @param packName
 	 * @throws IOException 
 	 */
-	public void updatePromoItemName(PromotionSet p, String packName) throws IOException {
-		p.setPackName(packName);
-		ps.updatePromotionSet(p);
+	public void updatePromotionSetName(Promotion promo, String name) throws IOException {
+		promo.setPackName(name);
+		ps.updatePromotionSet(promo);
 	}
 	
-	public void updateAlaCarteItems(PromotionSet p, ArrayList<AlaCarte> items) throws IOException {
-		p.setPackItem(items);
-		ps.updatePromotionSet(p);
+	public void updateAlaCarteItems(Promotion promo, ArrayList<AlaCarte> items) throws IOException {
+		promo.setPackItems(items);
+		ps.updatePromotionSet(promo);
 	}
 
 	/**
@@ -54,9 +54,9 @@ public class PromotionController {
 	 * @param packDesc
 	 * @throws IOException 
 	 */
-	public void updatePromoItemDesc(PromotionSet p, String packDesc) throws IOException {
-		p.setPackDesc(packDesc);
-		ps.updatePromotionSet(p);
+	public void updatePromotionSetDesc(Promotion promo, String desc) throws IOException {
+		promo.setPackDesc(desc);
+		ps.updatePromotionSet(promo);
 
 	}
 
@@ -66,9 +66,9 @@ public class PromotionController {
 	 * @param packPrice
 	 * @throws IOException 
 	 */
-	public void updatePromoPrice(PromotionSet p, double packPrice) throws IOException {
-		p.setPackPrice(packPrice);;
-		ps.updatePromotionSet(p);
+	public void updatePromotionSetPrice(Promotion promo, double price) throws IOException {
+		promo.setPackPrice(price);;
+		ps.updatePromotionSet(promo);
 	}
 
 	/**
@@ -76,9 +76,8 @@ public class PromotionController {
 	 * @param packId
 	 * @throws IOException 
 	 */
-	public void deletePromoSet(PromotionSet s) throws IOException {
-		// TODO - implement PromotionController.deletePromoItem
-		ps.deletePromotionSet(s);
+	public void deletePromotionSet(Promotion promo) throws IOException {
+		ps.deletePromotionSet(promo);
 		
 	}
 	
