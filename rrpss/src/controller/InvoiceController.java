@@ -25,7 +25,6 @@ public class InvoiceController {
 		while(reader.readLine()!=null) {
 			counter++;
 		}
-		
 		return counter;
 	}
 	
@@ -44,9 +43,7 @@ public class InvoiceController {
 		return orders;
 	}
 	
-//	public ArrayList<Table>
-	
-	
+	//FOR THE ORDER ITEMS
 	public double calculateSubTotalPriceOrder(ArrayList<OrderItem> itemList) {
 		double subTotalPrice = 0;
 		for(int i=0;i<itemList.size();i++) {
@@ -62,11 +59,11 @@ public class InvoiceController {
 	public double calculateGst(double subTotalPrice) {
 		return 0.07 * subTotalPrice;
 	}
-
-	public int calculateTotalPrice() {
-		// TODO - implement InvoiceController.calculateTotalPrice
-		throw new UnsupportedOperationException();
-	}
+//
+//	public int calculateTotalPrice() {
+//		// TODO - implement InvoiceController.calculateTotalPrice
+//		throw new UnsupportedOperationException();
+//	}
 	
 	public void saveInvoice(Invoice i) throws IOException {
 		List l = new ArrayList();
