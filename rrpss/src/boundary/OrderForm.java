@@ -90,6 +90,7 @@ public class OrderForm {
             try {
                 tableNo = Integer.parseInt(sc.nextLine());
                 t = tc.getAllReservedAndOccupiedTables().get(tableNo - 1);
+                System.out.println(t.getTableNo());
                 if (t == null)
                     print("Table does not exist, please enter a valid table number: ");
             }catch(NumberFormatException e){
@@ -105,7 +106,7 @@ public class OrderForm {
             try{
                 staffid = Integer.parseInt(sc.nextLine());
                 if(!s.isIdExists(staffid)) {
-                    print("Staff ID does not exist");
+                    print("Staff ID des not exist");
                     print("Please enter a valid Staff ID: ");
                 }
             }catch(NumberFormatException e){
@@ -126,12 +127,14 @@ public class OrderForm {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime time = LocalTime.parse(LocalTime.now().format(formatter));
         LocalDate date = LocalDate.now();
-        or.addOrder(index,time,date,staffid,false,custNo,tableNo);
+        
+        tc.updateTableStatusString("OCCUPIED", t.getTableNo());
+        or.addOrder(index,time,date,staffid,false,custNo,t.getTableNo());
         insertOrderItems(index,0);
         print("==================================");
         print("Order added successfully");
         print("==================================");
-        t.updateTableStatusString("OCCUPIED", tableNo);
+        
     }
     //insert Order Calls to insertOrderItems function
     private void insertOrderItems(int orderId, int counter) throws IOException {
