@@ -51,7 +51,7 @@ public class OrderController {
 
 	public ArrayList<AlaCarte> getAllAlaCartItems() throws IOException {
 		ArrayList<AlaCarte> items = oi.getAllAlaCartItems();
-		return SortAlaCarteItems(items);
+		return sortAlaCarteItems(items);
 	}
 
 	//RETRIEVE ALL ORDER ITEMS
@@ -60,8 +60,8 @@ public class OrderController {
 	}
 
 	//ORDER ITEMS
-	public void addOrderItem(OrderItem o) throws IOException {
-		oi.addOrderItem(o);
+	public void addOrderItem(OrderItem item) throws IOException {
+		oi.addOrderItem(item);
 	}
 
 	public void removeEntireOrderItemList(int orderId) throws IOException {
@@ -88,7 +88,7 @@ public class OrderController {
 	}
 
 
-	public ArrayList<AlaCarte> SortAlaCarteItems(ArrayList<AlaCarte> items) throws IOException{
+	public ArrayList<AlaCarte> sortAlaCarteItems(ArrayList<AlaCarte> items) throws IOException{
 
 		ArrayList<AlaCarte> sorted = new ArrayList<>();
 		for (AlaCarte item: items) {
@@ -137,19 +137,19 @@ public class OrderController {
 		return o;
 	}
 
-	public void updateOrderItemQty(OrderItem o, int qty) throws IOException
+	public void updateOrderItemQty(OrderItem item, int qty) throws IOException
 	{
-		o.setOrderItemQty(qty);
-		oi.updateOrderItem(o);
+		item.setOrderItemQty(qty);
+		oi.updateOrderItem(item);
 	}
 
-	public void addPromoOrderItem(int id, Promotion i, int qty, int orderId) throws IOException {
-		OrderItem o = new OrderItem(id,i,qty,orderId);
+	public void addPromoOrderItem(int id, Promotion promo, int qty, int orderId) throws IOException {
+		OrderItem o = new OrderItem(id,promo,qty,orderId);
 		oi.addOrderItem(o);
 	}
 
-	public void addAlaCarteOrderItem(int id, AlaCarte a, int qty, int orderId) throws IOException {
-		OrderItem o = new OrderItem(id,a,qty,orderId);
+	public void addAlaCarteOrderItem(int id, AlaCarte ala, int qty, int orderId) throws IOException {
+		OrderItem o = new OrderItem(id,ala,qty,orderId);
 		oi.addOrderItem(o);
 	}
 
