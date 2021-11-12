@@ -7,26 +7,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class PromotionSet {
+public class Promotion {
 	
 	private static final String filename = "DataSet/PromotionSet.csv";
 
 	private int packId;
 	private String packName;
-	private Double packPrice;
+	private double packPrice;
 	private ArrayList<AlaCarte> packItems;
 	private String packDesc;
-//	Collection<OrderItem> orderitem;
 	
-	public PromotionSet() {
+	public Promotion() {
 	
 	}
 	
-	public PromotionSet(int id, String n, ArrayList<AlaCarte> packItems, String d, double price) {
+	public Promotion(int id, String name, ArrayList<AlaCarte> packItems, String desc, double price) {
 		this.packId = id;
-		this.packName = n;
+		this.packName = name;
 		this.packItems = packItems;
-		this.packDesc = d;
+		this.packDesc = desc;
 		this.packPrice = price;
 	}
 	
@@ -57,7 +56,7 @@ public class PromotionSet {
 	}
 
 
-	public Double getPackPrice() {
+	public double getPackPrice() {
 		return this.packPrice;
 	}
 
@@ -69,7 +68,7 @@ public class PromotionSet {
 		this.packPrice = packPrice;
 	}
 
-	public ArrayList<AlaCarte> getPackItem() {
+	public ArrayList<AlaCarte> getPackItems() {
 		return this.packItems;
 	}
 
@@ -77,7 +76,7 @@ public class PromotionSet {
 	 * 
 	 * @param packItem
 	 */
-	public void setPackItem(ArrayList<AlaCarte> packItem) {
+	public void setPackItems(ArrayList<AlaCarte> packItem) {
 		this.packItems = packItem;
 	}
 
@@ -94,8 +93,8 @@ public class PromotionSet {
 		this.packDesc = packDesc;
 	}
 	
-	public PromotionSet selectItemById(int id) throws FileNotFoundException {	
-		PromotionSet p = null;
+	public Promotion selectItemById(int id) throws FileNotFoundException {	
+		Promotion p = null;
 		for(int i=0;i<getAllPromotionItems().size();i++) {
 			if(getAllPromotionItems().get(i).getPackId() == id) {
 				p = getAllPromotionItems().get(i);
@@ -104,8 +103,8 @@ public class PromotionSet {
 		return p;
 	}
 	
-	public PromotionSet selectPromotionSetByName(String n) throws FileNotFoundException {	
-		PromotionSet a = null;
+	public Promotion selectPromotionSetByName(String n) throws FileNotFoundException {	
+		Promotion a = null;
 		for(int i=0;i<getAllPromotionItems().size();i++) {
 			
 			if(getAllPromotionItems().get(i).getPackName().equals(n)) {
@@ -149,8 +148,8 @@ public class PromotionSet {
 	
 	
 	// RETRIEVE THE PROMOTION SET ITEMS
-	public ArrayList<PromotionSet> getAllPromotionItems() throws FileNotFoundException {
-		ArrayList<PromotionSet> psList= new ArrayList<>();
+	public ArrayList<Promotion> getAllPromotionItems() throws FileNotFoundException {
+		ArrayList<Promotion> psList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename); 	
 		
 		for (int i = 0; i < stringitems.size(); i++) {
@@ -164,7 +163,7 @@ public class PromotionSet {
 			String desc = star.nextToken().trim();
 			String newdesc = desc.replace('/', ',');
 			String price = star.nextToken().trim();
-			PromotionSet m = new PromotionSet(Integer.parseInt(id),name,packItems,newdesc,Double.valueOf(price));
+			Promotion m = new Promotion(Integer.parseInt(id),name,packItems,newdesc,Double.valueOf(price));
 			psList.add(m);
 		}
 		return psList;
@@ -172,9 +171,9 @@ public class PromotionSet {
 	
 	
 	//FOR UPDATE
-	public void updatePromotionSet(PromotionSet a) throws IOException {
+	public void updatePromotionSet(Promotion a) throws IOException {
 		List l = new ArrayList<>();
-		ArrayList<PromotionSet> miList = getAllPromotionItems();
+		ArrayList<Promotion> miList = getAllPromotionItems();
 		
 		for(int i=0;i<getAllPromotionItems().size();i++) {
 			
@@ -183,14 +182,14 @@ public class PromotionSet {
 				miList.set(i, a);
 			}
 		
-			PromotionSet k = miList.get(i);
+			Promotion k = miList.get(i);
 			
 			String packitems ="";
-			for(int j=0;j<k.getPackItem().size();j++) {
-				if(j == k.getPackItem().size()-1) {
-					packitems += k.getPackItem().get(j).getAlaCarteName();
+			for(int j=0;j<k.getPackItems().size();j++) {
+				if(j == k.getPackItems().size()-1) {
+					packitems += k.getPackItems().get(j).getAlaCarteName();
 				} else {
-					packitems += k.getPackItem().get(j).getAlaCarteName() + "@";
+					packitems += k.getPackItems().get(j).getAlaCarteName() + "@";
 				}	
 			}
 			String newdesc = k.getPackDesc().replace(',', '/');
@@ -202,9 +201,9 @@ public class PromotionSet {
 	}
 	
 	//DELETE THE PROMOTION SET
-	public void deletePromotionSet(PromotionSet a) throws IOException {
+	public void deletePromotionSet(Promotion a) throws IOException {
 		List l = new ArrayList<>();
-		ArrayList<PromotionSet> miList = getAllPromotionItems();
+		ArrayList<Promotion> miList = getAllPromotionItems();
 		
 		for(int i=0;i<getAllPromotionItems().size()-1;i++) {
 			
@@ -213,14 +212,14 @@ public class PromotionSet {
 				miList.remove(i);
 			}
 					
-			PromotionSet k = miList.get(i);
+			Promotion k = miList.get(i);
 			
 			String packitems ="";
-			for(int j=0;j<k.getPackItem().size();j++) {
-				if(j == k.getPackItem().size()-1) {
-					packitems += k.getPackItem().get(j).getAlaCarteName();
+			for(int j=0;j<k.getPackItems().size();j++) {
+				if(j == k.getPackItems().size()-1) {
+					packitems += k.getPackItems().get(j).getAlaCarteName();
 				} else {
-					packitems += k.getPackItem().get(j).getAlaCarteName() + "@";
+					packitems += k.getPackItems().get(j).getAlaCarteName() + "@";
 				}	
 			}
 			String newdesc = k.getPackDesc().replace(',', '/');

@@ -24,16 +24,16 @@ public class AlaCarteForm {
             try {
                 switch (choice) {
                     case 1 -> {
-                        displayMenu();
+                        displayAlaCarte();
                     }
                     case 2 -> {
-                        insertMenuItem();
+                        insertAlaCarte();
                     }
                     case 3 -> {
-                        updateMenuItem();
+                        updateAlaCarte();
                     }
                     case 4 -> {
-                        deleteMenuItem();
+                        deleteAlaCarte();
                     }
                     case 5 -> {
                         MainAppUI.print();
@@ -45,7 +45,7 @@ public class AlaCarteForm {
         }while(choice>4 || choice < 1);
     }
 
-    private void displayMenu() throws IOException{
+    private void displayAlaCarte() throws IOException{
 
         int choice, c;
 
@@ -61,24 +61,24 @@ public class AlaCarteForm {
         do{
             try {
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice<0 || choice > ac.getAllFoodItem().size())
+                if (choice<0 || choice > ac.getAllAlaCarteItems().size())
                     print("Choice does not exist, please enter a valid choice: ");
             }catch(NumberFormatException e){
                 print("Choice is of invalid format, please enter a valid choice: ");
                 choice = -1;
             }
-        }while(choice<0 || choice >ac.getAllFoodItem().size());
+        }while(choice<0 || choice >ac.getAllAlaCarteItems().size());
 
         if (choice == 0)
             displayOption();
         else{
-            AlaCarte a = ac.getAllFoodItem().get(choice-1);
+            AlaCarte a = ac.getAllAlaCarteItems().get(choice-1);
             print("==================================");
             print("\t Food item details ");
             print("==================================");
-            print("Name: " + a.getFoodName());
-            print("Description: " + a.getFoodDesc());
-            print("Price: $" + a.getFoodPrice());
+            print("Name: " + a.getAlaCarteName());
+            print("Description: " + a.getAlaCarteDesc());
+            print("Price: $" + a.getAlaCartePrice());
             print("Food Type: " + a.getFoodType());
             print("Press 0 to return to the menu");
             do{
@@ -91,12 +91,12 @@ public class AlaCarteForm {
                     c=-1;
                 }
             }while(c!=0);
-            displayMenu();
+            displayAlaCarte();
         }
     }
 
 
-    private void insertMenuItem() throws IOException {
+    private void insertAlaCarte() throws IOException {
         String AlaCarteName, desc;
         boolean setter = true, fail = true;
         double price= 0;
@@ -112,7 +112,7 @@ public class AlaCarteForm {
                 print("Ala Carte name must not be empty, please enter a Ala Carte name: ");
             else
             {
-                AlaCarte a = ac.getFoodByName(AlaCarteName);
+                AlaCarte a = ac.getAlaCarteByName(AlaCarteName);
                 if (a == null)
                     setter = false;
                 else
@@ -145,7 +145,7 @@ public class AlaCarteForm {
         }while(fail);
         FoodType ft = foodTypeOptions();
         try {
-            ac.addFoodItem(AlaCarteName, newdesc, price,ft);
+            ac.addAlaCarte(AlaCarteName, newdesc, price,ft);
             print("==================================");
             print( AlaCarteName + " added successfully");
             print("==================================");
@@ -154,12 +154,12 @@ public class AlaCarteForm {
             print("==================================");
             print("Unsuccessful. Please try again");
             print("==================================");
-            insertMenuItem();
+            insertAlaCarte();
         }
     }
 
     
-    private void updateMenuItem() throws IOException{
+    private void updateAlaCarte() throws IOException{
 
         int choice, choice2;
 
@@ -173,7 +173,7 @@ public class AlaCarteForm {
         do{
             try{
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice<0 || choice>ac.getAllFoodItem().size())
+                if (choice<0 || choice>ac.getAllAlaCarteItems().size())
                     print("Choice does not exist, please enter a valid choice: ");
 
             }catch(NumberFormatException e){
@@ -181,12 +181,12 @@ public class AlaCarteForm {
                 choice = -1;
             }
 
-        }while(choice<0|| choice> ac.getAllFoodItem().size());
+        }while(choice<0|| choice> ac.getAllAlaCarteItems().size());
         
         if (choice == 0)
             displayOption();
         
-        AlaCarte a = ac.getFoodByName(ac.getAllFoodItem().get(choice-1).getFoodName());
+        AlaCarte a = ac.getAlaCarteByName(ac.getAllAlaCarteItems().get(choice-1).getAlaCarteName());
 
         while(true)
         {
@@ -216,17 +216,17 @@ public class AlaCarteForm {
             switch(choice2)
             {
                 case 1->{
-                    String oldname = a.getFoodName();
-                    setFoodName(a);
-                    print("Ala Carte Item Name "+oldname+" has been changed to "+a.getFoodName());
+                    String oldname = a.getAlaCarteName();
+                    setAlaCarteName(a);
+                    print("Ala Carte Item Name "+oldname+" has been changed to "+a.getAlaCarteName());
                 }
                 case 2->{
-                    String olddesc = a.getFoodDesc();
-                    setFoodDesc(a);
-                    print("Ala Carte Item Desc "+olddesc+" has been changed to "+a.getFoodDesc());
+                    String olddesc = a.getAlaCarteDesc();
+                    setAlaCarteDesc(a);
+                    print("Ala Carte Item Desc "+olddesc+" has been changed to "+a.getAlaCarteDesc());
                 }
                 case 3->{
-                    double oldprice = a.getFoodPrice();
+                    double oldprice = a.getAlaCartePrice();
                     double price = 0;
                     boolean fail = true;
                     print("Enter new Ala Carte Item Price (Original Price: $"+oldprice+"): ");
@@ -240,24 +240,24 @@ public class AlaCarteForm {
                             print("Price is of invalid format, please enter a valid price: (Original Price: $"+oldprice+"): ");
                         }
                     }while(fail);
-                    ac.updateFoodItemPrice(a,price);
-                    print("Ala Carte Item Price $"+oldprice+" has been changed to $" +a.getFoodPrice());
+                    ac.updateAlaCartePrice(a,price);
+                    print("Ala Carte Item Price $"+oldprice+" has been changed to $" +a.getAlaCartePrice());
                 }
                 case 4->{
                     print("Edit Food Type");
                     FoodType oldft =a.getFoodType();
                     FoodType ft = foodTypeOptions();
-                    ac.updateFoodItemType(a, ft);
+                    ac.updateAlaCarteType(a, ft);
                     print("Ala Carte item Food Type $"+oldft+" has been changed to $"+a.getFoodType());
 
                 }
                 default -> print("Choice does not exist, please enter a valid choice: ");
             }
         }
-        updateMenuItem();
+        updateAlaCarte();
     }
 
-    private void deleteMenuItem() throws IOException{
+    private void deleteAlaCarte() throws IOException{
 
         int choice;
 
@@ -270,22 +270,22 @@ public class AlaCarteForm {
         do{
             try{
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice < 0 || choice > ac.getAllFoodItem().size())
+                if (choice < 0 || choice > ac.getAllAlaCarteItems().size())
                     print("Choice does not exist, please enter a valid choice: ");
             }catch(NumberFormatException e){
                 print("Choice is of invalid format, please enter a valid choice: ");
                 choice = -1;
             }
-        }while(choice < 0 || choice > ac.getAllFoodItem().size());
+        }while(choice < 0 || choice > ac.getAllAlaCarteItems().size());
 
         if (choice == 0)
             displayOption();
         else
         {
             try {
-                AlaCarte c = ac.getFoodByName(ac.getAllFoodItem().get(choice-1).getFoodName());
-                String deletedname = c.getFoodName();
-                ac.deleteFoodItem(c);
+                AlaCarte c = ac.getAlaCarteByName(ac.getAllAlaCarteItems().get(choice-1).getAlaCarteName());
+                String deletedname = c.getAlaCarteName();
+                ac.deleteAlaCarteItem(c);
                 System.out.println("==================================");
                 System.out.println(deletedname+ " deleted successfully");
                 System.out.println("==================================");
@@ -295,17 +295,17 @@ public class AlaCarteForm {
                 System.out.println("==================================");
                 System.out.println("Unsuccessful. Please try again");
                 System.out.println("==================================");
-                deleteMenuItem();
+                deleteAlaCarte();
             }
         }
     }
 
     //Menu and Misc
 
-    private void setFoodName(AlaCarte c) throws IOException {
+    private void setAlaCarteName(AlaCarte c) throws IOException {
         String AlaCarteName;
         boolean setter = true;
-        String oldname = c.getFoodName();
+        String oldname = c.getAlaCarteName();
         print("Enter New Ala Carte Item Name (Original Name: "+oldname+"): ");
         do
         {
@@ -314,21 +314,21 @@ public class AlaCarteForm {
                 print("Ala Carte name must not be empty, please enter a Ala Carte name (Original Name:" +oldname+"): ");
             else
             {
-                AlaCarte a = ac.getFoodByName(AlaCarteName);
+                AlaCarte a = ac.getAlaCarteByName(AlaCarteName);
                 if (a == null)
                     setter = false;
                 else
                     print("Ala Carte name already exist, please enter another Ala Carte name (Original Name:" +oldname+"): ");
             }
         }while(setter);
-        ac.updateFoodItemName(c, AlaCarteName);
+        ac.updateAlaCarteName(c, AlaCarteName);
     }
 
-    private void setFoodDesc(AlaCarte c) throws IOException{
+    private void setAlaCarteDesc(AlaCarte c) throws IOException{
 
         String desc;
         boolean setter = true;
-        String olddesc = c.getFoodDesc();
+        String olddesc = c.getAlaCarteDesc();
 
         print("Enter Ala Carte Description: (Original Description:" +olddesc+ "): ");
         do{
@@ -341,7 +341,7 @@ public class AlaCarteForm {
         }while(setter);
 
         String newdesc = desc.replace(',', '/');
-        ac.updateFoodItemDesc(c, newdesc);
+        ac.updateAlaCarteDesc(c, newdesc);
     }
 
     private FoodType foodTypeOptions()
@@ -371,21 +371,21 @@ public class AlaCarteForm {
     }
 
 
-    public void displayAlaCarteItems() throws IOException
+    private void displayAlaCarteItems() throws IOException
     {
         int i;
         String format = "%-30s%s%n";
 
         printf(format,"AlaCarte Name","Price");
         print("====================================");
-        for(i=0;i< ac.getAllFoodItem().size() ; i++ ) {
-            printf(format,i+1 + ") "+ac.getAllFoodItem().get(i).getFoodName()
-                    ,"$"+df.format(ac.getAllFoodItem().get(i).getFoodPrice()));
+        for(i=0;i< ac.getAllAlaCarteItems().size() ; i++ ) {
+            printf(format,i+1 + ") "+ac.getAllAlaCarteItems().get(i).getAlaCarteName()
+                    ,"$"+df.format(ac.getAllAlaCarteItems().get(i).getAlaCartePrice()));
         }
     }
 
 
-    public void displayAlaCarteOptions()
+    private void displayAlaCarteOptions()
     {
         print("=================================");
         print("\t Menu Options ");

@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 import entity.AlaCarte;
 import entity.OrderItem;
-import entity.PromotionSet;
+import entity.Promotion;
 
 
 //Changes might be required || Refactoring needed
 public class OrderItemController {
 	OrderItem oi = new OrderItem();
 
-	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
+	public ArrayList<Promotion> getAllPromoSets() throws FileNotFoundException {
 		return oi.getAllPromoSets();
 	}
 

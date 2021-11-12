@@ -23,7 +23,7 @@ public class OrderController {
 		o.saveOrder(l);
 	}
 		
-	public void addPromoOrderItem(int id, PromotionSet i, int qty, int orderId) throws IOException {
+	public void addPromoOrderItem(int id, Promotion i, int qty, int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,i,qty,orderId);
 		oi.addOrderItem(o);
 	}
@@ -100,7 +100,7 @@ public class OrderController {
 //	}
 //
 
-	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
+	public ArrayList<Promotion> getAllPromoSets() throws FileNotFoundException {
 		return oi.getAllPromoSets();
 	}
 

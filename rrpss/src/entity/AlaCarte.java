@@ -13,10 +13,10 @@ public class AlaCarte {
 	private static final String filename = "DataSet/AlaCarte.csv";
 //	Collection<Order> order;
 //	Collection<SetPackage> setpack;
-	private int foodId;
-	private String foodName;
-	private String foodDesc;
-	private Double foodPrice;
+	private int alaCarteId;
+	private String alaCarteName;
+	private String alaCarteDesc;
+	private Double alaCartePrice;
 	private FoodType foodType;
 	
 	public AlaCarte() {
@@ -24,47 +24,47 @@ public class AlaCarte {
 	}
 	
 	public AlaCarte(int id, String n,String d,Double p, FoodType mt) {
-		this.foodId = id;
-		this.foodName = n;
-		this.foodDesc = d;
-		this.foodPrice = p;
+		this.alaCarteId = id;
+		this.alaCarteName = n;
+		this.alaCarteDesc = d;
+		this.alaCartePrice = p;
 		this.foodType = mt;
 	}
 
-	public int getFoodId() {
-		return this.foodId;
+	public int getAlaCarteId() {
+		return this.alaCarteId;
 	}
 
-	public void setFoodId(int foodId) {
-		this.foodId = foodId;
+	public void setFoodId(int id) {
+		this.alaCarteId = id;
 	}
 
-	public String getFoodName() {
-		return this.foodName;
+	public String getAlaCarteName() {
+		return this.alaCarteName;
 	}
 
 	/**
 	 * 
 	 * @param foodName
 	 */
-	public void setFoodName(String foodName) {
-		this.foodName = foodName;
+	public void setAlaCarteName(String name) {
+		this.alaCarteName = name;
 	}
 
-	public String getFoodDesc() {
-		return this.foodDesc;
+	public String getAlaCarteDesc() {
+		return this.alaCarteDesc;
 	}
 
-	public void setFoodDesc(String foodDesc) {
-		this.foodDesc = foodDesc;
+	public void setAlaCarteDesc(String desc) {
+		this.alaCarteDesc = desc;
 	}
 
-	public Double getFoodPrice() {
-		return this.foodPrice;
+	public Double getAlaCartePrice() {
+		return this.alaCartePrice;
 	}
 
-	public void setFoodPrice(Double foodPrice) {
-		this.foodPrice = foodPrice;
+	public void setAlaCartePrice(double price) {
+		this.alaCartePrice = price;
 	}
 
 	public FoodType getFoodType() {
@@ -75,11 +75,11 @@ public class AlaCarte {
 		this.foodType = foodType;
 	}
 	
-	public AlaCarte selectItemById(int id) throws FileNotFoundException {	
+	public AlaCarte selectAlaCarteById(int id) throws FileNotFoundException {	
 		AlaCarte a = null;
-		for(int i=0;i<getAllMenuItems().size();i++) {
-			if(getAllMenuItems().get(i).getFoodId() == id) {
-				a = getAllMenuItems().get(i);
+		for(int i=0;i<getAllAlaCarteItems().size();i++) {
+			if(getAllAlaCarteItems().get(i).getAlaCarteId() == id) {
+				a = getAllAlaCarteItems().get(i);
 			}
 		}
 		return a;
@@ -87,10 +87,10 @@ public class AlaCarte {
 	
 	public AlaCarte selectFoodByName(String n) throws FileNotFoundException {	
 		AlaCarte a = null;
-		for(int i=0;i<getAllMenuItems().size();i++) {
+		for(int i=0;i<getAllAlaCarteItems().size();i++) {
 			
-			if(getAllMenuItems().get(i).getFoodName().equals(n)) {
-				a = getAllMenuItems().get(i);
+			if(getAllAlaCarteItems().get(i).getAlaCarteName().equals(n)) {
+				a = getAllAlaCarteItems().get(i);
 			}
 		}
 		return a;
@@ -98,7 +98,7 @@ public class AlaCarte {
 	
 	
 	// EXTRACT OUT FROM CSV FILE
-	public ArrayList<AlaCarte> getAllMenuItems() throws FileNotFoundException {
+	public ArrayList<AlaCarte> getAllAlaCarteItems() throws FileNotFoundException {
 		ArrayList<AlaCarte> miList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename); 	
 		
@@ -123,8 +123,8 @@ public class AlaCarte {
 	
 	//ADDING TO CSV FILE 
 	public void saveFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
-		int last = getAllMenuItems().size();
-		int id = getAllMenuItems().get(last-1).getFoodId()+ 1;
+		int last = getAllAlaCarteItems().size();
+		int id = getAllAlaCarteItems().get(last-1).getAlaCarteId()+ 1;
 		String newft = menuType.toString().replace("_"," ");
 		String foodItem = id + "," + menuName + "," + menuDesc +  "," +  menuPrice+ "," +newft;
 		List l = new ArrayList();
@@ -135,15 +135,15 @@ public class AlaCarte {
 	//FOR DELETE
 	public void deleteFoodItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
-		ArrayList<AlaCarte> miList = getAllMenuItems();
+		ArrayList<AlaCarte> miList = getAllAlaCarteItems();
 		
-		for(int i=0;i<getAllMenuItems().size();i++) {
-			if(getAllMenuItems().get(i).getFoodId() == a.getFoodId()) {
+		for(int i=0;i<getAllAlaCarteItems().size();i++) {
+			if(getAllAlaCarteItems().get(i).getAlaCarteId() == a.getAlaCarteId()) {
 				miList.remove(i);
 			} else {
 				AlaCarte k = miList.get(i);
-				String newdesc = k.getFoodDesc().replace(',', '/');
-				String foodItem = k.getFoodId() + "," + k.getFoodName() + "," + newdesc +  "," +  k.getFoodPrice()+ "," +k.getFoodType();
+				String newdesc = k.getAlaCarteDesc().replace(',', '/');
+				String foodItem = k.getAlaCarteId() + "," + k.getAlaCarteName() + "," + newdesc +  "," +  k.getAlaCartePrice()+ "," +k.getFoodType();
 				l.add(foodItem);
 			}
 		}
@@ -151,20 +151,20 @@ public class AlaCarte {
 	}
 	
 	//FOR UPDATE 
-	public void updateFoodItem(AlaCarte a) throws IOException {
+	public void updateAlaCarteItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
-		ArrayList<AlaCarte> miList = getAllMenuItems();
+		ArrayList<AlaCarte> miList = getAllAlaCarteItems();
 		
-		for(int i=0;i<getAllMenuItems().size();i++) {
+		for(int i=0;i<getAllAlaCarteItems().size();i++) {
 			
 			
-			if(getAllMenuItems().get(i).getFoodId() == a.getFoodId()) {
+			if(getAllAlaCarteItems().get(i).getAlaCarteId() == a.getAlaCarteId()) {
 				miList.set(i, a);
 			}
 					
 			AlaCarte k = miList.get(i);
-			String newdesc = k.getFoodDesc().replace(',', '/');
-			String foodItem = k.getFoodId() + "," + k.getFoodName() + "," + newdesc +  "," +  k.getFoodPrice()+ "," +k.getFoodType();
+			String newdesc = k.getAlaCarteDesc().replace(',', '/');
+			String foodItem = k.getAlaCarteId() + "," + k.getAlaCarteName() + "," + newdesc +  "," +  k.getAlaCartePrice()+ "," +k.getFoodType();
 			l.add(foodItem);
 		}
 		

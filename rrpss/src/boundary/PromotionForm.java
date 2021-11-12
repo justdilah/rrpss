@@ -11,7 +11,7 @@ import controller.AlaCarteController;
 import controller.MainAppController;
 import controller.PromotionController;
 import entity.AlaCarte;
-import entity.PromotionSet;
+import entity.Promotion;
 
 public class PromotionForm {
 	
@@ -97,14 +97,14 @@ public class PromotionForm {
 
 		}while(c>=control.getAllPromotionSets().size()+1 || c <= -1);
 
-		PromotionSet a = control.getAllPromotionSets().get(c-1);
+		Promotion a = control.getAllPromotionSets().get(c-1);
 		print("==================================");
 		print("\t Promotion Set details ");
 		print("==================================");
 		print("Name: " + a.getPackName());
 		print("Food Items: ");
-		for(int j = 0;j<a.getPackItem().size();j++) {
-			print(j + 1 + ") " + a.getPackItem().get(j).getAlaCarteName());
+		for(int j = 0;j<a.getPackItems().size();j++) {
+			print(j + 1 + ") " + a.getPackItems().get(j).getAlaCarteName());
 		}
 
 		print("Description: " + a.getPackDesc());
@@ -142,7 +142,7 @@ public class PromotionForm {
 			}
 			else
 			{
-				PromotionSet promo = control.getPromotionSetByName(PromotionName);
+				Promotion promo = control.getPromotionSetByName(PromotionName);
 				if (promo == null)
 					setter = false;
 				else
@@ -151,7 +151,7 @@ public class PromotionForm {
 		}while(setter);
 
 		ArrayList<AlaCarte> items;
-		ArrayList<PromotionSet> promos = new ArrayList<>();
+		ArrayList<Promotion> promos = new ArrayList<>();
 		
 		setter = true;
 		do{
@@ -159,17 +159,17 @@ public class PromotionForm {
 			int checker = 0;
 			for(int i=0; i< control.getAllPromotionSets().size();i++)
 			{
-				if (control.getAllPromotionSets().get(i).getPackItem().size() == items.size())
+				if (control.getAllPromotionSets().get(i).getPackItems().size() == items.size())
 					promos.add(control.getAllPromotionSets().get(i));
 			}
 
-			for (PromotionSet promo : promos) {
+			for (Promotion promo : promos) {
 				checker = 0;
 				for (int i=0; i<items.size();i++) {
 					{
 						for(int j=0; j<items.size();j++)
 						{
-							if(promo.getPackItem().get(i).getAlaCarteName().equals(items.get(j).getAlaCarteName())) {
+							if(promo.getPackItems().get(i).getAlaCarteName().equals(items.get(j).getAlaCarteName())) {
 								checker++;
 								break;
 							}
@@ -269,7 +269,7 @@ public class PromotionForm {
 			}
 		} while(option < 0 || option > control.getAllPromotionSets().size());
 
-		PromotionSet c = control.getPromotionSetByName(control.getAllPromotionSets().get(option-1).getPackName());
+		Promotion c = control.getPromotionSetByName(control.getAllPromotionSets().get(option-1).getPackName());
 
 		while (true) {
 			print("===========================================");
@@ -298,7 +298,7 @@ public class PromotionForm {
 					case 1 -> {
 						String name;
 						String ogname = c.getPackName();
-						PromotionSet promo = new PromotionSet();
+						Promotion promo = new Promotion();
 						print("Enter The New Promotion Set Name (Original Name: "+ogname+"): ");
 						do {
 							name = sc.nextLine();
@@ -313,7 +313,7 @@ public class PromotionForm {
 								print("Promotion Set name already exist, please enter another name (Original Name: "+ogname+"):");
 
 						} while (name.trim().isEmpty() || name.equals(ogname)||promo!=null);
-						control.updatePromoItemName(c, name);
+						control.updatePromotionSetName(c, name);
 						print("Promotion Set Name "+ogname+" has been changed to "+name);
 					}
 					case 2 -> control.updateAlaCarteItems(c, selectPromotionItemOptions(c));
@@ -327,12 +327,12 @@ public class PromotionForm {
 							if (desc.trim().isEmpty())
 								print("New Description cannot be empty, please enter a valid description (Original Description: "+ogdesc+" ): ");
 						} while (desc.trim().isEmpty());
-						control.updatePromoItemDesc(c, desc);
+						control.updatePromotionSetDesc(c, desc);
 						print("Promotion Set Description has been successfully changed");
 					}
 					case 4 -> {
 						double ogprice = c.getPackPrice();
-						ArrayList<AlaCarte> items = c.getPackItem();
+						ArrayList<AlaCarte> items = c.getPackItems();
 						double checkPrice = 0;
 						for (int i=0; i<items.size(); i++)
 						{
@@ -359,7 +359,7 @@ public class PromotionForm {
 								fail=true;
 							}
 						} while (fail || price == ogprice || price>=checkPrice);
-						control.updatePromoPrice(c, price);
+						control.updatePromotionSetPrice(c, price);
 						print("Promotion Set Price $"+ogprice+" has been changed to $"+price);
 					}
 				}
@@ -432,20 +432,20 @@ public class PromotionForm {
 		return alList;
 	}
 
-	private ArrayList<AlaCarte> selectPromotionItemOptions(PromotionSet p) throws FileNotFoundException {
+	private ArrayList<AlaCarte> selectPromotionItemOptions(Promotion p) throws FileNotFoundException {
 
 		int choice =0, c=0, k=0;
 		String format = "%-25s%s%n";
 		String format1 ="%-35s%s%n";
-		ArrayList<AlaCarte> alList = p.getPackItem();
+		ArrayList<AlaCarte> alList = p.getPackItems();
 		do {
 			print("=================================");
 			print("Promotion Item Options " + p.getPackName());
 			print("=================================");
 			print("Current Promotional Set Items");
 			print("=================================");
-			for (int i = 0; i < p.getPackItem().size(); i++)
-				System.out.printf(format, p.getPackItem().get(i).getAlaCarteName(), "$" + p.getPackItem().get(i).getAlaCartePrice());
+			for (int i = 0; i < p.getPackItems().size(); i++)
+				System.out.printf(format, p.getPackItems().get(i).getAlaCarteName(), "$" + p.getPackItems().get(i).getAlaCartePrice());
 			print("");
 			print("Press 0 to end update to the list");
 			print("1) Add Ala Carte item in the promotion set");
@@ -559,9 +559,9 @@ public class PromotionForm {
 			
 		} while(option < 1 || option > control.getAllPromotionSets().size());
 		
-		PromotionSet c = control.getPromotionSetByName(control.getAllPromotionSets().get(option-1).getPackName());
+		Promotion c = control.getPromotionSetByName(control.getAllPromotionSets().get(option-1).getPackName());
 		deletedname = c.getPackName();
-		control.deletePromoSet(c);
+		control.deletePromotionSet(c);
 		print("=================================================");
 		print("Promotion Set "+deletedname+" Has Been Deleted Successfully");
 		print("=================================================");

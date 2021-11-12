@@ -18,14 +18,14 @@ public class OrderItem {
 	private String orderItemName;
 	private Double orderItemPrice;
 	private int orderId;
-	PromotionSet promoitem;
+	Promotion promoitem;
 	AlaCarte food;
 	
 	public OrderItem() {
 		
 	}
 	
-	public OrderItem(int orderItemId,PromotionSet a, int qty, int orderId) {
+	public OrderItem(int orderItemId,Promotion a, int qty, int orderId) {
 		this.orderItemId = orderItemId;
 		this.orderItemName = a.getPackName();
 		this.promoitem = a;
@@ -107,8 +107,8 @@ public class OrderItem {
 		this.orderId = id;
 	}
 	
-	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
-		PromotionSet p = new PromotionSet();
+	public ArrayList<Promotion> getAllPromoSets() throws FileNotFoundException {
+		Promotion p = new Promotion();
 		return p.getAllPromotionItems();
 	}
 	
@@ -131,7 +131,7 @@ public class OrderItem {
 	
 	// GET ALL THE ORDER ITEMS BASED ON THAT ORDER
 	public ArrayList<OrderItem> getOrderItems(int id) throws IOException {
-		PromotionSet p = new PromotionSet();
+		Promotion p = new Promotion();
 		AlaCarte a = new AlaCarte();
 		OrderItem m;
 		ArrayList<OrderItem> itemList= new ArrayList<>();
@@ -168,7 +168,7 @@ public class OrderItem {
 	
 	// GET ALL THE ORDER ITEMS
 	public ArrayList<OrderItem> getAllOrderItems() throws IOException {
-		PromotionSet p = new PromotionSet();
+		Promotion p = new Promotion();
 		AlaCarte a = new AlaCarte();
 		OrderItem m;
 		ArrayList<OrderItem> itemList= new ArrayList<>();

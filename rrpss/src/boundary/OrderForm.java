@@ -13,7 +13,7 @@ import entity.AlaCarte;
 import entity.Customer;
 import entity.Order;
 import entity.OrderItem;
-import entity.PromotionSet;
+import entity.Promotion;
 import entity.Staff;
 import entity.Table;
 
@@ -146,7 +146,7 @@ public class OrderForm {
         boolean setter;
 
         ArrayList<AlaCarte> alarCarteItems = or.getAllAlaCartItems();
-        ArrayList<PromotionSet> promoSetItems = or.getAllPromoSets();
+        ArrayList<Promotion> promoSetItems = or.getAllPromoSets();
         printFoodMenu();
         i= alarCarteItems.size()+ promoSetItems.size();
         indexes = i-1;
@@ -178,7 +178,7 @@ public class OrderForm {
             or.addAlaCarteOrderItem(++counter,a,qty,orderId);
         }
         else{
-            PromotionSet p =  promoSetItems.get(c-1-alarCarteItems.size());
+            Promotion p =  promoSetItems.get(c-1-alarCarteItems.size());
             or.addPromoOrderItem(++counter, p, qty,orderId);
         }
 
@@ -254,7 +254,7 @@ public class OrderForm {
                         }
                     }
                     else{
-                        PromotionSet p =  promoSetItems.get(c-1-alarCarteItems.size());
+                        Promotion p =  promoSetItems.get(c-1-alarCarteItems.size());
                         for (j=0; j<size; j++) {
                             if (oiList.get(j).getOrderItemName().equals(p.getPackName())) {
                                 print("Enter Quantity: ");
@@ -412,7 +412,7 @@ public class OrderForm {
         String format1 = "%-27s%s%n";
 
         ArrayList<AlaCarte> alarCarteItems = or.getAllAlaCartItems();
-        ArrayList<PromotionSet> promoSetItems = or.getAllPromoSets();
+        ArrayList<Promotion> promoSetItems = or.getAllPromoSets();
 
         size= alarCarteItems.size()+ promoSetItems.size();
 
@@ -495,7 +495,7 @@ public class OrderForm {
 
             }
             else{
-                PromotionSet p =  promoSetItems.get(choice-1-alarCarteItems.size());
+                Promotion p =  promoSetItems.get(choice-1-alarCarteItems.size());
                 for (int i=0; i<o.getOrderItemList().size(); i++){
                     if (o.getOrderItemList().get(i).getOrderItemName().equals(p.getPackName())){
                         print("Enter Quantity");
@@ -726,16 +726,16 @@ public class OrderForm {
         print("=================================");
         print("Promotion Sets ");
         print("=================================");
-        ArrayList<PromotionSet> promoSetItems = or.getAllPromoSets();
+        ArrayList<Promotion> promoSetItems = or.getAllPromoSets();
 
-        for (PromotionSet promo: promoSetItems)
+        for (Promotion promo: promoSetItems)
         {
             print("["+(i+1)+"]");
             printf(format,"Name: ", promo.getPackName());
             printf(format,"Description: ", promo.getPackDesc());
             printf(format,"Promotion Price: ", "$"+df.format(promo.getPackPrice()));
-            for(int j=0; j<promo.getPackItem().size();j++)
-                actualPrice+=promo.getPackItem().get(j).getAlaCartePrice();
+            for(int j=0; j<promo.getPackItems().size();j++)
+                actualPrice+=promo.getPackItems().get(j).getAlaCartePrice();
             printf(format,"Actual Price: ", "$"+df.format(actualPrice));
             print("");
             i++;
