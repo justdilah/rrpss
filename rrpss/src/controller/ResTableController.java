@@ -288,7 +288,7 @@ public class ResTableController {
         Table.updateTableStatus(table);
     }
 
-    public void deteleTable(int resID) throws IOException
+    public void deleteTable(int resID) throws IOException
     {
         Table.deleteTable(resID);
     }
