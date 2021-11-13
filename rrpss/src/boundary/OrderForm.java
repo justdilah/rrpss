@@ -22,6 +22,7 @@ public class OrderForm {
     private final OrderController or = new OrderController();
     private final CustomerController cc = new CustomerController();
     private final ResTableController tc = new ResTableController();
+    private final StaffController stc = new StaffController();
     private static final Scanner sc = new Scanner(System.in);
     private static final DecimalFormat df= new DecimalFormat("0.00");
 
@@ -222,18 +223,17 @@ public class OrderForm {
         index = or.getIndexFromOICsv(index);
 
         print("Please enter Staff ID: ");
-        Staff s = new Staff();
         do {
             try{
                 staffid = Integer.parseInt(sc.nextLine());
-                if(!s.isIdExists(staffid)) {
+                if(!stc.isIdExists(staffid)) {
                     print("Staff ID des not exist");
                     print("Please enter a valid Staff ID: ");
                 }
             }catch(NumberFormatException e){
                 print("Staff ID is not of valid format, please enter a valid Staff ID: ");
             }
-        }while(!s.isIdExists(staffid));
+        }while(!stc.isIdExists(staffid));
 
         print("Please enter Customer Phone Number: ");
         Customer c = new Customer();
