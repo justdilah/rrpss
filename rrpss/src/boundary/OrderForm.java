@@ -579,8 +579,8 @@ public class OrderForm {
 
 
     /**
-     * This method will displays the food menu and prompts the staff to select an orderItem to be added into an Order
-     * and calls the addAlaCarteOrderItem() or addPromoOrderItem() in the controller class to add the selected orderItem.
+     * This method will displays the food menu and prompts the staff to select an orderItem to be added given an Order
+     * and calls the addAlaCarteOrderItem(..) or addPromoOrderItem(..) in the controller class to add the selected orderItem.
      * @param o The order that is going to be updated on
      * @param counter The value to increment the orderID
      * @throws IOException Display error message if any I/O error found while inserting the records.
@@ -723,9 +723,9 @@ public class OrderForm {
 
 
     /**
-     * This method will displays all the orderItems and prompts the staff to select an orderItem to be removed
+     * This method will displays all the orderItems and prompts the staff to select an orderItem to be removed from the given order
      * then the staff can chooses to either remove an quantity or remove it completely.
-     * Thus, it will calls either the updateOrderItemQty or addPromoOrderItem() in the controller class to delete the selected orderItem.
+     * Thus, it will calls either the updateOrderItemQty(..) or addPromoOrderItem(..) in the controller class to delete the selected orderItem.
      * @param o The order that is going to be deleted from
      * @throws IOException Display error message if any I/O error found while accessing the records.
      */
@@ -814,8 +814,8 @@ public class OrderForm {
     }
 
 
-    /**This method will display all the orders and prompts the staff to select an order to be deleted calls
-     * the deleteOrder in the controller class to remove the chosen order.
+    /**This method will displays all the orders and prompts the staff to select an order to be deleted, so it will calls
+     * the deleteOrder(..) in the controller class to remove the chosen order.
      * @throws IOException Display error message if any I/O error found while deleting the records.
      */
     private void deleteOrder() throws IOException{
@@ -873,7 +873,7 @@ public class OrderForm {
     }
 
     /**
-     * This method will display different order functions.
+     * This method will onlu display different order functions.
      */
     public void printOrderFormMenu()
     {
