@@ -13,64 +13,50 @@ import entity.*;
 
 public class OrderController {
 
-	Order o = new Order();
-	OrderItem oi = new OrderItem();
 
-	public void addOrder(int orderId, LocalTime timeStamp,LocalDate date, int staffId, Boolean isPaid, String custPhoneNum, int tableNo) throws IOException {
-		String foodItem = orderId + "," + timeStamp +  "," + date +  "," +  staffId + "," + isPaid + "," + o.getCustIDByPhoneNum(custPhoneNum) + "," +  tableNo;
+	public void addOrder(int orderId, LocalTime timeStamp, LocalDate date, int staffId, Boolean isPaid, String custPhoneNum, int tableNo) throws IOException {
+		String foodItem = orderId + "," + timeStamp +  "," + date +  "," +  staffId + "," + isPaid + "," + getCustIDByPhoneNum(custPhoneNum) + "," +  tableNo;
 		List l = new ArrayList();
 		l.add(foodItem);
-		o.saveOrder(l);
+		Order.saveOrder(l);
 	}
 
-	public ArrayList<Order> getAllOrders() throws IOException {
-		return o.getAllOrders();
-	}
-
-	public ArrayList<Order> getUnpaidOrders() throws IOException {
-		return o.getUnpaidOrders();
+	public static ArrayList<Order> getAllOrders() throws IOException {
+		return Order.getAllOrders();
 	}
 
 	public void deleteOrder(int orderId) throws IOException {
 		// TODO - implement OrderController.deleteOrder
-		o.deleteOrder(orderId);
+		Order.deleteOrder(orderId);
 	}
 
 	public void removeOrderItem(int orderId, int orderItemId) throws IOException {
-		oi.removeOrderItem(orderId, orderItemId);
+		OrderItem.removeOrderItem(orderId, orderItemId);
 	}
 
 
 	public void replaceOrder(Order or) throws IOException {
-		o.replaceOrder(or);
-	}
-
-	public ArrayList<Promotion> getAllPromoSets() throws FileNotFoundException {
-		return oi.getAllPromoSets();
-	}
-
-	public ArrayList<AlaCarte> getAllAlaCartItems() throws IOException {
-		ArrayList<AlaCarte> items = oi.getAllAlaCartItems();
-		return sortAlaCarteItems(items);
+		Order.replaceOrder(or);
 	}
 
 	//RETRIEVE ALL ORDER ITEMS
-	public ArrayList<OrderItem> getAllOrderItems() throws IOException {
-		return oi.getAllOrderItems();
+	public static ArrayList<OrderItem> getAllOrderItems() throws IOException {
+		return OrderItem.getAllOrderItems();
 	}
 
 	//ORDER ITEMS
 	public void addOrderItem(OrderItem item) throws IOException {
-		oi.addOrderItem(item);
+		OrderItem.addOrderItem(item);
 	}
 
 	public void removeEntireOrderItemList(int orderId) throws IOException {
-		oi.removeEntireOrderItemList(orderId);
+		OrderItem.removeEntireOrderItemList(orderId);
 	}
 
-	public void addOrderItem(int orderId, int orderItemId) throws IOException {
-		oi.addOrderItem(orderId, orderItemId);
-	}
+	//Not Used
+//	public void addOrderItem(int orderId, int orderItemId) throws IOException {
+//		oi.addOrderItem(orderId, orderItemId);
+//	}
 
 	public int getIndexFromOICsv(int index) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader("DataSet/Order.csv"));
@@ -128,11 +114,9 @@ public class OrderController {
 
 		ArrayList<Order> order = getAllOrders();
 		Order o = null;
-		for (int i=0; i<order.size();i++)
-		{
-			if (order.get(i).getOrderId() == id)
-				o = order.get(i);
-
+		for (Order value : order) {
+			if (value.getOrderId() == id)
+				o = value;
 		}
 		return o;
 	}
@@ -140,17 +124,17 @@ public class OrderController {
 	public void updateOrderItemQty(OrderItem item, int qty) throws IOException
 	{
 		item.setOrderItemQty(qty);
-		oi.updateOrderItem(item);
+		OrderItem.updateOrderItem(item);
 	}
 
 	public void addPromoOrderItem(int id, Promotion promo, int qty, int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,promo,qty,orderId);
-		oi.addOrderItem(o);
+		OrderItem.addOrderItem(o);
 	}
 
 	public void addAlaCarteOrderItem(int id, AlaCarte ala, int qty, int orderId) throws IOException {
 		OrderItem o = new OrderItem(id,ala,qty,orderId);
-		oi.addOrderItem(o);
+		OrderItem.addOrderItem(o);
 	}
 
 	public ArrayList<Order> getCurrentDateOrder(LocalDate date) throws IOException {
@@ -165,5 +149,95 @@ public class OrderController {
 		return CurrentDateList;
 	}
 
+	//Newly Shifted Methods from Entity Order and OrderItem
+
+	public static ArrayList<Order> getUnpaidOrders() throws IOException {
+		ArrayList<Order> storeOrder = getAllOrders();
+		ArrayList<Order> unpaidList = new ArrayList<>();
+		int counter = 0;
+		if(storeOrder != null) {
+			for (Order order : storeOrder) {
+				if (!order.getIsPaid()) {
+					counter++;
+					unpaidList.add(order);
+				}
+			}
+		}
+		if(counter==0) {
+			unpaidList = null;
+		}
+		return unpaidList;
+	}
+
+	public Order selectOrderById(int id) throws IOException {
+		ArrayList<Order> ord = getAllOrders();
+		Order o = null;
+		for(Order order: ord){
+			if(order.getOrderId() == id){
+				o=order;
+			}
+		}
+		return o;
+	}
+
+
+	public int getCustIDByPhoneNum(String contact) throws IOException{
+		int id = -1;
+		ArrayList<Customer> cust = Customer.getAllCustomerDetails();
+		Customer c = null;
+		for(Customer cus: cust)
+		{
+			if(cus.getPersPhoneNo().equals(contact)){
+				c = cus;
+			}
+		}
+
+		if(c!=null)
+			return c.getCustId();
+		else
+			return id;
+	}
+
+	public OrderItem selectOrderItemById(int id) throws IOException {
+		ArrayList<OrderItem> ordi = getAllOrderItems();
+		OrderItem o = null;
+		for(OrderItem ord: ordi){
+			if(ord.getOrderItemId() == id){
+				o = ord;
+			}
+		}
+		return o;
+	}
+
+	public ArrayList<Promotion> getAllPromoSets() throws FileNotFoundException {
+		return Promotion.getAllPromotionItems();
+	}
+
+	public ArrayList<AlaCarte> getAllAlaCartItems() throws IOException {
+		ArrayList<AlaCarte> items = AlaCarte.getAllAlaCarteItems();
+		return sortAlaCarteItems(items);
+	}
+
+	public OrderItem selectOrderItemById(int orderId,int orderItemId) throws IOException {
+		OrderItem c = null;
+		ArrayList<OrderItem> orderi =  getOrderItemsByOrderId(orderId);
+		for(OrderItem odi : orderi)
+		{
+			if(odi.getOrderItemId() == orderItemId)
+				c = odi;
+		}
+		return c;
+	}
+
+	public static ArrayList<OrderItem> getOrderItemsByOrderId(int id) throws IOException{
+		ArrayList<OrderItem> orderi = getAllOrderItems();
+		ArrayList<OrderItem> storeL = new ArrayList<>();
+		for (OrderItem odi: orderi)
+		{
+			if(odi.getOrderId() == id)
+				storeL.add(odi);
+		}
+		return storeL;
+	}
 
 }

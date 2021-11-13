@@ -90,7 +90,7 @@ public class MainAppUI {
 					break; 
 				
 				case 6:
-					mc.getInvoiceForm();
+//					mc.getInvoiceForm();
 					break;
 				
 				case 7: 

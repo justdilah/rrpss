@@ -17,6 +17,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+
+import controller.CustomerController;
+import controller.StaffController;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,37 +101,8 @@ public class Reservation {
 	}
 
 
-	public Reservation getResByContact(String contact) throws IOException
-	{
-		Reservation r = new Reservation();
-
-		for(int i=0; i<getAllReservationDetails().size();i++) {
-
-			if(getAllReservationDetails().get(i).getResContact().equals(contact)) {
-				r = getAllReservationDetails().get(i);
-			}
-		}
-		return r;
-	}
-
-	public Reservation getResById(Integer id) throws IOException
-	{
-		Reservation r = new Reservation();
-		ArrayList<Reservation> rList = getAllReservationDetails();
-
-		for(int i=0; i<rList.size();i++) {
-
-			if(rList.get(i).getResId()==id) {
-				r = rList.get(i);
-				break;
-			}
-		}
-		return r;
-	}
-
-
 	// csv
-	public ArrayList<Reservation> getAllReservationDetails() throws IOException
+	public static ArrayList<Reservation> getAllReservationDetails() throws IOException
 	{
 		ArrayList<Reservation> rlist= new ArrayList<>();
 		ArrayList stringitems = (ArrayList)read(filename);
@@ -144,11 +119,13 @@ public class Reservation {
 			String custid =  star.nextToken().trim();
 			String staffid =  star.nextToken().trim();
 
-			Customer c = new Customer();
-			c=c.getCustById(Integer.parseInt(custid));
+			Customer c;
+			CustomerController cc = new CustomerController();
+			c=cc.getCustById(Integer.parseInt(custid));
 
 			Staff s = new Staff();
-			s=s.getStaffById(Integer.parseInt(staffid));
+			StaffController sc = new StaffController();
+			s=sc.getStaffById(Integer.parseInt(staffid));
 
 			Reservation  r = new Reservation(Integer.parseInt(resid), name, contact, Integer.parseInt(pax), c, s);
 			rlist.add(r);
@@ -159,9 +136,10 @@ public class Reservation {
 
 
 	//ADDING TO CSV FILE
-	public int saveReservation(String name, String resContact, int resNoPax, int custid, int staffid) throws IOException
+	public static int saveReservation(String name, String resContact, int resNoPax, int custid, int staffid) throws IOException
 	{
-		int last = getAllReservationDetails().size();
+		ArrayList<Reservation> rList = getAllReservationDetails();
+		int last = rList.size();
 		int id;
 
 		if (last == 0)
@@ -170,7 +148,7 @@ public class Reservation {
 		}
 		else
 		{
-			id = getAllReservationDetails().get(last-1).getResId()+1;
+			id = rList.get(last-1).getResId()+1;
 		}
 
 		String res = id + "," + name + "," + resContact +  "," +  resNoPax + "," + custid + "," + staffid;
@@ -183,14 +161,14 @@ public class Reservation {
 
 
 	//FOR UPDATE
-	public void updateReservation(Reservation r) throws IOException
+	public static void updateReservation(Reservation r) throws IOException
 	{
 		List l = new ArrayList<>();
 		ArrayList<Reservation> rList = getAllReservationDetails();
 
-		for(int i=0;i<getAllReservationDetails().size();i++)
+		for(int i=0;i<rList.size();i++)
 		{
-			if(getAllReservationDetails().get(i).getResId() == r.getResId())
+			if(rList.get(i).getResId() == r.getResId())
 			{
 				rList.set(i, r);
 			}
@@ -204,39 +182,14 @@ public class Reservation {
 		replace(filename, l);
 	}
 
-	public void deleteLateReservation(ArrayList<Integer> deleteList) throws IOException {
-		Reservation tempRest = new Reservation();
-		for (Integer resID : deleteList) {
-			tempRest = this.getResById(resID);
-			String name = tempRest.getResName();
-			this.deleteReservation(tempRest);
-			System.out.println("NOTE: ");
-			System.out.println("=========================================================================================");
-			System.out.printf("%s 's reservation has been removed because he/she is late more than 10 minutes \n", name);
-			System.out.println("=========================================================================================");
-		}
-	}
-
-	public void deletePastReservation(ArrayList<Integer> deleteList) throws IOException {
-		Reservation tempRest = new Reservation();
-		for (Integer resID : deleteList) {
-			tempRest = this.getResById(resID);
-			String name = tempRest.getResName();
-			this.deleteReservation(tempRest);
-			System.out.printf("%s 's reservation has been removed because the reservation date is before today \n",
-					name);
-		}
-	}
-
-	public void deleteReservation(Reservation r) throws IOException
+	public static void deleteReservation(Reservation r) throws IOException
 	{
 		List l = new ArrayList<>();
 		ArrayList<Reservation> rList = getAllReservationDetails();
 
 		for(int i=0; i<rList.size(); i++)
-//		for(int i=0; i<getAllReservationDetails().size(); i++)
 		{
-			if(getAllReservationDetails().get(i).getResId() == r.getResId())
+			if(rList.get(i).getResId() == r.getResId())
 			{
 				//			rList.remove(i);
 			}
@@ -254,15 +207,16 @@ public class Reservation {
 
 
 	//READ AND WRITE TO CSV
-	private List read(String filename) throws IOException {
-
+	private static List read(String filename) throws IOException
+	{
 		List data = new ArrayList();
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String headerLine = reader.readLine();
-		//  System.out.println(headerLine);
 		String line;
+
 		try {
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null)
+			{
 				data.add(line);
 			}
 		} finally {
@@ -271,12 +225,12 @@ public class Reservation {
 		return data;
 	}
 
-	private void write(String filename, List data) throws IOException {
+	private static void write(String filename, List data) throws IOException
+	{
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
-			for (int i = 0; i < data.size(); i++) {
-
-				//out.write("\n" +(String) data.get(i)+"\n");
+			for (int i = 0; i < data.size(); i++)
+			{
 				out.write((String) data.get(i)+"\n");
 			}
 		} finally {
@@ -286,14 +240,14 @@ public class Reservation {
 
 
 
-	private void replace(String filename, List data) throws IOException {
-
+	private static void replace(String filename, List data) throws IOException
+	{
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
 			out.write("resId" + "," + "resName" + "," + "resContact" + "," + "resNoPax" + "," + "customer" + "," + "staff" + "\n");
 
-			for (int i = 0; i < data.size(); i++) {
-
+			for (int i = 0; i < data.size(); i++)
+			{
 				out.write((String) data.get(i) + "\n");
 			}
 		} finally {

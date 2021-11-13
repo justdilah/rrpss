@@ -1,9 +1,11 @@
  package entity;
 
+import controller.CustomerController;
+import controller.OrderController;
+import controller.ResTableController;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,13 +34,7 @@ public class Order {
 	public Order() {
 		this.orderItemList = new ArrayList<OrderItem>();
 	}
-	
-	public Order(Table t, Customer cust, String staffid) {
-		this.orderItemList = new ArrayList<OrderItem>();
-		this.table = t;
-		this.staffId = staffid;
-	}
-	
+
 	public Order(int id, LocalTime timeStamp, LocalDate date, Boolean isPaid, String staffId, Customer cust, Table t) {
 		this.orderId = id;
 		this.timeStamp = timeStamp;
@@ -121,87 +117,7 @@ public class Order {
 	public ArrayList<OrderItem> getOrderItemList() {
 		return this.orderItemList;
 	}
-	
-	public ArrayList<Order> getUnpaidOrders() throws IOException {
-		ArrayList<Order> storeOrder = getAllOrders();
-		ArrayList<Order> unpaidList = new ArrayList<>();
-		int counter = 0;
-		if(storeOrder != null) {
-			for (Order order : storeOrder) {
-				if (!order.getIsPaid()) {
-					counter++;
-					unpaidList.add(order);
-				}
-			}
-		}
-		if(counter==0) {
-			unpaidList = null;
-		}
-		return unpaidList;
-	}
-	
-//	public void addPromoOrderItemtoList(int id, PromotionSet i,int qty, int orderId) throws IOException {
-//		OrderItem o = new OrderItem(id,i,qty,orderId);
-//		oiControl.addOrderItem(o);
-//	}
-//
-//	public void addAlaCarteOrderItemtoList(int id, AlaCarte a, int qty,int orderId) throws IOException {
-//		OrderItem o = new OrderItem(id,a,qty, orderId);
-//		oiControl.addOrderItem(o);
-//	}
-	
-//	// RETURN PROMOTION SET ITEMS
-//	public ArrayList<PromotionSet> getAllPromoSets() throws FileNotFoundException {
-//		return oiControl.getAllPromoSets();
-//	}
-//
-//	// RETURN ALA CARTE ITEMS
-//	public ArrayList<AlaCarte> getAllAlaCartItems() throws FileNotFoundException {
-//		return oiControl.getAllAlaCartItems();
-//	}
-//
-//
-//	public void removeOrderItemFromList(int orderId, OrderItem o) throws IOException {
-//		OrderItem i = new OrderItem();
-//		i.removeOrderItem(orderId,o.getOrderItemId());
-//	}
-	
-	public Order selectOrderById(int id) throws IOException {
-		Order o = null;
-		
-		for(int i=0; i<getAllOrders().size();i++) {
-						
-			if(getAllOrders().get(i).getOrderId() == id) {
-				o = getAllOrders().get(i);
-			}
-		}
-		return o;
-	}
-	
-	public int getCustIDByPhoneNum(String contact) throws IOException {
-		Customer c = new Customer();
-		
-		for(int i=0; i<c.getAllCustomerDetails().size();i++) {
-			
-			String k = c.getAllCustomerDetails().get(i).getPersPhoneNo();
-			if(c.getAllCustomerDetails().get(i).getPersPhoneNo().equals(contact)) {
-				c = c.getAllCustomerDetails().get(i);
-			}
-		}
-		return c.getCustId();
-	}
-	
-	public OrderItem selectOrderItemById(int id) throws FileNotFoundException {
-		OrderItem o = null;
-		
-		for(int i=0; i<getOrderItemList().size();i++) {
-						
-			if(getOrderItemList().get(i).getOrderItemId() == id) {
-				o = getOrderItemList().get(i);
-			}
-		}
-		return o;
-	}
+
 
 	/**
 	 * 
@@ -212,18 +128,16 @@ public class Order {
 	}
 	
 	// SAVE THE ORDER
-	public void saveOrder(List list) throws IOException {
+	public static void saveOrder(List list) throws IOException {
 		write(filename, list);
 	}
 	
-	public void replaceOrder(Order o) throws IOException {
+	public static void replaceOrder(Order o) throws IOException {
 		
 		List l = new ArrayList<>();
 		ArrayList<Order> miList = getAllOrders();
-		
-		OrderItem item = new OrderItem();
-		
-		int size = getAllOrders().size();
+
+		int size = miList.size();
 		
 		for(int i=0;i<size;i++) {
 			
@@ -232,22 +146,19 @@ public class Order {
 			} 
 			
 			Order k = miList.get(i);
-			String order = k.getOrderId() + "," + k.getTimeStamp() +  "," + k.getDate() +  "," +  k.getStaffId() + "," + k.getIsPaid() + "," + k.getCust().getCustId() + "," +  k.getTable().getTableNo();
+			String order = k.getOrderId() + "," + k.getTimeStamp()
+					+  "," + k.getDate() +  "," +  k.getStaffId()
+					+ "," + k.getIsPaid() + "," + k.getCust().getCustId()
+					+ "," +  k.getTable().getTableNo();
 			l.add(order);
 			
 			
 		}
 		replace(filename,l);
 	}
-	
-	// REMOVE ORDER ITEM FROM THE ORDER ITEM LIST
-	public void removeOrderItem(int orderId, int orderItemId) throws IOException {
-		ArrayList<OrderItem> orderItemList = selectOrderById(orderId).getOrderItemList();
-		orderItemList.remove(selectOrderItemById(orderItemId));
-	}
 
 	// GET ALL THE ORDERS
-	public ArrayList<Order> getAllOrders() throws IOException {
+	public static ArrayList<Order> getAllOrders() throws IOException {
 		ArrayList<Order> psList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename);
 		Table t = new Table();
@@ -268,11 +179,13 @@ public class Order {
 				
 				DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
 				LocalTime converttime = LocalTime.parse(timeOrdered,tformatter);
-				
+
+				CustomerController cc = new CustomerController();
 				LocalDate date = LocalDate.parse(dateOrdered);
-				
-				Order m = new Order(Integer.parseInt(orderId),converttime,date, Boolean.valueOf(isPaid),staffId,c.getCustById(Integer.parseInt(custid)),t.getTableByTableNo(no));
-				m.setOrderItemList(o.getOrderItems(Integer.parseInt(orderId)));
+				ResTableController tc = new ResTableController();
+				Order m = new Order(Integer.parseInt(orderId),converttime,date,
+						Boolean.valueOf(isPaid),staffId,cc.getCustById(Integer.parseInt(custid)),tc.getTableByTableNo(no));
+				m.setOrderItemList(OrderController.getOrderItemsByOrderId(Integer.parseInt(orderId)));
 				psList.add(m);
 			}
 		} else {
@@ -282,14 +195,14 @@ public class Order {
 	}
 	
 	// DELETE THE ORDER
-	public void deleteOrder(int orderId) throws IOException {		
+	public static void deleteOrder(int orderId) throws IOException {
 		
 		List l = new ArrayList<>();
 		ArrayList<Order> miList = getAllOrders();
 		
 		OrderItem item = new OrderItem();
 		
-		int size = getAllOrders().size();
+		int size = miList.size();
 		
 		for(int i=0;i<size;i++) {
 			
@@ -298,17 +211,18 @@ public class Order {
 				miList.remove(i);
 			} else {
 				Order k = miList.get(i);
-				String foodItem = k.getOrderId() + "," + k.getTimeStamp() + "," + k.getDate() +"," + k.getStaffId() + "," + k.getIsPaid() +  "," + k.getCust().getCustId() + "," + k.getTable().getTableNo();
+				String foodItem = k.getOrderId() + "," + k.getTimeStamp()
+						+ "," + k.getDate() +"," + k.getStaffId() + ","
+						+ k.getIsPaid() +  "," + k.getCust().getCustId() + ","
+						+ k.getTable().getTableNo();
 				l.add(foodItem);
 			}
-			
-			
 		}
 		replace(filename,l);
 	}
 	
 	//READ AND WRITE TO CSV
-	private List read(String filename) throws IOException {
+	private static List read(String filename) throws IOException {
 		List data = new ArrayList();
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String headerLine = reader.readLine();
@@ -324,7 +238,7 @@ public class Order {
 		return data;
 	}
 	
-	private void write(String filename, List data) throws IOException {
+	private static void write(String filename, List data) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
 			for (int i = 0; i < data.size(); i++) {
@@ -336,7 +250,7 @@ public class Order {
 		}
 	}
 	
-	private void replace(String filename, List data) throws IOException {
+	private static void replace(String filename, List data) throws IOException {
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {

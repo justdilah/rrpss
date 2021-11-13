@@ -12,76 +12,72 @@ import entity.Promotion;
 public class PromotionController {
 	
 	private static final String filename = "DataSet/PromotionSet.csv";
-	Promotion ps = new Promotion();
-	/**
-	 * 
-	 * @param packName
-	 * @param packDesc
-	 * @param packPrice
-	 */
+
 	
 	public void addPromotionSet(String name, ArrayList<AlaCarte> allist, String desc, double price) throws IOException {
-		ps.savePromotionSetItem(name, allist, desc, price);
+		Promotion.savePromotionSetItem(name, allist, desc, price);
 	}
 	
 	public Promotion getPromotionSetByName(String name) throws FileNotFoundException {
-		return ps.selectPromotionSetByName(name);
+		return selectPromotionSetByName(name);
 	}
 	
-	public ArrayList<Promotion> getAllPromotionSets() throws FileNotFoundException {
-		return ps.getAllPromotionItems();
+	public static ArrayList<Promotion> getAllPromotionSets() throws FileNotFoundException {
+		return Promotion.getAllPromotionItems();
 	}
 	
-	/**
-	 * 
-	 * @param packId
-	 * @param packName
-	 * @throws IOException 
-	 */
+
 	public void updatePromotionSetName(Promotion promo, String name) throws IOException {
 		promo.setPackName(name);
-		ps.updatePromotionSet(promo);
+		Promotion.updatePromotionSet(promo);
 	}
 	
 	public void updateAlaCarteItems(Promotion promo, ArrayList<AlaCarte> items) throws IOException {
 		promo.setPackItems(items);
-		ps.updatePromotionSet(promo);
+		Promotion.updatePromotionSet(promo);
 	}
 
-	/**
-	 * 
-	 * @param packId
-	 * @param packDesc
-	 * @throws IOException 
-	 */
+
 	public void updatePromotionSetDesc(Promotion promo, String desc) throws IOException {
 		promo.setPackDesc(desc);
-		ps.updatePromotionSet(promo);
+		Promotion.updatePromotionSet(promo);
 
 	}
 
-	/**
-	 * 
-	 * @param packId
-	 * @param packPrice
-	 * @throws IOException 
-	 */
+
 	public void updatePromotionSetPrice(Promotion promo, double price) throws IOException {
 		promo.setPackPrice(price);;
-		ps.updatePromotionSet(promo);
+		Promotion.updatePromotionSet(promo);
 	}
 
-	/**
-	 * 
-	 * @param packId
-	 * @throws IOException 
-	 */
+
 	public void deletePromotionSet(Promotion promo) throws IOException {
-		ps.deletePromotionSet(promo);
+		Promotion.deletePromotionSet(promo);
 		
 	}
-	
-	
+
+	//Newly Shifted From Entity
+	public Promotion selectItemById(int id) throws FileNotFoundException {
+		Promotion p = null;
+		ArrayList<Promotion> promo = getAllPromotionSets();
+		for(Promotion promos: promo){
+			if(promos.getPackId() == id)
+				p = promos;
+		}
+		return p;
+	}
+
+	public static Promotion selectPromotionSetByName(String n) throws FileNotFoundException {
+		Promotion p = null;
+		ArrayList<Promotion> promo = getAllPromotionSets();
+		for(Promotion promos: promo){
+			if(promos.getPackName().equals(n))
+				p = promos;
+		}
+		return p;
+	}
+
+
 
 }
 

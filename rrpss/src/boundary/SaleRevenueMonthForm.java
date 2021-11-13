@@ -15,21 +15,44 @@ public class SaleRevenueMonthForm {
 	
 	//SHOW ORDER
 	public void displayOption() throws IOException {
-		System.out.println("===========================================================");
-        System.out.println("\t\t Monthly Revenue Report ");
-		System.out.println("===========================================================");
-		System.out.println("Guide: January = 1 ... December = 12");
-		System.out.println("Which month's revenue report would you like to print?");
-		System.out.print("Enter Month: ");
+		int monthchosen=-1,choice=-1;
+		print("===========================================================");
+        print("\t\t Monthly Revenue Report ");
+		print("===========================================================");
+		print("Guide: January = 1 ... December = 12");
+		print("Which month's revenue report would you like to print?");
+		print("Enter 0 to return to the Main Menu");
+		print("Enter Month: ");
 		
-		Scanner sc = new Scanner(System.in);
-		int monthchosen = sc.nextInt();
+		do{
+			try{
+				monthchosen = sc.nextInt();
+				if(monthchosen<0 || monthchosen > 12)
+					print("Month does not exist, please enter a valid month: ");
+				
+			}catch(NumberFormatException e){
+				print("Month chosen is of invalid format, please enter a valid month: ");
+			}
+		}while(monthchosen<0 || monthchosen >12);
 		
-		if(monthchosen > 0 && monthchosen < 13) {
-			sr.generateMonthRevenue(monthchosen);
-		}else {
-			System.out.print("No such month, pls try again.");
-		}
+		if(monthchosen ==0)
+			MainAppUI.print();
 		
+		sr.generateMonthRevenue(monthchosen);
+		print("Enter 0 to return to the Main Menu");
+		do{
+			try {
+				choice = Integer.parseInt(sc.nextLine());
+				if (choice != 0)
+					print("Enter 0 to return to the Main Menu");
+			}catch(NumberFormatException e){
+				print("Enter 0 to return to the Main Menu");
+			}
+		}while(choice!=0);
+		MainAppUI.print();
+	}
+	
+	private void print(String message){
+		System.out.println(message);
 	}
 }

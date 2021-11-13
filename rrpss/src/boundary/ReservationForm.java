@@ -19,6 +19,7 @@ import entity.Table;
 public class ReservationForm {
 
 	Scanner sc = new Scanner(System.in);
+	CustomerController cc = new CustomerController();
 	ReservationController rc = new ReservationController();
 	ResTableController rtc = new ResTableController();
 	StaffController stc = new StaffController();
@@ -29,11 +30,17 @@ public class ReservationForm {
 
 	public void checkReservation() throws IOException
 	{
-		//detect and delete past reservation
-		rc.deletePastReservation(rtc.deletePastReservationTable());
 		//detect and delete late customer reservation
-		rc.deleteLateReservation(rtc.deleteLateComerTable());
+		int late = rc.deleteLateReservation(rtc.deleteLateComerTable());
 
+		//detect and delete past reservation
+		int past = rc.deletePastReservation(rtc.deletePastReservationTable());
+
+		System.out.println("NOTE: ");
+		System.out.println("======================================================================");
+		System.out.println(past + " reservation(s) removed due to past reservation day.");
+		System.out.println(late + " reservation(s) removed due to late 10 minutes grace period.");
+		System.out.println("======================================================================");
 	}
 
 	public void displayOption() throws IOException
@@ -75,27 +82,17 @@ public class ReservationForm {
 
 			}while (choice == -1);
 
-			switch(choice) {
-
-				case 1:
-					insertReservation();
-					break;
-				case 2:
-					displayReservation();
-					break;
-				case 3:
-					updateReservation();
-					break;
-				case 4:
-					deleteReservation();
-					break;
-				case 5:
-					MainAppUI.print();
-					break;
-				default:
+			switch (choice) {
+				case 1 -> insertReservation();
+				case 2 -> displayReservation();
+				case 3 -> updateReservation();
+				case 4 -> deleteReservation();
+				case 5 -> MainAppUI.print();
+				default -> {
 					print("=========================================================");
 					print("\tInvalid input. Please enter again!");
 					print("=========================================================");
+				}
 			}
 		}while (choice<1 || choice>4);
 	}
@@ -105,8 +102,7 @@ public class ReservationForm {
 	{
 		int inputstaffid=0;
 
-		ResTableController rt = new ResTableController();
-		rt.createCapTable();
+		rtc.createCapTable();
 
 		int limit=3;
 
@@ -143,32 +139,31 @@ public class ReservationForm {
 
 		int staffid = stc.getStaffById(inputstaffid).getStaffId();
 
-
-
 		print("==================================");
 		print("\t Make Reservation");
 		print("==================================");
 
-
 		print("Enter Customer Contact: (e.g. 81234567) ");
 		contact = sc.nextLine();
 
-		CustomerController c1 = new CustomerController();
-		Customer cc1 = new Customer();
-		cc1 = c1.getCustByContact(contact);
-
-		if (cc1==null)
-		{
+		Customer c1;
+		c1 = cc.getCustByContact(contact);
+		if(c1.getPersName() == null){
 			print("Enter Customer Name: ");
 			name = sc.nextLine();
-
-			c1.saveCustomer(name, contact);
+			cc.saveCustomer(name, contact);
 		}
 		else
 		{
-			name = cc1.getPersName();
+			String contactcheck = c1.getPersPhoneNo();
+			Reservation r = ReservationController.getReservationByContact(contactcheck);
+			if(r.getResName()!=null) {
+				print("You have already made a booking, you cannot book another reservation.");
+				displayOption();
+			}
 		}
 
+		name = cc.getCustByContact(contact).getPersName();
 
 		print("Enter Date of Reservation (yyyy-MM-dd) format: ");
 		date = sc.nextLine();
@@ -197,6 +192,7 @@ public class ReservationForm {
 			temp =true;
 			while(temp)
 			{
+				print("Pax cannot be 0");
 				print("Enter Number of Pax: ");
 				pax = Integer.parseInt(sc.nextLine());
 
@@ -218,18 +214,23 @@ public class ReservationForm {
 			}
 		}
 
-		int custid = c1.getCustByContact(contact).getCustId();
+		int custid = cc.getCustByContact(contact).getCustId();
 
 
 		try {
-			rc.addReservation(name, contact, pax, custid, staffid);
 
-			int resid = rc.getReservationByContact(contact).getResId();
-			Table t = rt.reserveTable(finaldate, finaltime, pax, resid);
+			Table t = rtc.checkForTable(finaldate, finaltime, pax);
+
+//			rc.addReservation(name, contact, pax, custid, staffid);
+//			int resid = ReservationController.getReservationByContact(contact).getResId();
+//			Table t = rtc.reserveTable(finaldate, finaltime, pax, resid);
 
 
 			if(t != null)
 			{
+				rc.addReservation(name, contact, pax, custid, staffid);
+				int resid = ReservationController.getReservationByContact(contact).getResId();
+				rtc.reserveTable(finaldate, finaltime, resid, t);
 				print("==================================");
 				print( contact +  " added successfully");
 				print("Table " + t.getTableNo() +  " has been assigned successfully");
@@ -239,7 +240,7 @@ public class ReservationForm {
 			else
 			{
 				print("==================================");
-				print("No table found");
+				print("No table found && no reservation has been made");
 				print("==================================");
 				displayOption();
 			}
@@ -276,11 +277,11 @@ public class ReservationForm {
 
 			if (inputdate.isBefore(convertdate))
 			{
-				print("Reservation can only be done in advance.");
+				print("Date has already passed.");
 				print("Re-enter Date of Reservation (yyyy-MM-dd) format: ");
 				tempdate = sc.nextLine();
 
-				checkDate(tempdate);
+				local = checkDate(tempdate);
 			}
 			else if (inputdate.isAfter(convertdateafter))
 			{
@@ -289,21 +290,16 @@ public class ReservationForm {
 				print("Re-enter Date of Reservation (yyyy-MM-dd) format: ");
 				tempdate = sc.nextLine();
 
-				checkDate(tempdate);
+				local = checkDate(tempdate);
 			}
 		}
 		else
 		{
 			print("Invalid Date. Re-enter Date of Reservation (yyyy-MM-dd) format:");
 			tempdate = sc.nextLine();
-
 			local = checkDate(tempdate);
 		}
-
-
-
 		return local;
-
 	}
 
 	public static boolean isDateValid(String value) {
@@ -317,7 +313,7 @@ public class ReservationForm {
 
 	public LocalTime checkTime(String time)
 	{
-		LocalTime local = null;
+		LocalTime local;
 		String temptime;
 
 		DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -357,14 +353,13 @@ public class ReservationForm {
 		print("==================================");
 		String choice = sc.next();
 
-		Reservation r1 = rc.getReservationByContact(choice);
+		Reservation r1 = ReservationController.getReservationByContact(choice);
 
 		if (r1.getResId() == 0)
 			print("Reservation does not exist");
 		else
 		{
 			print("==================================================");
-			print("");
 			System.out.println("ResId: " +  r1.getResId());
 
 			// get custid and staffid
@@ -390,6 +385,8 @@ public class ReservationForm {
 			print("Reservation will be auto-cancelled at " + t.getTableTime().plusMinutes(10) + " HR");
 			print("==================================================");
 		}
+
+		displayOption();
 	}
 
 
@@ -397,6 +394,7 @@ public class ReservationForm {
 	{
 		Reservation r = new Reservation();
 		Table t = new Table();
+		ResTableController rtc = new ResTableController();
 
 		print("==================================");
 		print("\t Reservation ");
@@ -407,7 +405,7 @@ public class ReservationForm {
 
 		r = rc.getReservationByContact(stringchoice);
 
-		t = t.getTableByResId(r.getResId());
+		t = rtc.getTableByResId(r.getResId());
 
 		int p1 = r.getResNoPax();
 
@@ -454,7 +452,6 @@ public class ReservationForm {
 
 		try
 		{
-
 			// try catch for insert into reservation
 			try
 			{
@@ -517,7 +514,6 @@ public class ReservationForm {
 
 
 		try {
-//
 //			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 //			LocalDate convertdate = LocalDate.parse(date,formatter);
 
@@ -525,8 +521,11 @@ public class ReservationForm {
 
 
 			// pass in time and pax to check
-			int new_tno = -1;
-			new_tno = rt.checkAvailTable(finaldate, converttime, p1, resid).getTableNo();
+			int new_tno;
+			if(rt.checkAvailTable(finaldate, converttime, p1, resid) == null)
+				new_tno = -1;
+			else
+				new_tno =rt.checkAvailTable(finaldate, converttime, p1, resid).getTableNo();
 
 			if (new_tno != -1)
 			{
@@ -603,11 +602,22 @@ public class ReservationForm {
 
 		String choice = sc.nextLine();
 		try {
-			Reservation r = rc.getReservationByContact(choice);
-			rc.removeReservation(r);
-			print("==================================");
-			print("Remove successfully");
-			print("==================================");
+			Reservation r = ReservationController.getReservationByContact(choice);
+			if (r!=null) {
+				int res_id = r.getResId();
+				rtc.deteleTable(res_id);
+				rc.removeReservation(r);
+				print("==================================");
+				String name = r.getResName();
+				System.out.printf("%s 's reservation with contact number %s has been remove successfully\n", name, choice);
+				//print("Remove successfully");
+				print("==================================");
+			}
+			else {
+				print("==================================");
+				print("No reservation under this contact number");
+				print("==================================");
+			}
 			displayOption();
 		} catch (Exception ex) {
 			print("==================================");

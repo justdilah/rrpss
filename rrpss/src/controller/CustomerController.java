@@ -2,37 +2,75 @@ package controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import entity.Customer;
+import entity.Table;
 
 public class CustomerController {
-	Customer c = new Customer();
-	
-	public Customer getCustById(int id) throws IOException {
-		return c.getCustById(id);
-	}
-	
-	public Boolean isMember(int custID) throws IOException {
-		return c.isMember(custID);
-	}
-	
-	public void updateMembership(Customer cust) throws IOException {
-		c.updateMembership(cust);
+
+	public Boolean isMember(int custID) throws IOException
+	{
+		ArrayList<Customer> cList = Customer.getAllCustomerDetails();
+
+		for(int i=0; i<cList.size();i++)
+		{
+			if(cList.get(i).getCustId() == custID) {
+				if(cList.get(i).getMembership()) {
+					return true;
+				}
+			} else {
+				break;
+			}
+		}
+		return false;
 	}
 
-	public Customer getCustByIds(int id) throws IOException{
-		return c.getCustById(id);
+	public Boolean custExists(String contact) throws IOException
+	{
+		if(getCustByContact(contact)!=null)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public Customer getCustById(int id) throws IOException
+	{
+		Customer c = new Customer();
+		ArrayList<Customer> cList = Customer.getAllCustomerDetails();
+
+		for(int i=0; i<cList.size();i++) {
+
+			if(cList.get(i).getCustId() == id) {
+				c = cList.get(i);
+			}
+		}
+		return c;
 	}
 
 	public Customer getCustByContact(String contact) throws IOException
 	{
-		return c.getCustByContact(contact);
+		Customer c = new Customer();
+		ArrayList<Customer> cList = Customer.getAllCustomerDetails();
+
+		for(int i=0; i<cList.size();i++) {
+
+			String k = cList.get(i).getPersPhoneNo();
+
+			if(cList.get(i).getPersPhoneNo().equals(contact)) {
+				c = cList.get(i);
+			}
+		}
+		return c;
 	}
 
 	public void saveCustomer(String name, String contact) throws IOException
 	{
-		c.saveCustomer(name, contact);
+		Customer.saveCustomer(name, contact);
 	}
 
-
+	public void updateMembership(Customer cust) throws IOException {
+		Customer.updateMembership(cust);
+	}
 }

@@ -11,51 +11,86 @@ import java.util.List;
 import entity.Reservation;
 
 public class ReservationController {
-    
-    Reservation robj = new Reservation();
-    
-    public void addReservation(String name, String contact, int pax, int custid, int staffid) throws IOException
+
+
+    public static Reservation getReservationByContact(String contact) throws IOException
     {
-        robj.saveReservation(name, contact, pax, custid, staffid);
+        Reservation r = new Reservation();
+        ArrayList<Reservation> rList = Reservation.getAllReservationDetails();
+
+        for(int i=0; i<rList.size();i++)
+        {
+            if(rList.get(i).getResContact().equals(contact)) {
+                r = rList.get(i);
+            }
+        }
+        return r;
     }
 
-    public Reservation getReservationByContact(String contact) throws NumberFormatException, IOException
+    public Reservation getResById(int id) throws IOException
     {
-        return robj.getResByContact(contact);
-        
-    }
+        Reservation r = new Reservation();
+        ArrayList<Reservation> rList = r.getAllReservationDetails();
 
-    public Reservation getResById(Integer id) throws IOException
-    {
-        return robj.getResById(id);
+        for(int i=0; i<rList.size();i++)
+        {
+            if(rList.get(i).getResId()==id) {
+                r = rList.get(i);
+                break;
+            }
+        }
+        return r;
     }
 
     public ArrayList<Reservation> getAllReservation() throws NumberFormatException, IOException
     {
-        return robj.getAllReservationDetails();
+        return Reservation.getAllReservationDetails();
     }
 
+
+    public void addReservation(String name, String contact, int pax, int custid, int staffid) throws IOException
+    {
+        Reservation.saveReservation(name, contact, pax, custid, staffid);
+    }
+
+    public void updateReservationPax(Reservation r, int pax) throws IOException
+    {
+        r.setResNoPax(pax);
+        Reservation.updateReservation(r);
+    }
 
     public void removeReservation(Reservation r) throws IOException
     {
-        robj.deleteReservation(r);
+        Reservation.deleteReservation(r);
     }
 
-
-    public void updateReservationPax(Reservation r, int pax) throws IOException 
+    public int deleteLateReservation(ArrayList<Integer> deleteList) throws IOException
     {
-        r.setResNoPax(pax);
-        robj.updateReservation(r);
+        Reservation r = new Reservation();
+        int count=0;
+
+        for (Integer resid : deleteList)
+        {
+            r = getResById(resid);
+            Reservation.deleteReservation(r);
+            count++;
+        }
+        return count;
     }
 
-    public void deleteLateReservation(ArrayList<Integer> deleteList) throws IOException
+    public int deletePastReservation(ArrayList<Integer> deleteList) throws IOException
     {
-        robj.deleteLateReservation(deleteList);
+        Reservation r = new Reservation();
+        int count=0;
+
+        for (Integer resid : deleteList)
+        {
+            r = getResById(resid);
+            Reservation.deleteReservation(r);
+            count++;
+        }
+        return count;
     }
 
-    public void deletePastReservation(ArrayList<Integer> deleteList) throws IOException
-    {
-        robj.deletePastReservation(deleteList);
-    }
 
 }

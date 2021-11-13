@@ -2,13 +2,11 @@ package boundary;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.zip.DataFormatException;
 
 import controller.*;
 import entity.AlaCarte;
@@ -24,8 +22,6 @@ public class OrderForm {
     private final OrderController or = new OrderController();
     private final CustomerController cc = new CustomerController();
     private final ResTableController tc = new ResTableController();
-    private final StaffController scontrol = new StaffController();
-
     private static final Scanner sc = new Scanner(System.in);
     private static final DecimalFormat df= new DecimalFormat("0.00");
 
@@ -57,7 +53,7 @@ public class OrderForm {
 
     //Part is not done
     private void displayOrder() throws IOException {
-        int choice=-1, c=-1;
+        int choice=-1, c;
         ArrayList<Order> CurrentOrder;
         ArrayList<OrderItem>CustomerOrder;
         String format = "%-30s%s%n", format1 = "%-30s%-10s%s%n";
@@ -187,9 +183,9 @@ public class OrderForm {
     //Creation of Order
     private void insertOrder() throws IOException{
 
-        int tableNo =0, index = 1;
+        int tableNo, index = 1;
         int staffid= 0;
-        String custNo ="";
+        String custNo;
 
         System.out.println("=================================");
         System.out.println("\t Create Order ");
@@ -245,9 +241,9 @@ public class OrderForm {
             custNo = sc.nextLine();
             if(custNo.trim().isEmpty())
                 print("Customer Phone Number cannot be empty, please enter Customer Phone Number: ");
-            else if(!c.custExists(custNo))
+            else if(!cc.custExists(custNo))
                 print("Customer Phone Number does not exist, please enter Customer Phone Number: ");
-        }while(!c.custExists(custNo)||custNo.trim().isEmpty());
+        }while(!cc.custExists(custNo)||custNo.trim().isEmpty());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime time = LocalTime.parse(LocalTime.now().format(formatter));
@@ -430,7 +426,7 @@ public class OrderForm {
     private void updateOrder() throws IOException {
 
         String format = "%-20s%s%n";
-        int choice = 0, size = 0;
+        int choice = 0, size;
 
         print("================================================");
         print("Select the Order you would like to update ");
@@ -516,12 +512,8 @@ public class OrderForm {
             } while (choice < 0 || choice > 2);
 
             switch (choice) {
-                case 1 -> {
-                    addOrderItem(o, o.getOrderItemList().size());
-                }
-                case 2 -> {
-                    deleteOrderItem(o);
-                }
+                case 1 -> addOrderItem(o, o.getOrderItemList().size());
+                case 2 -> deleteOrderItem(o);
             }
         }while(choice!=0);
         updateOrder();
@@ -667,7 +659,7 @@ public class OrderForm {
     //FOR UPDATE PORTION (Finished)
     private void deleteOrderItem(Order o) throws IOException {
 
-        int choice = 0,  choice2 =0, qty =0;
+        int choice = 0,  choice2 =0, qty;
         String format = "%-30s%s%n";
         String format1 = "%-27s%s%n";
 
@@ -769,7 +761,7 @@ public class OrderForm {
 
         if(or.getUnpaidOrders() != null) {
             for (int i = 0; i < size; i++) {
-                Customer c = cc.getCustByIds(or.getUnpaidOrders().get(i).getCust().getCustId());
+                Customer c = cc.getCustById(or.getUnpaidOrders().get(i).getCust().getCustId());
                 print("("+(i+1)+")");
                 printf(format,"Order Id :" ,String.valueOf(or.getUnpaidOrders().get(i).getOrderId()));
                 printf(format,"Customer Name :" , c.getPersName());

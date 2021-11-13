@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import controller.AlaCarteController;
-import controller.MainAppController;
 import controller.PromotionController;
 import entity.AlaCarte;
 import entity.Promotion;
 
 public class PromotionForm {
-	
-	final private MainAppController mainControl = new MainAppController();
+
 	final private PromotionController control = new PromotionController();
 	final private AlaCarteController alcontrol = new AlaCarteController();
 	final private static Scanner sc = new Scanner(System.in);
@@ -38,24 +36,16 @@ public class PromotionForm {
 			do {
 				try {
 					choice = Integer.parseInt(sc.nextLine());
-		
+
 					switch (choice) {
-						case 1:
-							displayPromotionItem();
-							break;
-						case 2:
-							insertPromotionItem();
-							break;
-						case 3:
-							updatePromotionItem();
-							break;
-						case 4:
-							deletePromotionItem();
-							break;
-						case 5:
+						case 1 -> displayPromotionItem();
+						case 2 -> insertPromotionItem();
+						case 3 -> updatePromotionItem();
+						case 4 -> deletePromotionItem();
+						case 5 -> {
 							MainAppUI.print();
 							sc.close();
-							break;
+						}
 					}
 				}catch(NumberFormatException e)
 				{
@@ -68,16 +58,17 @@ public class PromotionForm {
 	private void displayPromotionItem() throws IOException {
 
 		int i, c = -1;
+		String format = "%-30s%s%n";
 
-		print("=================================");
+		print("===================================");
 		print("\t Promotion Menu ");
-		print("=================================");
-		print("Select the corresponding number "
-				+ "\nto see more food details ");
-		print("==================================");
-		for (i = 0; i < control.getAllPromotionSets().size(); i++) {
-			System.out.print(i + 1 + ") " + control.getAllPromotionSets().get(i).getPackName());
-			System.out.print(" $" + control.getAllPromotionSets().get(i).getPackPrice() + "\n");
+		print("===================================");
+		print("Select item number for more details ");
+		print("====================================");
+		System.out.printf(format,"Promotion Set Name","Price");
+		for (i = 0; i < PromotionController.getAllPromotionSets().size(); i++) {
+			System.out.printf(format,i + 1 + ") " + PromotionController.getAllPromotionSets().get(i).getPackName(),
+					"$" + df.format(PromotionController.getAllPromotionSets().get(i).getPackPrice()));
 		}
 		print("Enter 0 to return to the previous page.");
 		print("Please enter your choice: ");
@@ -85,7 +76,7 @@ public class PromotionForm {
 			try
 			{
 				c = Integer.parseInt(sc.nextLine());
-				if (c < 0 || c>=control.getAllPromotionSets().size()+1)
+				if (c < 0 || c>= PromotionController.getAllPromotionSets().size()+1)
 					print("Choice does not exist, please enter a valid choice: ");
 				else if (c == 0)
 					displayOption();
@@ -95,9 +86,9 @@ public class PromotionForm {
 				print("Input is of invalid format, please enter a valid choice: ");
 			}
 
-		}while(c>=control.getAllPromotionSets().size()+1 || c <= -1);
+		}while(c>= PromotionController.getAllPromotionSets().size()+1 || c <= -1);
 
-		Promotion a = control.getAllPromotionSets().get(c-1);
+		Promotion a = PromotionController.getAllPromotionSets().get(c-1);
 		print("==================================");
 		print("\t Promotion Set details ");
 		print("==================================");
@@ -109,7 +100,7 @@ public class PromotionForm {
 
 		print("Description: " + a.getPackDesc());
 
-		print("Price: $" + a.getPackPrice());
+		print("Price: $" + df.format(a.getPackPrice()));
 		print("");
 
 		print("Enter 1 to return to the menu");
@@ -157,10 +148,10 @@ public class PromotionForm {
 		do{
 			items = selectAlaCarteItems();
 			int checker = 0;
-			for(int i=0; i< control.getAllPromotionSets().size();i++)
+			for(int i = 0; i< PromotionController.getAllPromotionSets().size(); i++)
 			{
-				if (control.getAllPromotionSets().get(i).getPackItems().size() == items.size())
-					promos.add(control.getAllPromotionSets().get(i));
+				if (PromotionController.getAllPromotionSets().get(i).getPackItems().size() == items.size())
+					promos.add(PromotionController.getAllPromotionSets().get(i));
 			}
 
 			for (Promotion promo : promos) {
@@ -203,27 +194,27 @@ public class PromotionForm {
 		String newdesc = desc.replace(',', '/');
 		double checkPrice=0;
 		for (AlaCarte item : items) checkPrice += item.getAlaCartePrice();
-		print("Enter Promotion Set Price (Actual Price Combined: $"+checkPrice+"):");
+		print("Enter Promotion Set Price (Actual Price Combined: $"+df.format(checkPrice)+"):");
 
 		do {
 			try {
 				price = Double.parseDouble(sc.nextLine());
 				fail = (BigDecimal.valueOf(price).scale()>2);
 				if(fail)
-					print("Please enter the correct format for Price (Actual Price Combined: $"+checkPrice+"): ");
+					print("Please enter the correct format for Price (Actual Price Combined: $"+df.format(checkPrice)+"): ");
 				else
 				{
 					if(price>=checkPrice)
 					{
 						print("Promotion Price cannot be higher than actual prices of food items combined");
-						print("Please enter a valid Promotion Price (Actual Price Combined: $"+checkPrice+"): ");
+						print("Please enter a valid Promotion Price (Actual Price Combined: $"+df.format(checkPrice)+"): ");
 					}
 					else
 						pass = false;
 				}
 			}
 			catch (NumberFormatException e) {
-				print("Price is of invalid format, please enter a valid price (Actual Price Combined: $"+checkPrice+"): ");
+				print("Price is of invalid format, please enter a valid price (Actual Price Combined: $"+df.format(checkPrice)+"): ");
 			}
 		}while(fail || pass);
 
@@ -236,7 +227,7 @@ public class PromotionForm {
 		for (int i=0,j=1; i<items.size(); i++,j++) {
 			print("("+j+") "+items.get(i).getAlaCarteName());
 		}
-		print("Priced at: $" + price
+		print("Priced at: $" + df.format(price)
 				+"\nHas been added to the Promotions List Successfully.");
 
 		displayOption();
@@ -245,14 +236,14 @@ public class PromotionForm {
 	private void updatePromotionItem() throws FileNotFoundException {
 
 		boolean fail;
-		int choice = 0, option =0;
+		int choice = 0, option =-1;
 
 		print("================================================");
 		print("Select the Promotion Set you would like to update ");
 		print("================================================");
 
-		for(int i=0;i< control.getAllPromotionSets().size() ; i++ ) {
-			print(i+1 + ") "+control.getAllPromotionSets().get(i).getPackName());
+		for(int i = 0; i< PromotionController.getAllPromotionSets().size() ; i++ ) {
+			print(i+1 + ") "+ PromotionController.getAllPromotionSets().get(i).getPackName());
 		}
 
 		print("Enter 0 to return to the previous page");
@@ -260,16 +251,16 @@ public class PromotionForm {
 		do {
 			try {
 				option = Integer.parseInt(sc.nextLine());
-				if(option < 0 || option > control.getAllPromotionSets().size())
+				if(option < 0 || option > PromotionController.getAllPromotionSets().size())
 					print("Option does not exist, please enter a valid choice: ");
 				else if(option == 0)
 					displayOption();
 			} catch(NumberFormatException | IOException e) {
 				print("Input is of valid format, please enter a valid choice: ");
 			}
-		} while(option < 0 || option > control.getAllPromotionSets().size());
+		} while(option < 0 || option > PromotionController.getAllPromotionSets().size());
 
-		Promotion c = control.getPromotionSetByName(control.getAllPromotionSets().get(option-1).getPackName());
+		Promotion c = control.getPromotionSetByName(PromotionController.getAllPromotionSets().get(option-1).getPackName());
 
 		while (true) {
 			print("===========================================");
@@ -298,7 +289,7 @@ public class PromotionForm {
 					case 1 -> {
 						String name;
 						String ogname = c.getPackName();
-						Promotion promo = new Promotion();
+						Promotion promo;
 						print("Enter The New Promotion Set Name (Original Name: "+ogname+"): ");
 						do {
 							name = sc.nextLine();
@@ -339,28 +330,25 @@ public class PromotionForm {
 							checkPrice+= items.get(i).getAlaCartePrice();
 						}
 						print("Enter the New Promotion Set Price\n" +
-								"(Original Price: $"+ogprice+")||(AlaCarte Combined Price: $"+checkPrice+"): ");
+								"(Original Price: $"+df.format(ogprice)+")||(AlaCarte Combined Price: $"+df.format(checkPrice)+"): ");
 						do {
 							try {
 								price = Double.parseDouble(sc.nextLine());
 								fail = (BigDecimal.valueOf(price).scale() > 2);
 								if (fail)
 									print("Please input a proper format for the price\n" +
-											"(Original Price: $"+ogprice+")||(AlaCarte Combined Price: $"+checkPrice+"): ");
-								else if(price==ogprice)
-									print("New Price cannot be the same as the old price.\nPlease input a valid price" +
-											"(Original Price: $"+ogprice+")||(AlaCarte Combined Price: $"+checkPrice+"): ");
+											"(Original Price: $"+df.format(ogprice)+")||(AlaCarte Combined Price: $"+df.format(checkPrice)+"): ");
 								else if(price>=checkPrice)
 									print("New Price cannot be more expensive than original ala carte prices.\nPlease enter a valid price"+
-											"(Original Price: $"+ogprice+")||(AlaCarte Combined Price: $"+checkPrice+"): ");
+											"(Original Price: $"+df.format(ogprice)+")||(AlaCarte Combined Price: $"+df.format(checkPrice)+"): ");
 							} catch (NumberFormatException e) {
 								print("Price is of invalid format.\nPlease input a valid price" +
-										"(Original Price: $"+ogprice+")||(AlaCarte Combined Price: $"+checkPrice+"):");
+										"(Original Price: $"+df.format(ogprice)+")||(AlaCarte Combined Price: $"+df.format(checkPrice)+"):");
 								fail=true;
 							}
-						} while (fail || price == ogprice || price>=checkPrice);
+						} while (fail || price>=checkPrice);
 						control.updatePromotionSetPrice(c, price);
-						print("Promotion Set Price $"+ogprice+" has been changed to $"+price);
+						print("Promotion Set Price $"+df.format(ogprice)+" has been changed to $"+df.format(price));
 					}
 				}
 				if (choice == 5)
@@ -389,22 +377,23 @@ public class PromotionForm {
 		print("====================================================");
 		System.out.printf(format,"Food Name", "Price");
 		print("====================================================");
-		for(int j=0;j<alcontrol.getAllAlaCarteItems().size();j++) {
-			System.out.printf(format,j+1 + ") " + alcontrol.getAllAlaCarteItems().get(j).getAlaCarteName(),"$"+alcontrol.getAllAlaCarteItems().get(j).getAlaCartePrice());
+		for(int j = 0; j< AlaCarteController.getAllAlaCarteItems().size(); j++) {
+			System.out.printf(format,j+1 + ") " + AlaCarteController.getAllAlaCarteItems().get(j).getAlaCarteName(),
+					"$"+ df.format(AlaCarteController.getAllAlaCarteItems().get(j).getAlaCartePrice()));
 		}
 
 		print("Please enter your choice: ");
 		do {
 			try {
 				c = Integer.parseInt(sc.nextLine());
-				if(c==0||c>alcontrol.getAllAlaCarteItems().size())
+				if(c==0||c> AlaCarteController.getAllAlaCarteItems().size())
 					print("Choice does not exist, please enter a valid choice: ");
 			} catch (NumberFormatException e) {
 				print("Input is of invalid format, please enter a valid choice: ");
 			}
-		}while(c==0||c>alcontrol.getAllAlaCarteItems().size());
+		}while(c==0||c> AlaCarteController.getAllAlaCarteItems().size());
 
-		AlaCarte a = alcontrol.getAllAlaCarteItems().get(c-1);
+		AlaCarte a = AlaCarteController.getAllAlaCarteItems().get(c-1);
 		alList.add(a);
 
 		print("======================================================");
@@ -417,10 +406,10 @@ public class PromotionForm {
 				c = Integer.parseInt(sc.nextLine());
 				if (c == 0)
 					break;
-				else if (c<=-1||c>alcontrol.getAllAlaCarteItems().size())
+				else if (c<=-1||c> AlaCarteController.getAllAlaCarteItems().size())
 					print("Choice does not exist, please enter a valid choice");
 				else {
-					a = alcontrol.getAllAlaCarteItems().get(c - 1);
+					a = AlaCarteController.getAllAlaCarteItems().get(c - 1);
 					alList.add(a);
 				}
 			}
@@ -434,7 +423,7 @@ public class PromotionForm {
 
 	private ArrayList<AlaCarte> selectPromotionItemOptions(Promotion p) throws FileNotFoundException {
 
-		int choice =0, c=0, k=0;
+		int choice, c, k;
 		String format = "%-25s%s%n";
 		String format1 ="%-35s%s%n";
 		ArrayList<AlaCarte> alList = p.getPackItems();
@@ -445,7 +434,7 @@ public class PromotionForm {
 			print("Current Promotional Set Items");
 			print("=================================");
 			for (int i = 0; i < p.getPackItems().size(); i++)
-				System.out.printf(format, p.getPackItems().get(i).getAlaCarteName(), "$" + p.getPackItems().get(i).getAlaCartePrice());
+				System.out.printf(format, p.getPackItems().get(i).getAlaCarteName(), "$" + df.format(p.getPackItems().get(i).getAlaCartePrice()));
 			print("");
 			print("Press 0 to end update to the list");
 			print("1) Add Ala Carte item in the promotion set");
@@ -472,9 +461,9 @@ public class PromotionForm {
 						print("====================================================");
 						System.out.printf(format1, "Food Name", "Price");
 						print("====================================================");
-						for (int i = 0; i < alcontrol.getAllAlaCarteItems().size(); i++) {
-							System.out.printf(format1, i + 1 + ")" + alcontrol.getAllAlaCarteItems().get(i).getAlaCarteName(),
-									"$" + alcontrol.getAllAlaCarteItems().get(i).getAlaCartePrice());
+						for (int i = 0; i < AlaCarteController.getAllAlaCarteItems().size(); i++) {
+							System.out.printf(format1, i + 1 + ")" + AlaCarteController.getAllAlaCarteItems().get(i).getAlaCarteName(),
+									"$" + df.format(AlaCarteController.getAllAlaCarteItems().get(i).getAlaCartePrice()));
 						}
 						print("");
 						print("Press 0 to end the addition to the list");
@@ -484,10 +473,10 @@ public class PromotionForm {
 								c=Integer.parseInt(sc.nextLine());
 								if (c == 0 )
 									break;
-								else if (c<=-1||c>alcontrol.getAllAlaCarteItems().size())
+								else if (c<=-1||c> AlaCarteController.getAllAlaCarteItems().size())
 									print("Choice does not exist, please enter a valid choice");
 								else {
-									alList.add(a.selectFoodByName(alcontrol.getAllAlaCarteItems().get(c - 1).getAlaCarteName()));
+									alList.add(AlaCarteController.getAlaCarteByName(AlaCarteController.getAllAlaCarteItems().get(c - 1).getAlaCarteName()));
 									print("Press 0 to end the addition to the list");
 								}
 
@@ -539,16 +528,16 @@ public class PromotionForm {
         print("Select the Promotion Set you would like to delete ");
 		print("==================================================");
 		
-		for(int i=0;i< control.getAllPromotionSets().size() ; i++ ) {
-			print(i+1 + ") "+control.getAllPromotionSets().get(i).getPackName());
-		};
+		for(int i = 0; i< PromotionController.getAllPromotionSets().size() ; i++ ) {
+			print(i+1 + ") "+ PromotionController.getAllPromotionSets().get(i).getPackName());
+		}
 
 		print("Enter 0 to return to the previous page");
 		print("Please enter your choice: ");
 		do {
 			try {
 				option = Integer.parseInt(sc.nextLine());
-				if(option < 0 || option > control.getAllPromotionSets().size())
+				if(option < 0 || option > PromotionController.getAllPromotionSets().size())
 					print("Choice does not exist, please enter a valid choice: ");
 				else if(option == 0)
 					displayOption();
@@ -557,9 +546,9 @@ public class PromotionForm {
 				print("Input is of invalid format, please enter a valid choice: ");
 			}
 			
-		} while(option < 1 || option > control.getAllPromotionSets().size());
+		} while(option < 1 || option > PromotionController.getAllPromotionSets().size());
 		
-		Promotion c = control.getPromotionSetByName(control.getAllPromotionSets().get(option-1).getPackName());
+		Promotion c = control.getPromotionSetByName(PromotionController.getAllPromotionSets().get(option-1).getPackName());
 		deletedname = c.getPackName();
 		control.deletePromotionSet(c);
 		print("=================================================");

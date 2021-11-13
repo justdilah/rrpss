@@ -11,8 +11,6 @@ import java.util.*;
 public class AlaCarte {
 	
 	private static final String filename = "DataSet/AlaCarte.csv";
-//	Collection<Order> order;
-//	Collection<SetPackage> setpack;
 	private int alaCarteId;
 	private String alaCarteName;
 	private String alaCarteDesc;
@@ -43,10 +41,7 @@ public class AlaCarte {
 		return this.alaCarteName;
 	}
 
-	/**
-	 * 
-	 * @param foodName
-	 */
+
 	public void setAlaCarteName(String name) {
 		this.alaCarteName = name;
 	}
@@ -74,31 +69,10 @@ public class AlaCarte {
 	public void setFoodType(FoodType foodType) {
 		this.foodType = foodType;
 	}
+
 	
-	public AlaCarte selectAlaCarteById(int id) throws FileNotFoundException {	
-		AlaCarte a = null;
-		for(int i=0;i<getAllAlaCarteItems().size();i++) {
-			if(getAllAlaCarteItems().get(i).getAlaCarteId() == id) {
-				a = getAllAlaCarteItems().get(i);
-			}
-		}
-		return a;
-	}
-	
-	public AlaCarte selectFoodByName(String n) throws FileNotFoundException {	
-		AlaCarte a = null;
-		for(int i=0;i<getAllAlaCarteItems().size();i++) {
-			
-			if(getAllAlaCarteItems().get(i).getAlaCarteName().equals(n)) {
-				a = getAllAlaCarteItems().get(i);
-			}
-		}
-		return a;
-	}
-	
-	
-	// EXTRACT OUT FROM CSV FILE
-	public ArrayList<AlaCarte> getAllAlaCarteItems() throws FileNotFoundException {
+	// EXTRACT OUT FROM CSV FILE //Static Method //Main Read Methods
+	public static ArrayList<AlaCarte> getAllAlaCarteItems() throws FileNotFoundException {
 		ArrayList<AlaCarte> miList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename); 	
 		
@@ -118,13 +92,12 @@ public class AlaCarte {
 		return miList;
 	}
 	
-	
-	
-	
-	//ADDING TO CSV FILE 
-	public void saveFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
-		int last = getAllAlaCarteItems().size();
-		int id = getAllAlaCarteItems().get(last-1).getAlaCarteId()+ 1;
+
+	//ADDING TO CSV FILE (Reduced Time)
+	public static void saveFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
+		ArrayList<AlaCarte> ala = getAllAlaCarteItems();
+		int last = ala.size();
+		int id = ala.get(last-1).getAlaCarteId()+ 1;
 		String newft = menuType.toString().replace("_"," ");
 		String foodItem = id + "," + menuName + "," + menuDesc +  "," +  menuPrice+ "," +newft;
 		List l = new ArrayList();
@@ -132,13 +105,13 @@ public class AlaCarte {
 		write(filename, l);
 	}
 	
-	//FOR DELETE
-	public void deleteFoodItem(AlaCarte a) throws IOException {
+	//FOR DELETE (Reduced Time)
+	public static void deleteFoodItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllAlaCarteItems();
 		
-		for(int i=0;i<getAllAlaCarteItems().size();i++) {
-			if(getAllAlaCarteItems().get(i).getAlaCarteId() == a.getAlaCarteId()) {
+		for(int i=0;i<miList.size();i++) {
+			if(miList.get(i).getAlaCarteId() == a.getAlaCarteId()) {
 				miList.remove(i);
 			} else {
 				AlaCarte k = miList.get(i);
@@ -151,14 +124,13 @@ public class AlaCarte {
 	}
 	
 	//FOR UPDATE 
-	public void updateAlaCarteItem(AlaCarte a) throws IOException {
+	public static void updateAlaCarteItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllAlaCarteItems();
 		
-		for(int i=0;i<getAllAlaCarteItems().size();i++) {
-			
-			
-			if(getAllAlaCarteItems().get(i).getAlaCarteId() == a.getAlaCarteId()) {
+		for(int i=0;i<miList.size();i++) {
+
+			if(miList.get(i).getAlaCarteId() == a.getAlaCarteId()) {
 				miList.set(i, a);
 			}
 					
@@ -167,12 +139,11 @@ public class AlaCarte {
 			String foodItem = k.getAlaCarteId() + "," + k.getAlaCarteName() + "," + newdesc +  "," +  k.getAlaCartePrice()+ "," +k.getFoodType();
 			l.add(foodItem);
 		}
-		
 		replace(filename, l);	
 	}
 	
-	//READ AND WRITE TO CSV
-	private List read(String filename) throws FileNotFoundException {
+	//READ AND WRITE TO CSV (No Change)
+	private static List read(String filename) throws FileNotFoundException {
 		List data = new ArrayList();
 		Scanner scanner = new Scanner(new FileInputStream(filename));
 		try {
@@ -185,7 +156,7 @@ public class AlaCarte {
 		return data;
 	}
 	
-	private void write(String filename, List data) throws IOException {
+	private static void write(String filename, List data) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
 			for (int i = 0; i < data.size(); i++) {
@@ -197,7 +168,7 @@ public class AlaCarte {
 		}
 	}
 	
-	private void replace(String filename, List data) throws IOException {
+	private static void replace(String filename, List data) throws IOException {
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {

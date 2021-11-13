@@ -19,25 +19,21 @@ public class AlaCarteForm {
         int choice;
 
         displayAlaCarteOptions();
+        print("Please enter your choice: ");
         do{
             choice = Integer.parseInt(sc.nextLine());
             try {
                 switch (choice) {
-                    case 1 -> {
-                        displayAlaCarte();
-                    }
-                    case 2 -> {
-                        insertAlaCarte();
-                    }
-                    case 3 -> {
-                        updateAlaCarte();
-                    }
-                    case 4 -> {
-                        deleteAlaCarte();
-                    }
-                    case 5 -> {
-                        MainAppUI.print();
-                    }
+                    case 1 -> displayAlaCarte();
+
+                    case 2 -> insertAlaCarte();
+
+                    case 3 -> updateAlaCarte();
+
+                    case 4 -> deleteAlaCarte();
+
+                    case 5 -> MainAppUI.print();
+
                 }
             }catch(NumberFormatException e){
                 print("Choice is of invalid format, please enter a valid choice: ");
@@ -61,24 +57,24 @@ public class AlaCarteForm {
         do{
             try {
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice<0 || choice > ac.getAllAlaCarteItems().size())
+                if (choice<0 || choice > AlaCarteController.getAllAlaCarteItems().size())
                     print("Choice does not exist, please enter a valid choice: ");
             }catch(NumberFormatException e){
                 print("Choice is of invalid format, please enter a valid choice: ");
                 choice = -1;
             }
-        }while(choice<0 || choice >ac.getAllAlaCarteItems().size());
+        }while(choice<0 || choice > AlaCarteController.getAllAlaCarteItems().size());
 
         if (choice == 0)
             displayOption();
         else{
-            AlaCarte a = ac.getAllAlaCarteItems().get(choice-1);
+            AlaCarte a = AlaCarteController.getAllAlaCarteItems().get(choice-1);
             print("==================================");
             print("\t Food item details ");
             print("==================================");
             print("Name: " + a.getAlaCarteName());
             print("Description: " + a.getAlaCarteDesc());
-            print("Price: $" + a.getAlaCartePrice());
+            print("Price: $" + df.format(a.getAlaCartePrice()));
             print("Food Type: " + a.getFoodType());
             print("Press 0 to return to the menu");
             do{
@@ -112,7 +108,7 @@ public class AlaCarteForm {
                 print("Ala Carte name must not be empty, please enter a Ala Carte name: ");
             else
             {
-                AlaCarte a = ac.getAlaCarteByName(AlaCarteName);
+                AlaCarte a = AlaCarteController.getAlaCarteByName(AlaCarteName);
                 if (a == null)
                     setter = false;
                 else
@@ -173,7 +169,7 @@ public class AlaCarteForm {
         do{
             try{
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice<0 || choice>ac.getAllAlaCarteItems().size())
+                if (choice<0 || choice> AlaCarteController.getAllAlaCarteItems().size())
                     print("Choice does not exist, please enter a valid choice: ");
 
             }catch(NumberFormatException e){
@@ -181,12 +177,12 @@ public class AlaCarteForm {
                 choice = -1;
             }
 
-        }while(choice<0|| choice> ac.getAllAlaCarteItems().size());
+        }while(choice<0|| choice> AlaCarteController.getAllAlaCarteItems().size());
         
         if (choice == 0)
             displayOption();
         
-        AlaCarte a = ac.getAlaCarteByName(ac.getAllAlaCarteItems().get(choice-1).getAlaCarteName());
+        AlaCarte a = AlaCarteController.getAlaCarteByName(AlaCarteController.getAllAlaCarteItems().get(choice-1).getAlaCarteName());
 
         while(true)
         {
@@ -229,26 +225,26 @@ public class AlaCarteForm {
                     double oldprice = a.getAlaCartePrice();
                     double price = 0;
                     boolean fail = true;
-                    print("Enter new Ala Carte Item Price (Original Price: $"+oldprice+"): ");
+                    print("Enter new Ala Carte Item Price (Original Price: $"+df.format(oldprice)+"): ");
                     do{
                         try{
                             price = Double.parseDouble(sc.nextLine());
                             fail = (BigDecimal.valueOf(price).scale()>2);
                             if(fail)
-                                print("Please enter the correct format for price (Original Price: $"+oldprice+"): ");
+                                print("Please enter the correct format for price (Original Price: $"+df.format(oldprice)+"): ");
                         }catch(NumberFormatException e) {
-                            print("Price is of invalid format, please enter a valid price: (Original Price: $"+oldprice+"): ");
+                            print("Price is of invalid format, please enter a valid price: (Original Price: $"+df.format(oldprice)+"): ");
                         }
                     }while(fail);
                     ac.updateAlaCartePrice(a,price);
-                    print("Ala Carte Item Price $"+oldprice+" has been changed to $" +a.getAlaCartePrice());
+                    print("Ala Carte Item Price $"+df.format(oldprice)+" has been changed to $" +df.format(a.getAlaCartePrice()));
                 }
                 case 4->{
                     print("Edit Food Type");
                     FoodType oldft =a.getFoodType();
                     FoodType ft = foodTypeOptions();
                     ac.updateAlaCarteType(a, ft);
-                    print("Ala Carte item Food Type $"+oldft+" has been changed to $"+a.getFoodType());
+                    print("Ala Carte item Food Type "+oldft+" has been changed to "+a.getFoodType());
 
                 }
                 default -> print("Choice does not exist, please enter a valid choice: ");
@@ -270,20 +266,20 @@ public class AlaCarteForm {
         do{
             try{
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice < 0 || choice > ac.getAllAlaCarteItems().size())
+                if (choice < 0 || choice > AlaCarteController.getAllAlaCarteItems().size())
                     print("Choice does not exist, please enter a valid choice: ");
             }catch(NumberFormatException e){
                 print("Choice is of invalid format, please enter a valid choice: ");
                 choice = -1;
             }
-        }while(choice < 0 || choice > ac.getAllAlaCarteItems().size());
+        }while(choice < 0 || choice > AlaCarteController.getAllAlaCarteItems().size());
 
         if (choice == 0)
             displayOption();
         else
         {
             try {
-                AlaCarte c = ac.getAlaCarteByName(ac.getAllAlaCarteItems().get(choice-1).getAlaCarteName());
+                AlaCarte c = AlaCarteController.getAlaCarteByName(AlaCarteController.getAllAlaCarteItems().get(choice-1).getAlaCarteName());
                 String deletedname = c.getAlaCarteName();
                 ac.deleteAlaCarteItem(c);
                 System.out.println("==================================");
@@ -314,7 +310,7 @@ public class AlaCarteForm {
                 print("Ala Carte name must not be empty, please enter a Ala Carte name (Original Name:" +oldname+"): ");
             else
             {
-                AlaCarte a = ac.getAlaCarteByName(AlaCarteName);
+                AlaCarte a = AlaCarteController.getAlaCarteByName(AlaCarteName);
                 if (a == null)
                     setter = false;
                 else
@@ -330,11 +326,11 @@ public class AlaCarteForm {
         boolean setter = true;
         String olddesc = c.getAlaCarteDesc();
 
-        print("Enter Ala Carte Description: (Original Description:" +olddesc+ "): ");
+        print("Enter Ala Carte Description: (Original Description: " +olddesc+ "): ");
         do{
             desc = sc.nextLine();
             if (desc == null || desc.trim().isEmpty()) {
-                print("Ala Carte Description must not be empty, please enter a description (Original Description:" +olddesc+"): ");
+                print("Ala Carte Description must not be empty, please enter a description (Original Description: " +olddesc+"): ");
             }
             else
                 setter = false;
@@ -378,9 +374,9 @@ public class AlaCarteForm {
 
         printf(format,"AlaCarte Name","Price");
         print("====================================");
-        for(i=0;i< ac.getAllAlaCarteItems().size() ; i++ ) {
-            printf(format,i+1 + ") "+ac.getAllAlaCarteItems().get(i).getAlaCarteName()
-                    ,"$"+df.format(ac.getAllAlaCarteItems().get(i).getAlaCartePrice()));
+        for(i=0; i< AlaCarteController.getAllAlaCarteItems().size() ; i++ ) {
+            printf(format,i+1 + ") "+ AlaCarteController.getAllAlaCarteItems().get(i).getAlaCarteName()
+                    ,"$"+df.format(AlaCarteController.getAllAlaCarteItems().get(i).getAlaCartePrice()));
         }
     }
 

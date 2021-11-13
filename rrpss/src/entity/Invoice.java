@@ -13,117 +13,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import controller.CustomerController;
+import controller.OrderController;
+import controller.ResTableController;
+import controller.ReservationController;
+import controller.StaffController;
+
 public class Invoice {
+
+
+	private static final String filename = "DataSet/Invoice.csv";
 
 	private int invoiceNo;
 	private double subTotal;
-	private double gst;
 	private double serviceCharge;
 	private double discounts;
 	private double totalPrice;
-	private int staffID;
+	private double gst;
 	private LocalDate invoiceDate;
 	private LocalTime invoiceTime;
-	SaleRevenueMonth monthlyreport;
+	Customer customer;
+	Staff staff;
+	Order order;
 	private int tableNo;
-	private int orderID;
 
-	private static final String filename = "DataSet/Invoice.csv";
-	
-	public Invoice() {
-		
-	}
-	
-	public Invoice(int invoiceNo,int orderID, LocalDate date, double subTotal, double discount, double gst, int staffID, int tableNo) {
-		this.invoiceDate = date;
-		this.invoiceNo = invoiceNo;
-		this.orderID = orderID;
-		this.staffID = staffID;
-		this.tableNo = tableNo;
-		this.gst = gst;
-		this.subTotal = subTotal;
-		this.discounts = discount;
-	}
-	
-	
 	public int getInvoiceNo() {
-		return this.invoiceNo;
-	}
-	
-	public int getOrderID() {
-		return this.orderID;
-	}
-	
-	public LocalDate getDate() {
-		return this.invoiceDate;
-	}
-	
-	public double getTotalPrice() {
-		return this.totalPrice;
-	}
-	
-	public int getStaffID() {
-		return this.staffID;
-	}
-	
-	public int getTableNo() {
-		return this.tableNo;
-	}
-	
-
-	public Double getSubTotal() {
-		return this.subTotal;
+		return invoiceNo;
 	}
 
-	/**
-	 * 
-	 * @param invoiceNo
-	 */
 	public void setInvoiceNo(int invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
 
-	/**
-	 * 
-	 * @param subTotal
-	 */
-	public void setSubTotal(Double subTotal) {
+	public double getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(double subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public Double getGst() {
-		return this.gst;
-	}
-
-	/**
-	 * 
-	 * @param gst
-	 */
-	public void setGst(Double gst) {
-		this.gst = gst;
-	}
-
-	public Double getServiceCharge() {
+	public double getServiceCharge() {
 		return this.serviceCharge;
 	}
 
-	/**
-	 * 
-	 * @param serviceCharge
-	 */
-	public void setServiceCharge(Double serviceCharge) {
+	public void setServiceCharge(double serviceCharge) {
 		this.serviceCharge = serviceCharge;
 	}
 
-	public Double getDiscounts() {
+	public double getDiscounts() {
 		return this.discounts;
 	}
 
-	/**
-	 * 
-	 * @param discounts
-	 */
-	public void setDiscounts(Double discounts) {
+	public void setDiscounts(double discounts) {
 		this.discounts = discounts;
 	}
 
@@ -131,73 +73,172 @@ public class Invoice {
 		return this.invoiceDate;
 	}
 
-	/**
-	 * 
-	 * @param invoiceDate
-	 */
+	public double getTotalPrice() {
+		return this.totalPrice;
+	}
+
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public double getGst(){return this.gst;}
+
+	public void setGst(double gst){this.gst = gst;}
+
 	public void setInvoiceDate(LocalDate invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
 
 	public LocalTime getInvoiceTime() {
-		return this.invoiceTime;
+		return invoiceTime;
 	}
 
-	/**
-	 * 
-	 * @param invoiceTime
-	 */
 	public void setInvoiceTime(LocalTime invoiceTime) {
 		this.invoiceTime = invoiceTime;
 	}
-	
-	public void saveInvoice(List l) throws IOException {
-		write(filename,l);
+
+	public Staff getStaff() {
+		return staff;
 	}
-	
-	public void updateStatus(Table table, Order order) throws IOException {
-		Table t = new Table();
-		Order o = new Order();
-		t.updateTableStatusString("VACANT",table.getTableNo());
-		order.setIsPaid(true);
-		
+
+	public void setStaff(Staff staff) {
+		this.staff = staff;
 	}
-	
-	//RETRIEVE ALL THE INVOICE RECORDS 
-	public ArrayList<Invoice> getAllInvoice() throws IOException {
-		ArrayList<Invoice> invoiceList= new ArrayList<>();
-		ArrayList stringitems = (ArrayList) read(filename);
-		if(stringitems.size() > 0) {
-			OrderItem o = new OrderItem();
-			Customer c = new Customer();
-			for (int i = 0; i < stringitems.size(); i++) {
+
+	public int getTableNo() {
+		return this.tableNo;
+	}
+
+	public void setTableNo(int tableNo) {
+		this.tableNo = tableNo;
+	}
+
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Invoice() {
+
+	}
+
+//	public Invoice(int no, double subtotal, double discount, double total, LocalDate date, Staff s, Order o)
+//	{
+//		this.invoiceNo = no;
+//		this.subTotal = subtotal;
+//		this.discounts = discount;
+//		this.totalPrice = total;
+//		this.invoiceDate = date;
+//		this.staff = s;
+//		this.order = o;
+//	}
+
+
+	public Invoice(int no, double subtotal, double servicecharge, double discount, double total, double gst, LocalDate date, LocalTime time, Staff s, Order o, Customer c, int tableNo)
+	{
+		this.invoiceNo = no;
+		this.subTotal = subtotal;
+		this.serviceCharge = servicecharge;
+		this.discounts = discount;
+		this.totalPrice = total;
+		this.gst = gst;
+		this.invoiceDate = date;
+		this.invoiceTime = time;
+		this.staff = s;
+		this.order = o;
+		this.customer = c;
+		this.tableNo = tableNo;
+	}
+
+
+	//RETRIEVE ALL THE INVOICE RECORDS
+	public static ArrayList<Invoice> getAllInvoice() throws IOException
+	{
+		ArrayList<Invoice> ilist= new ArrayList<>();
+		ilist.clear();
+		ArrayList stringitems;
+
+		try {
+			stringitems = (ArrayList) read(filename);
+
+			for (int i = 0; i < stringitems.size(); i++)
+			{
 				String st = (String) stringitems.get(i);
 				StringTokenizer star = new StringTokenizer(st, ",");
-				String invoiceId = star.nextToken().trim();
-				String orderId = star.nextToken().trim();
-				String dateOrdered = star.nextToken().trim();
-				LocalDate date = LocalDate.parse(dateOrdered);
-				String subTotal = star.nextToken().trim();
-				double subt = Double.parseDouble(subTotal);
+
+				String ino = star.nextToken().trim();
+				String sub = star.nextToken().trim();
+				String service = star.nextToken().trim();
 				String discount = star.nextToken().trim();
-				double dis = Double.parseDouble(discount);
+				String total = star.nextToken().trim();
 				String gst = star.nextToken().trim();
-				double gst2 = Double.parseDouble(gst);
-				String staffId = star.nextToken().trim();	
-				int stId = Integer.parseInt(staffId);
-				String tableNo = star.nextToken().trim();
-				int no = Integer.parseInt(tableNo);
-				
-				Invoice p = new Invoice(Integer.parseInt(invoiceId),Integer.parseInt(orderId), date, subt, dis, gst2, stId, no);
-				invoiceList.add(p);
+				String date = star.nextToken().trim();
+				String time = star.nextToken().trim();
+				String custid = star.nextToken().trim();;
+				String staffid = star.nextToken().trim();
+				String tablno = star.nextToken().trim();
+				String orderno= star.nextToken().trim();
+				String tableno = star.nextToken().trim();
+
+				Customer c = new Customer();
+				CustomerController cc = new CustomerController();
+				c=cc.getCustById(Integer.parseInt(custid));
+
+				Staff s = new Staff();
+				StaffController sc = new StaffController();
+				s=sc.getStaffById(Integer.parseInt(staffid));
+
+				Order o = new Order();
+				OrderController oc = new OrderController();
+				o=oc.getOrderById(Integer.parseInt(orderno));
+
+
+				String contact = cc.getCustById(Integer.parseInt(custid)).getPersPhoneNo();
+				int resid = ReservationController.getReservationByContact(contact).getResId();
+
+
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				LocalDate convertdate = LocalDate.parse(date,formatter);
+
+				DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
+				LocalTime converttime = LocalTime.parse(time,tformatter);
+
+
+				Invoice p = new Invoice(Integer.parseInt(ino), Double.parseDouble(sub), Double.parseDouble(service), Double.parseDouble(discount),
+						Double.parseDouble(total), Double.parseDouble(gst), convertdate, converttime, s, o, c, Integer.parseInt(tableno));
+				ilist.add(p);
 			}
-		} else {
-			invoiceList = null;
+		} catch (IOException e) {
+
+			e.printStackTrace();
 		}
-		return invoiceList;
+		return ilist;
 	}
-	
-	private List read(String filename) throws IOException {
+
+	public static void saveInvoice(List l) throws IOException
+	{
+		write(filename,l);
+	}
+
+	public void updateStatus(Table t, Order o) throws IOException {
+		o.setIsPaid(true);
+	}
+
+
+
+	private static List read(String filename) throws IOException {
 		List data = new ArrayList();
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String headerLine = reader.readLine();
@@ -212,33 +253,22 @@ public class Invoice {
 		}
 		return data;
 	}
-	
-	
-	
+
+
+
 	//READ AND WRITE TO CSV
-	private void write(String filename, List data) throws IOException {
+	private static void write(String filename, List data) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
 			for (int i = 0; i < data.size(); i++) {
-				
+
 				out.write((String) data.get(i)+"\n");
 			}
 		} finally {
 			out.close();
 		}
 	}
-	
-//	private void replace(String filename, List data) throws IOException {
-//		
-//		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
-//		try {
-//			out.write("InvoiceID" + "," + "OrderID" + "," + "TotalPrice" + "," + "DateOrdered" + "," + "StaffID" + "\n");
-//			for (int i = 0; i < data.size(); i++) {
-//				out.write((String) data.get(i) + "\n");
-//			}
-//		} finally {
-//			out.close();
-//		}
-//	}
+
+
 
 }

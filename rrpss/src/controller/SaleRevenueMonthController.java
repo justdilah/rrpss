@@ -34,7 +34,7 @@ public class SaleRevenueMonthController {
 	            int month = Integer.parseInt(date[1]);
 	            if(month == monthchosen) {
 	            	// do not include duplicate orderIDs
-	            	if(invoiceList_orderID.contains(Integer.parseInt(str[1])) == false) {
+	            	if(!invoiceList_orderID.contains(Integer.parseInt(str[1]))) {
 	            		invoiceList_orderID.add(Integer.parseInt(str[1]));
 	            	}
 	            invoiceList_SubTotal.add(Double.parseDouble(str[3]));
@@ -76,7 +76,7 @@ public class SaleRevenueMonthController {
 			
 			int itemindex = 0;
 			for(String item: OIList_OrderItemName) {
-				if(OIList_OrderItemName_distinct.contains(item) == false) {
+				if(!OIList_OrderItemName_distinct.contains(item)) {
 					OIList_OrderItemName_distinct.add(item);
 					OIList_qty_total.add(OIList_qty.get(OIList_OrderItemName.indexOf(item)));
 //					System.out.println(OIList_OrderItemName.indexOf(item)); 
