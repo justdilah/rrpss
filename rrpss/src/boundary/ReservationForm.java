@@ -368,7 +368,7 @@ public class ReservationForm {
 			int cid = c.getCustByContact(r1.getResContact()).getCustId();
 
 			Staff s = new Staff();
-			s = s.getStaffById(r1.getStaff().getStaffId());
+			s = stc.getStaffById(r1.getStaff().getStaffId());
 			int sid = s.getStaffId();
 			String name = s.getPersName();
 
@@ -607,7 +607,7 @@ public class ReservationForm {
 			Reservation r = ReservationController.getReservationByContact(choice);
 			if (r!=null) {
 				int res_id = r.getResId();
-				rtc.deteleTable(res_id);
+				rtc.deleteTable(res_id);
 				rc.removeReservation(r);
 				print("==================================");
 				String name = r.getResName();
