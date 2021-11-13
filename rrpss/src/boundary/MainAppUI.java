@@ -6,45 +6,63 @@ import java.util.Scanner;
 
 import controller.MainAppController;
 
+/**
+ * This class represents the Main Application of the restaurant.
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 public class MainAppUI {
-	
-	public static void main(String[] args) throws IOException 
+
+	/**
+	 * This method is the main method in which the program will first run
+	 * @param args
+	 * @throws IOException Display error message if any I/O error found while retrieving the various records.
+	 */
+	public static void main(String[] args) throws IOException
 	{
 		print();
 	}
-	
+
+	/**
+	 * This method display a list of options for the staff to select which function he/she wants to perform
+	 * @throws IOException Display error message if any I/O error found while retrieving the various records.
+	 */
 	public static void print() throws IOException
 	{
 		MainAppController mc = new MainAppController();
-		
+
 		int choice = -1;
 		Scanner sc = new Scanner(System.in);
-		
+
 		do {
-		System.out.println("=================================");		
-        System.out.println("\t Welcome to RRPSS");
-		System.out.println("=================================");
-		System.out.println("(1) Reservation");
-		System.out.println("(2) Orders");
-		System.out.println("(3) Sales Revenue Report");
-		System.out.println("(4) Menu");
-		System.out.println("(5) Promotion");
-		System.out.println("(6) Payment");
-		System.out.println("(7) Exit");
-		
-			
+
+			mc.checkReservation();
+
+			System.out.println("=================================");
+			System.out.println("\t Welcome to RRPSS");
+			System.out.println("=================================");
+			System.out.println("(1) Reservation");
+			System.out.println("(2) Orders");
+			System.out.println("(3) Sales Revenue Report");
+			System.out.println("(4) Menu");
+			System.out.println("(5) Promotion");
+			System.out.println("(6) Payment");
+			System.out.println("(7) Exit");
+
+
 			do {
 				try {
 					System.out.print("Please enter your choice : ");
 					choice = sc.nextInt();
-					
-				}catch(InputMismatchException e) 
-				{	
+
+				}catch(InputMismatchException e)
+				{
 					System.out.println("=================================");
 					System.out.println("Invalid Entry has been entered. ");
 					System.out.println("Please enter numbers only. ");
 					System.out.println("=================================");
-			        System.out.println("\t Welcome to RRPSS");
+					System.out.println("\t Welcome to RRPSS");
 					System.out.println("=================================");
 					System.out.println("(1) Reservation");
 					System.out.println("(2) Orders");
@@ -55,52 +73,42 @@ public class MainAppUI {
 				}
 				sc.nextLine();
 			}while (choice == -1);
-				
-			
+
+
 			switch (choice) {
-			
-				case 1: 
+
+				case 1:
 					mc.getReservationForm();
-//					ReservationForm rf = new ReservationForm();
-//					rf.displayOption();
 					break;
-					
-				case 2: 
+
+				case 2:
 					mc.getOrderForm();
-//					OrderForm of = new OrderForm();
-//					of.displayOption();
 					break;
-					
+
 				case 3:
 					mc.getSalesRevenueMonthForm();
-//					SalesRevenueMonth srmf = new SalesRevenueMonth();
-//					srmf.displayOption();
-					break; 
-					
-				case 4: 
-					mc.getAlaCarteForm();
-//					AlaCarteForm acf = new AlaCarteForm();
-//					acf.displayOption();
 					break;
-					
+
+				case 4:
+					mc.getAlaCarteForm();
+					break;
+
 				case 5:
 					mc.getPromotionForm();
-//					PromotionForm pf = new PromotionForm();
-//					pf.displayOption(); 
-					break; 
-				
+					break;
+
 				case 6:
 					mc.getInvoiceForm();
 					break;
-				
-				case 7: 
+
+				case 7:
 					break;
-				
+
 				default:
-			    	System.out.println("=========================================================");
+					System.out.println("=========================================================");
 					System.out.println("\tInvalid input. Please enter again!");
-			    	System.out.println("=========================================================");
-			    	System.out.println("(1) Reservation");
+					System.out.println("=========================================================");
+					System.out.println("(1) Reservation");
 					System.out.println("(2) Orders ");
 					System.out.println("(3) Sales Revenue Report ");
 					System.out.println("(4) Menu");
@@ -110,6 +118,5 @@ public class MainAppUI {
 			}
 		}while (choice <1||choice>6);
 	}
-	
-}
 
+}

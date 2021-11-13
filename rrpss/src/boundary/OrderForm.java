@@ -17,15 +17,49 @@ import entity.Promotion;
 import entity.Staff;
 import entity.Table;
 
-public class OrderForm {
+/**
+ * This class represents a OrderForm in boundary.
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 
+public class OrderForm {
+    /**
+     * Order controller object to call methods in the controller class
+     */
     private final OrderController or = new OrderController();
+
+    /**
+     * Customer controller object to call methods in the controller class
+     */
     private final CustomerController cc = new CustomerController();
+
+    /**
+     * ResTable controller object to call methods in the controller class
+     */
     private final ResTableController tc = new ResTableController();
+
+    /**
+     * Staff controller object to call methods in the controller class
+     */
     private final StaffController stc = new StaffController();
+
+    /**
+     * Scanner object to scan user input
+     */
     private static final Scanner sc = new Scanner(System.in);
+
+
+    /**
+     * DecimalFormat formatter to convert to 2 decimal place
+     */
     private static final DecimalFormat df= new DecimalFormat("0.00");
 
+    /**
+     * This method will displays a list of options for the staff to select what function he/she wants to perform and executes the selected function.
+     * @throws IOException Display error message if any I/O error found while accessing the order records.
+     */
     public void displayOption() throws IOException{
 
         int choice = 0;
@@ -45,14 +79,17 @@ public class OrderForm {
         switch (choice) {
             case 1 -> displayOrder();
             case 2 -> insertOrder();
-			case 3 -> updateOrder();
-			case 4 -> deleteOrder();
+            case 3 -> updateOrder();
+            case 4 -> deleteOrder();
             case 5 -> MainAppUI.print();
         }
 
     }
 
-    //Part is not done
+    /**
+     * This method will prompts the staff to either displays current order, or past orders and displays them accordingly.
+     * @throws IOException Display error message if any I/O error found while retrieving the order records.
+     */
     private void displayOrder() throws IOException {
         int choice=-1, c;
         ArrayList<Order> CurrentOrder;
@@ -82,7 +119,6 @@ public class OrderForm {
         if(choice == 0)
             displayOption();
 
-        print("=================================");
         if(choice == 1)
         {
             date = LocalDate.now();
@@ -92,26 +128,24 @@ public class OrderForm {
             }
             else{
                 for (Order order: CurrentOrder){
-                    if (!order.getIsPaid()) {
-                        printf(format, "Order ID :", String.valueOf(order.getOrderId()));
-                        printf(format, "Time Ordered : ", String.valueOf(order.getTimeStamp()));
-                        printf(format, "Date Ordered : ", order.getDate().toString().substring(8, 10) +
-                                "-" + order.getDate().toString().substring(5, 7) + "-" + order.getDate().toString().substring(0, 4));
-                        printf(format, "Payment Completed : ", String.valueOf(order.getIsPaid()));
-                        printf(format, "Staff ID : ", String.valueOf(order.getStaffId()));
-                        printf(format, "Table No : ", String.valueOf(order.getTable().getTableNo()));
-                        CustomerOrder = or.getOrderItemByOrderId(order.getOrderId());
-                        print("=============================================");
-                        System.out.printf(format1, "Order Item name", "Quantity", "Price");
-                        print("=============================================");
-                        for (OrderItem oitem : CustomerOrder) {
-                            System.out.printf(format1, oitem.getOrderItemName(), oitem.getOrderItemQty(), "$" + df.format(oitem.getOrderItemPrice()));
-                            TotalPrice += oitem.getOrderItemPrice();
-                        }
-                        print("");
-                        printf(format, "Total Price: ", "$" + df.format(TotalPrice));
-                        print("");
+                    printf(format,"Order ID :", String.valueOf(order.getOrderId()));
+                    printf(format,"Time Ordered : " , String.valueOf(order.getTimeStamp()));
+                    printf(format,"Date Ordered : " , order.getDate().toString().substring(8,10)+
+                            "-"+order.getDate().toString().substring(5,7)+"-"+order.getDate().toString().substring(0,4));
+                    printf(format,"Payment Completed : " , String.valueOf(order.getIsPaid()));
+                    printf(format,"Staff ID : " , String.valueOf(order.getStaffId()));
+                    printf(format,"Table No : " , String.valueOf(order.getTable().getTableNo()));
+                    CustomerOrder = or.getOrderItemByOrderId(order.getOrderId());
+                    print("=============================================");
+                    System.out.printf(format1,"Order Item name","Quantity","Price");
+                    print("=============================================");
+                    for (OrderItem oitem: CustomerOrder){
+                        System.out.printf(format1,oitem.getOrderItemName(),oitem.getOrderItemQty(),"$"+oitem.getOrderItemPrice());
+                        TotalPrice+= oitem.getOrderItemPrice();
                     }
+                    print("");
+                    printf(format,"Total Price: ", "$"+TotalPrice);
+                    print("");
                 }
             }
             print("Enter 0 to return to the previous page");
@@ -141,12 +175,8 @@ public class OrderForm {
                     print("Date is of invalid format, please enter a valid date");
                 }
             }while(setter);
-
-            if(date2.isAfter(LocalDate.now()))
-                print("Date has not arrived yet.");
-
             CurrentOrder = or.getCurrentDateOrder(date2);
-            if(CurrentOrder.size()==0){
+            if(CurrentOrder==null){
                 print("There are currently no orders as of this date");
             }
             else{
@@ -163,11 +193,11 @@ public class OrderForm {
                     System.out.printf(format1,"Order Item name","Quantity","Price");
                     print("=============================================");
                     for (OrderItem oitem: CustomerOrder){
-                        System.out.printf(format1,oitem.getOrderItemName(),oitem.getOrderItemQty(),"$"+df.format(oitem.getOrderItemPrice()));
+                        System.out.printf(format1,oitem.getOrderItemName(),oitem.getOrderItemQty(),"$"+oitem.getOrderItemPrice());
                         TotalPrice+= oitem.getOrderItemPrice();
                     }
                     print("");
-                    printf(format,"Total Price: ", "$"+df.format(TotalPrice));
+                    printf(format,"Total Price: ", "$"+TotalPrice);
                     print("");
                 }
             }
@@ -188,34 +218,32 @@ public class OrderForm {
     }
 
 
-    //Creation of Order
+    /**
+     * This method will prompt the staff for different inputs, and calls the addOrder(..) in the controller class to add an order.
+     * @throws IOException Display error message if any I/O error found while accessing records.
+     */
     private void insertOrder() throws IOException{
 
         int tableNo, index = 1;
         int staffid= 0;
         String custNo;
 
-        DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date2 = LocalDate.parse(LocalDate.now().toString(),formatterD);
-        ArrayList<Table> table = tc.getAllReservedTables(date2);
-
-
-
         System.out.println("=================================");
         System.out.println("\t Create Order ");
         System.out.println("=================================");
 
-        if(table == null)
+        if(tc.getAllReservedAndOccupiedTables() == null)
         {
             print("No Reserved Tables at the moment");
             displayOption();
         }
 
+
         System.out.println("Please enter your choice: ");
 
 
-        for(int i=0;i<table.size();i++) {
-            System.out.println(i+1 + ") Table No " + table.get(i).getTableNo());
+        for(int i=0;i<tc.getAllReservedAndOccupiedTables().size();i++) {
+            System.out.println(i+1 + ") Table No " + tc.getAllReservedAndOccupiedTables().get(i).getTableNo());
         }
 
         Table t = null;
@@ -223,7 +251,8 @@ public class OrderForm {
         do {
             try {
                 tableNo = Integer.parseInt(sc.nextLine());
-                t = table.get(tableNo - 1);
+                t = tc.getAllReservedAndOccupiedTables().get(tableNo - 1);
+                System.out.println(t.getTableNo());
                 if (t == null)
                     print("Table does not exist, please enter a valid table number: ");
             }catch(NumberFormatException e){
@@ -247,6 +276,7 @@ public class OrderForm {
         }while(!stc.isIdExists(staffid));
 
         print("Please enter Customer Phone Number: ");
+        Customer c = new Customer();
         do{
             custNo = sc.nextLine();
             if(custNo.trim().isEmpty())
@@ -258,16 +288,24 @@ public class OrderForm {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime time = LocalTime.parse(LocalTime.now().format(formatter));
         LocalDate date = LocalDate.now();
-        
+
         tc.updateTableStatusString("OCCUPIED", t.getTableNo());
         or.addOrder(index,time,date,staffid,false,custNo,t.getTableNo());
         insertOrderItems(index,0);
         print("==================================");
         print("Order added successfully");
         print("==================================");
-        
+
     }
-    //insert Order Calls to insertOrderItems function
+
+
+    /**
+     * This method will displays the food menu and prompts the staff to select which food item to be added and its quantity,
+     * then it calls the addAlaCarteOrderItem(..) or addPromoOrderItem(..) in the controller class to add an orderItem.
+     * @param orderId The order that the orderItem is going to be inserted into.
+     * @param counter The value to increment the orderID
+     * @throws IOException Display error message if any I/O error found while accessing records.
+     */
     private void insertOrderItems(int orderId, int counter) throws IOException {
 
         String format = "%-30s%s%n";
@@ -433,6 +471,11 @@ public class OrderForm {
         displayOption();
     }
 
+    /**
+     *  This method displays the whole list of orders for the staff to select which order he/she wants to perform the update on,
+     *  then it will proceeds to updateOptions(..) for further inputs.
+     * @throws IOException Display error message if any I/O error found while updating into the order records.
+     */
     private void updateOrder() throws IOException {
 
         String format = "%-20s%s%n";
@@ -441,15 +484,15 @@ public class OrderForm {
         print("================================================");
         print("Select the Order you would like to update ");
         print("================================================");
-        if (OrderController.getUnpaidOrders() == null)
+        if (or.getUnpaidOrders() == null)
         {
             print("There are no orders for updating");
             displayOption();
         }
 
         Customer c;
-        size = OrderController.getUnpaidOrders().size();
-        ArrayList<Order> uorder = OrderController.getUnpaidOrders();
+        size = or.getUnpaidOrders().size();
+        ArrayList<Order> uorder = or.getUnpaidOrders();
 
         for (int i = 0; i < size; i++) {
             c = uorder.get(i).getCust();
@@ -467,23 +510,28 @@ public class OrderForm {
         do {
             try{
                 choice = Integer.parseInt(sc.nextLine());
-                if(choice<0||choice> OrderController.getUnpaidOrders().size())
+                if(choice<0||choice>or.getUnpaidOrders().size())
                     print("Choice does not exist, please enter a valid choice: ");
 
             }catch(NumberFormatException e) {
                 print("Choice is of invalid format, please enter a valid choice: ");
             }
-        }while(choice<0||choice> OrderController.getUnpaidOrders().size());
+        }while(choice<0||choice>or.getUnpaidOrders().size());
 
         if (choice==0)
             displayOption();
 
         else
-            updateOptions(OrderController.getUnpaidOrders().get(choice-1));
+            updateOptions(or.getUnpaidOrders().get(choice-1));
 
 
     }
 
+    /**
+     * This method display a list of options for the staff to select which update functions he/she wants to perform on the given order.
+     * @param o The order that is going to be updated on
+     * @throws IOException Display error message if any I/O error found while updating the records.
+     */
     private void updateOptions(Order o) throws IOException{
 
         int choice = 0;
@@ -529,7 +577,14 @@ public class OrderForm {
         updateOrder();
     }
 
-    //FOR UPDATE PORTION
+
+    /**
+     * This method will displays the food menu and prompts the staff to select an orderItem to be added into an Order
+     * and calls the addAlaCarteOrderItem() or addPromoOrderItem() in the controller class to add the selected orderItem.
+     * @param o The order that is going to be updated on
+     * @param counter The value to increment the orderID
+     * @throws IOException Display error message if any I/O error found while inserting the records.
+     */
     private void addOrderItem(Order o, int counter) throws IOException {
 
         int size, choice=0;
@@ -666,7 +721,14 @@ public class OrderForm {
         updateOptions(or.getOrderById(o.getOrderId()));
     }
 
-    //FOR UPDATE PORTION (Finished)
+
+    /**
+     * This method will displays all the orderItems and prompts the staff to select an orderItem to be removed
+     * then the staff can chooses to either remove an quantity or remove it completely.
+     * Thus, it will calls either the updateOrderItemQty or addPromoOrderItem() in the controller class to delete the selected orderItem.
+     * @param o The order that is going to be deleted from
+     * @throws IOException Display error message if any I/O error found while accessing the records.
+     */
     private void deleteOrderItem(Order o) throws IOException {
 
         int choice = 0,  choice2 =0, qty;
@@ -736,14 +798,8 @@ public class OrderForm {
                             print("0 is not a valid Quantity, please enter a valid Quantity: ");
                         else{
                             int newQty = oi.getOrderItemQty() - qty;
-                            if (newQty == 0) {
-                                or.removeOrderItem(o.getOrderId(), o.getOrderItemList().get(choice - 1).getOrderItemId());
-                                print("Order Item has been deleted successfully");
-                            }
-                            else {
-                                or.updateOrderItemQty(o.getOrderItemList().get(choice - 1), newQty);
-                                print("Quantity has been updated successfully");
-                            }
+                            or.updateOrderItemQty(o.getOrderItemList().get(choice-1),newQty);
+                            print("Quantity has been updated successfully");
                         }
                     }while(qty==0 || qty>oi.getOrderItemQty());
                 }
@@ -758,6 +814,10 @@ public class OrderForm {
     }
 
 
+    /**This method will display all the orders and prompts the staff to select an order to be deleted calls
+     * the deleteOrder in the controller class to remove the chosen order.
+     * @throws IOException Display error message if any I/O error found while deleting the records.
+     */
     private void deleteOrder() throws IOException{
 
         String format = "%-20s%s%n";
@@ -812,7 +872,9 @@ public class OrderForm {
         displayOption();
     }
 
-    //Print Menu/Misc
+    /**
+     * This method will display different order functions.
+     */
     public void printOrderFormMenu()
     {
         print("=================================");
@@ -825,14 +887,28 @@ public class OrderForm {
         print("5) Back");
     }
 
+
+    /**
+     * This method displays the given message.
+     * @param message The message to be displayed.
+     */
     public void print(String message) {
         System.out.println(message);
     }
 
-    public void printf(String format,String message,String message1){
-        System.out.printf(format,message,message1);
+    /** This method displays the given message with formatting.
+     * @param template The string template
+     * @param arg1 The first argument string data to be formatted into the template
+     * @param arg2 The second argument string data to be formatted into the template
+     */
+    public void printf(String template,String arg1,String arg2){
+        System.out.printf(template,arg1,arg2);
     }
 
+    /**
+     * This methods displays the food menu with details in different categories (AlaCarte and Promotion Sets).
+     * @throws IOException Display error message if any I/O error found while accessing the records.
+     */
     public void printFoodMenu() throws IOException {
 
         String format = "%-20s%s%n";

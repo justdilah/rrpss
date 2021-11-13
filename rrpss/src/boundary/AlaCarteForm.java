@@ -22,16 +22,16 @@ public class AlaCarteForm {
     /**
      * Control class for Ala Carte
      */
-    final private AlaCarteController ac = new AlaCarteController();
+    AlaCarteController ac = new AlaCarteController();
     /**
      * Scanner class to read the user's inputs
      */
-    final private static Scanner sc = new Scanner(System.in);
+    Scanner sc = new Scanner(System.in);
 
     /**
      * initialise DecimalFormat df variable
      */
-    private static final DecimalFormat df= new DecimalFormat("0.00");
+    DecimalFormat df= new DecimalFormat("0.00");
 
 
     /**

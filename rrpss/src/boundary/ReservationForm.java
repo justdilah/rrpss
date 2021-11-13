@@ -16,18 +16,44 @@ import entity.Reservation;
 import entity.Staff;
 import entity.Table;
 
+/**
+ * This class represents the Reservation form of the restaurant.
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 public class ReservationForm {
 
+	/**
+	 * Scanner object to scan user input
+	 */
 	Scanner sc = new Scanner(System.in);
+
+	/**
+	 * Customer controller object to call methods in the controller class
+	 */
 	CustomerController cc = new CustomerController();
+
+	/**
+	 * Reservation controller object to call methods in the controller class
+	 */
 	ReservationController rc = new ReservationController();
+
+	/**
+	 * Reservation Table controller object to call methods in the controller class
+	 */
 	ResTableController rtc = new ResTableController();
+
+	/**
+	 * Staff controller object to call methods in the controller class
+	 */
 	StaffController stc = new StaffController();
 
-	String name, contact, date, time;
-	int pax;
 
-
+	/**
+	 * The method checks and delete reservations where its date have passed and if the customer is 10 minutes late for his/her reservation
+	 * @throws IOException Display error message if any I/O error found while deleting from the reservation records.
+	 */
 	public void checkReservation() throws IOException
 	{
 		//detect and delete late customer reservation
@@ -43,6 +69,10 @@ public class ReservationForm {
 		System.out.println("======================================================================");
 	}
 
+	/**
+	 * This method display a list of options for the staff to select which function he/she wants to perform
+	 * @throws IOException Display error message if any I/O error found while retrieving the reservation records.
+	 */
 	public void displayOption() throws IOException
 	{
 		int choice = -1;
@@ -97,7 +127,11 @@ public class ReservationForm {
 		}while (choice<1 || choice>4);
 	}
 
-
+	/**
+	 * This method will prompt the staff for inputs, calls the addReservation() in the controller class to add a reservation and
+	 * calls the reserveTable() in the controller class to reserve a specific table for this reservation
+	 * @throws IOException Display error message if any I/O error found while inserting into the reservation records.
+	 */
 	public void insertReservation() throws IOException
 	{
 		int inputstaffid=0;
@@ -144,7 +178,9 @@ public class ReservationForm {
 		print("==================================");
 
 		print("Enter Customer Contact: (e.g. 81234567) ");
-		contact = sc.nextLine();
+		String contact = sc.nextLine();
+
+		String name;
 
 		Customer c1;
 		c1 = cc.getCustByContact(contact);
@@ -166,7 +202,7 @@ public class ReservationForm {
 		name = cc.getCustByContact(contact).getPersName();
 
 		print("Enter Date of Reservation (yyyy-MM-dd) format: ");
-		date = sc.nextLine();
+		String date = sc.nextLine();
 
 		//	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		//	LocalDate finaldate = LocalDate.parse(date,formatter);
@@ -174,7 +210,7 @@ public class ReservationForm {
 
 
 		print("Enter Time of Reservation (HH:mm) format:");
-		time = sc.nextLine();
+		String time = sc.nextLine();
 
 		//	DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
 		//	LocalTime finaltime = LocalTime.parse(time, tformatter);
@@ -184,7 +220,7 @@ public class ReservationForm {
 
 
 		print("Enter Number of Pax: (Max: 10 pax) ");
-		pax = Integer.parseInt(sc.nextLine());
+		int pax = Integer.parseInt(sc.nextLine());
 
 		Boolean temp;
 		if (pax <= 0)
@@ -221,9 +257,9 @@ public class ReservationForm {
 
 			Table t = rtc.checkForTable(finaldate, finaltime, pax);
 
-//			rc.addReservation(name, contact, pax, custid, staffid);
-//			int resid = ReservationController.getReservationByContact(contact).getResId();
-//			Table t = rtc.reserveTable(finaldate, finaltime, pax, resid);
+			//			rc.addReservation(name, contact, pax, custid, staffid);
+			//			int resid = ReservationController.getReservationByContact(contact).getResId();
+			//			Table t = rtc.reserveTable(finaldate, finaltime, pax, resid);
 
 
 			if(t != null)
@@ -255,7 +291,11 @@ public class ReservationForm {
 
 	}
 
-
+	/**
+	 * This method check for the correctness of the user input for its reservation date
+	 * @param date The date in which the customer wants to book the reservation on
+	 * @return A date that is valid and is in a correct format
+	 */
 	public LocalDate checkDate(String date)
 	{
 		LocalDate tempdate;
@@ -307,6 +347,11 @@ public class ReservationForm {
 		return tempdate;
 	}
 
+	/**
+	 * This method check if the user input for its reservation is valid
+	 * @param value The date in which the customer wants to book the reservation on
+	 * @return A date that is valid
+	 */
 	public static boolean isDateValid(String value) {
 		try {
 			String[] date = value.split("-");
@@ -316,6 +361,11 @@ public class ReservationForm {
 		}
 	}
 
+	/**
+	 * This method check for the correctness of the user input for its reservation time
+	 * @param time The time in which the customer wants to book
+	 * @return A time that is valid and is in a correct format
+	 */
 	public LocalTime checkTime(String time)
 	{
 		LocalTime local;
@@ -335,6 +385,11 @@ public class ReservationForm {
 	}
 
 
+	/**
+	 * This method check if the user input for its reservation is valid
+	 * @param value The time in which the customer wants to book the reservation on
+	 * @return A time that is valid
+	 */
 	public static boolean isTimeValid(String value) {
 		try {
 			String[] time = value.split(":");
@@ -344,7 +399,10 @@ public class ReservationForm {
 		}
 	}
 
-
+	/**
+	 * This method display a specific reservation
+	 * @throws IOException Display error message if any I/O error found while retrieving the reservation records.
+	 */
 	public void displayReservation() throws IOException
 	{
 		print("==================================");
@@ -391,6 +449,10 @@ public class ReservationForm {
 	}
 
 
+	/**
+	 *  This method display a list of options for the staff to select which variable he/she wants to perform update on
+	 * @throws IOException Display error message if any I/O error found while updating into the reservation records.
+	 */
 	public void updateReservation() throws IOException
 	{
 		Reservation r = new Reservation();
@@ -438,7 +500,12 @@ public class ReservationForm {
 			}
 		}
 	}
-
+	/**
+	 * This method updates the specifIc reservation number of pax and store into the reservation CSV
+	 * @param r The reservation object to be updated
+	 * @param t The current table object where its table is assigned to the reservation object
+	 * @throws IOException Display error message if any I/O error found while updating into the reservation records.
+	 */
 	public void updateReservationPax(Reservation r, Table t) throws IOException
 	{
 		ResTableController rt = new ResTableController();
@@ -473,19 +540,20 @@ public class ReservationForm {
 
 			LocalTime converttime = rt.getTableByResId(resid).getTableTime();
 			LocalDate convertdate = rt.getTableByResId(resid).getTableDate();
-//			int oldpax = rc.getResById(resid).getResNoPax();
+			//			int oldpax = rc.getResById(resid).getResNoPax();
 
 
 			// pass in date time and pax to check
 			int new_tno;
-			if(rt.checkAvailTable(convertdate, converttime, pax, resid) == null)
+			int pax =0;
+			if(rt.checkForTable(convertdate, converttime, pax) == null)
 				new_tno = -1;
 			else
-				new_tno =rt.checkAvailTable(convertdate, converttime, pax, resid).getTableNo();
+				new_tno =rt.checkForTable(convertdate, converttime, pax).getTableNo();
 
 			if (new_tno != -1)
 			{
-				rt.updateTablePax(t, resid, new_tno, pax);
+				rt.updateTablePax(t, resid, new_tno);
 				print("==================================");
 				print(" data updated successfully");
 				print("==================================");
@@ -506,6 +574,13 @@ public class ReservationForm {
 		}
 	}
 
+	/**
+	 * This method updates the specifIc reservation date and store into the reservation CSV
+	 * @param r The reservation object to be updated
+	 * @param t The current table object where its table is assigned to the reservation object
+	 * @param p1 The current number of pax from the reservation
+	 * @throws IOException Display error message if any I/O error found while updating into the reservation records.
+	 */
 	public void updateReservationDate(Reservation r, Table t, int p1) throws IOException
 	{
 		ResTableController rt = new ResTableController();
@@ -523,10 +598,10 @@ public class ReservationForm {
 
 			// pass in time and pax to check
 			int new_tno;
-			if(rt.checkAvailTable(finaldate, converttime, p1, resid) == null)
+			if(rt.checkForTable(finaldate, converttime, p1) == null)
 				new_tno = -1;
 			else
-				new_tno =rt.checkAvailTable(finaldate, converttime, p1, resid).getTableNo();
+				new_tno =rt.checkForTable(finaldate, converttime, p1).getTableNo();
 
 			if (new_tno != -1)
 			{
@@ -551,6 +626,13 @@ public class ReservationForm {
 		}
 	}
 
+	/**
+	 * This method updates the specifIc reservation time and store into the reservation CSV
+	 * @param r The reservation object to be updated
+	 * @param t The current table object where its table is assigned to the reservation object
+	 * @param p1 The current number of pax from the reservation
+	 * @throws IOException Display error message if any I/O error found while updating into the reservation records.
+	 */
 	public void updateReservationTime(Reservation r, Table t, int p1) throws IOException
 	{
 		ResTableController rt = new ResTableController();
@@ -568,10 +650,10 @@ public class ReservationForm {
 
 			// pass in time and pax to check
 			int new_tno;
-			if(rt.checkAvailTable(convertdate, finaltime, p1, resid) == null)
+			if(rt.checkForTable(convertdate, finaltime, p1) == null)
 				new_tno = -1;
 			else
-				new_tno =rt.checkAvailTable(convertdate, finaltime, p1, resid).getTableNo();
+				new_tno =rt.checkForTable(convertdate, finaltime, p1).getTableNo();
 
 			if (new_tno != -1)
 			{
@@ -596,6 +678,12 @@ public class ReservationForm {
 		}
 	}
 
+
+	/**
+	 * This methods calls the removeReservation() in the controller class to delete the specific reservation and
+	 * call the deleteTable() in the controller class to remove the 'RESERVED' status
+	 * @throws IOException Display error message if any I/O error found while deleting from the reservation records.
+	 */
 	public void deleteReservation() throws IOException
 	{
 		print("================================================");
@@ -629,6 +717,10 @@ public class ReservationForm {
 		}
 	}
 
+	/**
+	 * This is a print methods for easier printing outputs
+	 * @param message The various output to be printed out
+	 */
 	public void print(String message)
 	{
 		System.out.println(message);

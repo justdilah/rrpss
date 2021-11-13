@@ -2,46 +2,78 @@ package entity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 import controller.CustomerController;
 import controller.StaffController;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
+/**
+ * This class represents the Reservation entity of the restaurant.
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 public class Reservation {
 
+	/**
+	 * The filepath of the CSV file
+	 */
 	private static final String filename = "DataSet/Reservation.csv";
 
+
+	/**
+	 * Customer who the reservation belongs to
+	 */
 	Customer customer;
+
+	/**
+	 * Staff who made the reservation
+	 */
 	Staff staff;
+
+	/**
+	 * The unique identifier of a reservation
+	 */
 	private int resId;
+
+	/**
+	 * The number of pax
+	 */
 	private int resNoPax;
+
+	/**
+	 * The name of the customer who the reservation belong to
+	 */
 	private String resName;
+
+	/**
+	 * The contact of the customer who the reservation belong to
+	 */
 	private String resContact;
 
-
+	/**
+	 * Default constructor of Reservation
+	 */
 	public Reservation()
 	{
 
 	}
 
+	/**
+	 * Reservation constructor with parameters
+	 * @param id The reservation id
+	 * @param name The name of the customer who the reservation belongs to
+	 * @param contact The contact of the customer who the reservation belong to
+	 * @param pax The number of pax
+	 * @param c The customer object who the reservation belongs to
+	 * @param s The staff object who made the reservation
+	 */
 	public Reservation(int id, String name, String contact, int pax, Customer c, Staff s)
 	{
 		this.resId = id;
@@ -52,56 +84,107 @@ public class Reservation {
 		this.staff = s;
 	}
 
+	/**
+	 * Get the customer object
+	 * @return The customer object
+	 */
 	public Customer getCustomer() {
 		return customer;
 	}
 
+	/**
+	 * Set the customer object
+	 * @param customer The customer object who the reservation belongs to
+	 */
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
 
+	/**
+	 * Get the staff object
+	 * @return The staff object
+	 */
 	public Staff getStaff() {
 		return staff;
 	}
 
+	/**
+	 * Set the staff object
+	 * @param staff The staff object who made the reservation
+	 */
 	public void setStaff(Staff staff) {
 		this.staff = staff;
 	}
 
+	/**
+	 * Get the reservation id
+	 * @return The reservation id
+	 */
 	public int getResId() {
 		return resId;
 	}
 
+	/**
+	 * Set the reservation id
+	 * @param resId The reservation id
+	 */
 	public void setResId(int resId) {
 		this.resId = resId;
 	}
 
+	/**
+	 * Get the number of pax
+	 * @return The number of pax
+	 */
 	public int getResNoPax() {
 		return resNoPax;
 	}
 
+	/**
+	 * Set the number of pax
+	 * @param resNoPax The number of pax
+	 */
 	public void setResNoPax(int resNoPax) {
 		this.resNoPax = resNoPax;
 	}
 
+	/**
+	 * Get the customer name who the reservation belong to
+	 * @return The name of the customer who the reservation belongs to
+	 */
 	public String getResName() {
 		return resName;
 	}
 
+	/**
+	 * Set the customer name who the reservation belong to
+	 * @param resName The name of the customer who the reservation belongs to
+	 */
 	public void setResName(String resName) {
 		this.resName = resName;
 	}
 
+	/**
+	 * Get the customer contact who the reservation belong to
+	 * @return The customer contact who the reservation belongs to
+	 */
 	public String getResContact() {
 		return resContact;
 	}
 
+	/**
+	 * Set the customer contact who the reservation belong to
+	 * @param resContact The contact of the customer who the reservation belongs to
+	 */
 	public void setResContact(String resContact) {
 		this.resContact = resContact;
 	}
 
-
-	// csv
+	/**
+	 * This method reads the CSV file to retrieve all details from the reservation CSV.
+	 * @return The whole list of reservation details
+	 * @throws IOException Display error message if any I/O error found while retrieving into the reservation records.
+	 */
 	public static ArrayList<Reservation> getAllReservationDetails() throws IOException
 	{
 		ArrayList<Reservation> rlist= new ArrayList<>();
@@ -134,8 +217,16 @@ public class Reservation {
 	}
 
 
-
-	//ADDING TO CSV FILE
+	/**
+	 * This method saves a reservation into the reservation CSV
+	 * @param name The name of the customer who the reservation belongs to
+	 * @param resContact The contact of the customer who the reservation belong to
+	 * @param resNoPax The number of pax
+	 * @param custid The customer id
+	 * @param staffid The staff id
+	 * @return The reservation id of the newly made reservation.
+	 * @throws IOException Display error message if any I/O error found while inserting into the reservation records.
+	 */
 	public static int saveReservation(String name, String resContact, int resNoPax, int custid, int staffid) throws IOException
 	{
 		ArrayList<Reservation> rList = getAllReservationDetails();
@@ -158,9 +249,11 @@ public class Reservation {
 		return id;
 	}
 
-
-
-	//FOR UPDATE
+	/**
+	 * This method updates the specific reservation and store into the reservation CSV
+	 * @param r A reservation object
+	 * @throws IOException Display error message if any I/O error found while updating into the reservation records.
+	 */
 	public static void updateReservation(Reservation r) throws IOException
 	{
 		List l = new ArrayList<>();
@@ -182,6 +275,11 @@ public class Reservation {
 		replace(filename, l);
 	}
 
+	/**
+	 * This method delete the specific reservation from the reservation CSV
+	 * @param r A reservation object
+	 * @throws IOException Display error message if any I/O error found while deleting from the reservation records.
+	 */
 	public static void deleteReservation(Reservation r) throws IOException
 	{
 		List l = new ArrayList<>();
@@ -206,7 +304,12 @@ public class Reservation {
 	}
 
 
-	//READ AND WRITE TO CSV
+	/**
+	 * This method reads the reservation CSV
+	 * @param filename The filepath of the CSV file
+	 * @return The list of records read from the reservation CSV
+	 * @throws IOException Display error message if any I/O error found while retrieving the reservation records.
+	 */
 	private static List read(String filename) throws IOException
 	{
 		List data = new ArrayList();
@@ -225,6 +328,12 @@ public class Reservation {
 		return data;
 	}
 
+	/**
+	 * This method writes the reservation CSV
+	 * @param filename The filepath of the CSV file
+	 * @param data A list of reservations records
+	 * @throws IOException Display error message if any I/O error found while inserting into the reservation records.
+	 */
 	private static void write(String filename, List data) throws IOException
 	{
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
@@ -239,7 +348,12 @@ public class Reservation {
 	}
 
 
-
+	/**
+	 * This method writes a new set of data and stores into the reservation CSV
+	 * @param filename The filepath of the CSV file
+	 * @param data A list of reservation records
+	 * @throws IOException Display error message if any I/O error found while inserting into the reservation records.
+	 */
 	private static void replace(String filename, List data) throws IOException
 	{
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));

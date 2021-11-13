@@ -23,23 +23,23 @@ public class PromotionForm {
 	/**
 	 * Control class for promotion
 	 */
-	final private PromotionController control = new PromotionController();
+	PromotionController control = new PromotionController();
 	/**
 	 * Control class for ala carte
 	 */
-	final private AlaCarteController alcontrol = new AlaCarteController();
+	AlaCarteController alcontrol = new AlaCarteController();
 	/**
 	 * Scanner class to read the user's inputs
 	 */
-	final private static Scanner sc = new Scanner(System.in);
+	Scanner sc = new Scanner(System.in);
 	/**
 	 * price of the promotion item
 	 */
-	private static double price;
+	private double price;
 	/**
 	 * initialise DecimalFormat df variable
 	 */
-	private static final DecimalFormat df = new DecimalFormat("0.00");
+	DecimalFormat df = new DecimalFormat("0.00");
 
 
 	/**This method calls the displayAlaCarteOptions method to display the promotion options

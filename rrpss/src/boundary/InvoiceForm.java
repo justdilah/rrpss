@@ -1,6 +1,5 @@
 package boundary;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -9,26 +8,82 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import controller.*;
-import entity.*;
+import controller.CustomerController;
+import controller.InvoiceController;
+import controller.OrderController;
+import controller.ResTableController;
+import controller.ReservationController;
+import controller.StaffController;
+import entity.Customer;
+import entity.Invoice;
+import entity.Order;
+import entity.OrderItem;
+import entity.Reservation;
+import entity.Staff;
+import entity.Table;
 
+/**
+ * This class represents the Invoice form of the restaurant.
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 public class InvoiceForm {
-	
-	InvoiceController  ivc= new InvoiceController();
-	OrderController or = new OrderController();
-	ResTableController tc = new ResTableController();
-	CustomerController cc = new CustomerController();
-    StaffController sct = new StaffController();
-    ReservationController rct = new ReservationController();
-    ResTableController rtc = new ResTableController();
-    Scanner sc = new Scanner(System.in);
-    DecimalFormat df= new DecimalFormat("0.00");
-	
-	public void displayOption() throws IOException {
-		printInvoice();
-	}
 
-	public void printInvoice() throws IOException {
+    /**
+     * Scanner object to scan user input
+     */
+    Scanner sc = new Scanner(System.in);
+
+    /**
+     * Initialise a DecimalFomat to get two decimal place
+     */
+    DecimalFormat df= new DecimalFormat("0.00");
+
+    /**
+     * Invoice controller object to call methods in the controller class
+     */
+    InvoiceController  ivc= new InvoiceController();
+
+    /**
+     * Order controller object to call methods in the controller class
+     */
+    OrderController or = new OrderController();
+
+    /**
+     * ResTable controller object to call methods in the controller class
+     */
+    ResTableController rtc = new ResTableController();
+
+    /**
+     * Customer controller object to call methods in the controller class
+     */
+    CustomerController cc = new CustomerController();
+
+    /**
+     * Staff controller object to call methods in the controller class
+     */
+    StaffController sct = new StaffController();
+
+    /**
+     * Reservation controller object to call methods in the controller class
+     */
+    ReservationController rct = new ReservationController();
+
+
+    /**
+     * This method display a list of options for the staff to select which function he/she wants to perform
+     * @throws IOException Display error message if any I/O error found while retrieving the invoice records.
+     */
+    public void displayOption() throws IOException {
+        printInvoice();
+    }
+
+    /**
+     * This method prints a specific invoice
+     * @throws IOException Display error message if any I/O error found while retrieving the invoice records.
+     */
+    public void printInvoice() throws IOException {
 
         int choice =-1;
         double subTotalprice , discount, gst, svc, totalPrice, discountedP;
@@ -45,7 +100,7 @@ public class InvoiceForm {
 
         //RETRIEVE OCCUPIED TABLE
 
-        if(tc.getAllOccupiedTables() == null){
+        if(rtc.getAllOccupiedTables() == null){
             print("============================================================");
             print("There are no occupied tables");
             print("============================================================");
@@ -53,8 +108,8 @@ public class InvoiceForm {
         }
 
 
-        for(int i=0; i<tc.getAllOccupiedTables().size(); i++) {
-            print(i+1 + ") Table No " + tc.getAllOccupiedTables().get(i).getTableNo());
+        for(int i=0; i<rtc.getAllOccupiedTables().size(); i++) {
+            print(i+1 + ") Table No " + rtc.getAllOccupiedTables().get(i).getTableNo());
         }
 
 
@@ -66,15 +121,15 @@ public class InvoiceForm {
         do{
             try {
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice < 0 || choice < tc.getAllOccupiedTables().size())
+                if (choice < 0 || choice < rtc.getAllOccupiedTables().size())
                     print("Choice does not exist, please enter a valid choice: ");
             }catch(NumberFormatException e){
                 print("Choice is of invalid format, please enter a valid choice: ");
             }
-        }while(choice<0||choice>tc.getAllOccupiedTables().size());
+        }while(choice<0||choice>rtc.getAllOccupiedTables().size());
 
         //RETRIEVE SPECIFIC TABLE
-        Table t = tc.getAllOccupiedTables().get(choice-1);
+        Table t = rtc.getAllOccupiedTables().get(choice-1);
         orders = ivc.getUnpaidOrdersByTableNo(t);
         cust = orders.get(0).getCust();
         String staffID = orders.get(0).getStaffId();
@@ -181,11 +236,19 @@ public class InvoiceForm {
         MainAppUI.print();
     }
 
-	public void print(String message)
-	{
-	    System.out.println(message);
-	}
+    /**
+     * This is a print method for easier printing outputs
+     * @param message The various output to be printed out
+     */
+    public void print(String message)
+    {
+        System.out.println(message);
+    }
 
+    /**
+     * This is a printf method for easier printing outputs
+     * @param message The various output to be printed out
+     */
     public void printf(String format, String message, String message2){
         System.out.printf(format,message,message2);
     }
