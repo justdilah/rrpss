@@ -209,7 +209,7 @@ public class OrderController {
 		return o;
 	}
 
-	public ArrayList<Promotion> getAllPromoSets() throws FileNotFoundException {
+	public ArrayList<Promotion> getAllPromoSets() throws IOException {
 		return Promotion.getAllPromotionItems();
 	}
 

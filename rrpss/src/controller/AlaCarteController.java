@@ -16,7 +16,7 @@ public class AlaCarteController {
 	}
 
 
-	public static ArrayList<AlaCarte> getAllAlaCarteItems() throws FileNotFoundException {
+	public static ArrayList<AlaCarte> getAllAlaCarteItems() throws IOException {
 		return AlaCarte.getAllAlaCarteItems();
 	}
 
@@ -46,7 +46,7 @@ public class AlaCarteController {
 
 
 	//Shifted Methods from Entity
-	public static AlaCarte getAlaCarteByName(String name) throws FileNotFoundException {
+	public static AlaCarte getAlaCarteByName(String name) throws IOException {
 		ArrayList<AlaCarte> alacarte = getAllAlaCarteItems();
 		AlaCarte a = null;
 		for(AlaCarte ala: alacarte){
@@ -57,7 +57,7 @@ public class AlaCarteController {
 		return a;
 	}
 
-	public AlaCarte selectAlaCarteById(int id) throws FileNotFoundException {
+	public AlaCarte selectAlaCarteById(int id) throws IOException {
 		ArrayList<AlaCarte> alacarte = getAllAlaCarteItems();
 		AlaCarte a = null;
 		for(AlaCarte ala: alacarte){

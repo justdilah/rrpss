@@ -18,11 +18,11 @@ public class PromotionController {
 		Promotion.savePromotionSetItem(name, allist, desc, price);
 	}
 	
-	public Promotion getPromotionSetByName(String name) throws FileNotFoundException {
+	public Promotion getPromotionSetByName(String name) throws IOException {
 		return selectPromotionSetByName(name);
 	}
 	
-	public static ArrayList<Promotion> getAllPromotionSets() throws FileNotFoundException {
+	public static ArrayList<Promotion> getAllPromotionSets() throws IOException {
 		return Promotion.getAllPromotionItems();
 	}
 	
@@ -57,7 +57,7 @@ public class PromotionController {
 	}
 
 	//Newly Shifted From Entity
-	public Promotion selectItemById(int id) throws FileNotFoundException {
+	public Promotion selectItemById(int id) throws IOException {
 		Promotion p = null;
 		ArrayList<Promotion> promo = getAllPromotionSets();
 		for(Promotion promos: promo){
@@ -67,7 +67,7 @@ public class PromotionController {
 		return p;
 	}
 
-	public static Promotion selectPromotionSetByName(String n) throws FileNotFoundException {
+	public static Promotion selectPromotionSetByName(String n) throws IOException {
 		Promotion p = null;
 		ArrayList<Promotion> promo = getAllPromotionSets();
 		for(Promotion promos: promo){

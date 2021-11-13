@@ -233,7 +233,7 @@ public class PromotionForm {
 		displayOption();
 	}
 
-	private void updatePromotionItem() throws FileNotFoundException {
+	private void updatePromotionItem() throws IOException {
 
 		boolean fail;
 		int choice = 0, option =-1;
@@ -368,7 +368,7 @@ public class PromotionForm {
 		}
 	}
 
-	private ArrayList<AlaCarte> selectAlaCarteItems() throws FileNotFoundException {
+	private ArrayList<AlaCarte> selectAlaCarteItems() throws IOException {
 
 		int c=0;
 		ArrayList<AlaCarte> alList = new ArrayList<>();

@@ -2,9 +2,11 @@ package entity;
 
 import controller.AlaCarteController;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -113,7 +115,7 @@ public class Promotion {
 	}
 	
 	//ADD ALACARTE ITEMS 
-	private static ArrayList<AlaCarte> addAlaCarteItems(String[] n) throws FileNotFoundException {
+	private static ArrayList<AlaCarte> addAlaCarteItems(String[] n) throws IOException {
 		ArrayList<AlaCarte> al = new ArrayList<>();
 
 		for(int k=0;k< n.length; k++) {			
@@ -124,7 +126,7 @@ public class Promotion {
 	
 	
 	// RETRIEVE THE PROMOTION SET ITEMS
-	public static ArrayList<Promotion> getAllPromotionItems() throws FileNotFoundException {
+	public static ArrayList<Promotion> getAllPromotionItems() throws IOException {
 		ArrayList<Promotion> psList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename); 	
 		
@@ -212,19 +214,23 @@ public class Promotion {
 	}
 	
 	//READ AND WRITE TO CSV
-	private static List read(String filename) throws FileNotFoundException {
+	private static List read(String filename) throws IOException {
 		List data = new ArrayList();
-		Scanner scanner = new Scanner(new FileInputStream(filename));
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String headerLine = reader.readLine();
+		String line;
 		try {
-			while (scanner.hasNextLine()) {
-				data.add(scanner.nextLine());
+			while ((line = reader.readLine()) != null) {
+
+				data.add(line);
 			}
 		} finally {
-			scanner.close();
+			reader.close();
 		}
 		return data;
 	}
 	
+
 	private static void write(String filename, List data) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
@@ -237,10 +243,12 @@ public class Promotion {
 		}
 	}
 	
+	
 	private static void replace(String filename, List data) throws IOException {
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
+			out.write("PromoID" + "," + "Name" + "," + "Items" + "," + "Desc" + "," + "Price" + "\n");
 			for (int i = 0; i < data.size(); i++) {
 				
 				out.write((String) data.get(i) + "\n");
