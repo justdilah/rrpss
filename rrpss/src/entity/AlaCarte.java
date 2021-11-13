@@ -21,19 +21,19 @@ public class AlaCarte {
 		
 	}
 	
-	public AlaCarte(int id, String n,String d,Double p, FoodType mt) {
+	public AlaCarte(int id, String n,String d,Double p, FoodType ft) {
 		this.alaCarteId = id;
 		this.alaCarteName = n;
 		this.alaCarteDesc = d;
 		this.alaCartePrice = p;
-		this.foodType = mt;
+		this.foodType = ft;
 	}
 
 	public int getAlaCarteId() {
 		return this.alaCarteId;
 	}
 
-	public void setFoodId(int id) {
+	public void setAlaCarteId(int id) {
 		this.alaCarteId = id;
 	}
 
@@ -94,7 +94,7 @@ public class AlaCarte {
 	
 
 	//ADDING TO CSV FILE (Reduced Time)
-	public static void saveFoodItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
+	public static void saveAlaCarteItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
 		ArrayList<AlaCarte> ala = getAllAlaCarteItems();
 		int last = ala.size();
 		int id = ala.get(last-1).getAlaCarteId()+ 1;
@@ -106,7 +106,7 @@ public class AlaCarte {
 	}
 	
 	//FOR DELETE (Reduced Time)
-	public static void deleteFoodItem(AlaCarte a) throws IOException {
+	public static void deleteAlaCarteItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllAlaCarteItems();
 		

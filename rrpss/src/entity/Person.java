@@ -3,10 +3,7 @@ package entity;
 public class Person {
 
 	private String persName;
-	private char persGender;
-	private String persAddress;
 	private String persPhoneNo;
-	private String persEmail;
 	
 	public Person() {
 		
@@ -29,29 +26,6 @@ public class Person {
 		this.persName = persName;
 	}
 
-	public char getPersGender() {
-		return this.persGender;
-	}
-
-	/**
-	 * 
-	 * @param persGender
-	 */
-	public void setPersGender(char persGender) {
-		this.persGender = persGender;
-	}
-
-	public String getPersAddress() {
-		return this.persAddress;
-	}
-
-	/**
-	 * 
-	 * @param persAddress
-	 */
-	public void setPersAddress(String persAddress) {
-		this.persAddress = persAddress;
-	}
 
 	public String getPersPhoneNo() {
 		return this.persPhoneNo;
@@ -65,16 +39,6 @@ public class Person {
 		this.persPhoneNo = persPhoneNo;
 	}
 
-	public String getPersEmail() {
-		return this.persEmail;
-	}
 
-	/**
-	 * 
-	 * @param persEmail
-	 */
-	public void setPersEmail(String persEmail) {
-		this.persEmail = persEmail;
-	}
 
 }

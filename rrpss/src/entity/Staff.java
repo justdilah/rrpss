@@ -51,28 +51,7 @@ public class Staff extends Person {
 		this.staffGender = staffGender;
 	}
 
-
-	public Staff getStaffById(int id) throws IOException 
-	{
-		Staff c = null;
-
-		for(int i=0; i<getAllStaffDetails().size();i++) {
-
-			if(getAllStaffDetails().get(i).getStaffId() == id) {
-				c = getAllStaffDetails().get(i);
-			}
-		}
-		return c;
-	}
-	
-	public Boolean isIdExists(int id) throws IOException {
-		if(getStaffById(id)!=null) {
-			return true;
-		}
-		return false;
-	}
-
-	public ArrayList<Staff> getAllStaffDetails() throws IOException
+	public static ArrayList<Staff> getAllStaffDetails() throws IOException
 	{
 		ArrayList<Staff> slist= new ArrayList<>();
 		ArrayList stringitems = (ArrayList)read(filename); 	
@@ -98,7 +77,7 @@ public class Staff extends Person {
 
 
 	//READ AND WRITE TO CSV
-	private List read(String filename) throws IOException {
+	private static List read(String filename) throws IOException {
 	    List data = new ArrayList();
 	    BufferedReader reader = new BufferedReader(new FileReader(filename));
 	    String headerLine = reader.readLine();

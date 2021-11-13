@@ -147,15 +147,15 @@ public class Promotion {
 	
 	
 	//FOR UPDATE
-	public static void updatePromotionSet(Promotion a) throws IOException {
+	public static void updatePromotionSet(Promotion promo) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<Promotion> miList = getAllPromotionItems();
 		
 		for(int i=0;i<getAllPromotionItems().size();i++) {
 			
 			
-			if(getAllPromotionItems().get(i).getPackId() == a.getPackId()) {
-				miList.set(i, a);
+			if(getAllPromotionItems().get(i).getPackId() == promo.getPackId()) {
+				miList.set(i, promo);
 			}
 		
 			Promotion k = miList.get(i);
@@ -177,14 +177,14 @@ public class Promotion {
 	}
 	
 	//DELETE THE PROMOTION SET
-	public static void deletePromotionSet(Promotion a) throws IOException {
+	public static void deletePromotionSet(Promotion promo) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<Promotion> miList = getAllPromotionItems();
 		
 		for(int i=0;i<getAllPromotionItems().size()-1;i++) {
 			
 			
-			if(getAllPromotionItems().get(i).getPackId() == a.getPackId()) {
+			if(getAllPromotionItems().get(i).getPackId() == promo.getPackId()) {
 				miList.remove(i);
 			}
 					

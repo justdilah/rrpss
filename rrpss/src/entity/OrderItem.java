@@ -120,7 +120,7 @@ public class OrderItem {
 		List l = new ArrayList<>();
 		String item = o.getOrderItemId() + "," + o.getOrderItemName() + "," + o.getOrderItemQty() + "," + o.getOrderItemPrice() + "," + o.getOrderId();
 		l.add(item);
-		saveFoodItem(l);
+		saveOrderItem(l);
  	}
 
 	 public static void updateOrderItem(OrderItem o) throws IOException{
@@ -199,7 +199,7 @@ public class OrderItem {
 //		replace(filename,l);
 //	}
 	
-	public static void saveFoodItem(List list) throws IOException {
+	public static void saveOrderItem(List list) throws IOException {
 		write(filename, list);
 	}
 

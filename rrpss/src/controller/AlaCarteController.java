@@ -12,7 +12,7 @@ public class AlaCarteController {
 
 
 	public void addAlaCarte(String name, String desc, double price, FoodType type) throws IOException {
-		AlaCarte.saveFoodItem(name, desc, price, type);
+		AlaCarte.saveAlaCarteItem(name, desc, price, type);
 	}
 
 
@@ -41,7 +41,7 @@ public class AlaCarteController {
 	}
 	
 	public void deleteAlaCarteItem(AlaCarte a) throws IOException {
-		AlaCarte.deleteFoodItem(a);
+		AlaCarte.deleteAlaCarteItem(a);
 	}
 
 

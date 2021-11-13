@@ -24,12 +24,11 @@ public class Order {
 	private LocalDate date;
 	private Boolean isPaid;
 	private String staffId;
-	Staff waiter;
+//	Staff waiter;
 	Customer customer;
 	Table table;
 	ArrayList <OrderItem> orderItemList; 
-	Invoice invoice;
-	
+//	Invoice invoice;
 	
 	public Order() {
 		this.orderItemList = new ArrayList<OrderItem>();
@@ -111,6 +110,10 @@ public class Order {
 	
 	public Customer getCust() {
 		return this.customer;
+	}
+	
+	public void setCust(Customer cust) {
+		this.customer = cust;
 	}
 
 	

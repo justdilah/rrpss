@@ -158,7 +158,7 @@ public class InvoiceForm {
             Reservation r = ReservationController.getReservationByContact(setInv.getCustomer().getPersPhoneNo());
             int res_id = r.getResId();
             rct.removeReservation(r);
-            rtc.deteleTable(res_id);
+            rtc.deleteTable(res_id);
         }
     }
 
