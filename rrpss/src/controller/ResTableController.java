@@ -180,7 +180,7 @@ public class ResTableController {
         {
             int max = table.returnINTcapcity(table.getSeatCapacity());
 
-            if ( max >= numOfGuests && isFree(date,time,table.getTableNo()))
+            if (isFree(date,time,table.getTableNo()) && ((max-numOfGuests)==0 || (max-numOfGuests)==1))
             {
                 temp = table;
             }

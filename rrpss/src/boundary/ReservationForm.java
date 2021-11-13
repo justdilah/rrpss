@@ -258,48 +258,53 @@ public class ReservationForm {
 
 	public LocalDate checkDate(String date)
 	{
-		LocalDate local = null;
-		String tempdate;
-
+		LocalDate tempdate;
+		String checkDate;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-		if (isDateValid(date))
-		{
-			LocalDate inputdate = LocalDate.parse(date,formatter);
+		checkDate = date;
 
-			String stringdate = LocalDate.now().toString();
-			LocalDate convertdate = LocalDate.parse(stringdate,formatter);
+		do{
+			if (!isDateValid(checkDate)){
+				print("Invalid Date. Re-enter Date of Reservation (yyyy-MM-dd) format: ");
+				checkDate = sc.nextLine();
+			}
+		}while(!isDateValid(checkDate));
+
+		LocalDate inputdate = LocalDate.parse(checkDate,formatter);
+		String stringdate = LocalDate.now().toString();
+		LocalDate convertdate = LocalDate.parse(stringdate,formatter);
+		LocalDate convertdateafter = convertdate.plusDays(14);
+		tempdate = inputdate;
 
 
-			LocalDate convertdateafter = convertdate.plusDays(14);
-
-			local = inputdate;
-
-			if (inputdate.isBefore(convertdate))
-			{
+		do{
+			if (tempdate.isBefore(convertdate)) {
 				print("Date has already passed.");
 				print("Re-enter Date of Reservation (yyyy-MM-dd) format: ");
-				tempdate = sc.nextLine();
-
-				local = checkDate(tempdate);
+				checkDate = sc.nextLine();
+				do{
+					if (!isDateValid(checkDate)){
+						print("Invalid Date. Re-enter Date of Reservation (yyyy-MM-dd) format: ");
+						checkDate = sc.nextLine();
+					}
+				}while(!isDateValid(checkDate));
+				tempdate = LocalDate.parse(checkDate, formatter);
 			}
-			else if (inputdate.isAfter(convertdateafter))
-			{
+			else if (tempdate.isAfter(convertdateafter)) {
 				print("Reservation only can be done 2 weeks in advance");
-
 				print("Re-enter Date of Reservation (yyyy-MM-dd) format: ");
-				tempdate = sc.nextLine();
-
-				local = checkDate(tempdate);
+				checkDate = sc.nextLine();
+				do{
+					if (!isDateValid(checkDate)){
+						print("Invalid Date. Re-enter Date of Reservation (yyyy-MM-dd) format: ");
+						checkDate = sc.nextLine();
+					}
+				}while(!isDateValid(checkDate));
+				tempdate = LocalDate.parse(checkDate, formatter);
 			}
-		}
-		else
-		{
-			print("Invalid Date. Re-enter Date of Reservation (yyyy-MM-dd) format:");
-			tempdate = sc.nextLine();
-			local = checkDate(tempdate);
-		}
-		return local;
+		}while(tempdate.isBefore(convertdate) || tempdate.isAfter(convertdateafter));
+		return tempdate;
 	}
 
 	public static boolean isDateValid(String value) {
@@ -315,21 +320,17 @@ public class ReservationForm {
 	{
 		LocalTime local;
 		String temptime;
-
 		DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
+		temptime = time;
 
-		if (isTimeValid(time))
-		{
-			LocalTime inputtime = LocalTime.parse(time,tformatter);
-			return inputtime;
-		}
-		else
-		{
-			print("Invalid Time. Re-enter Time of Reservation (HH:mm) format:");
-			temptime = sc.nextLine();
+		do {
+			if(!isTimeValid(temptime)){
+				print("Invalid Time. Re-enter Time of Reservation (HH:mm) format: ");
+				temptime=sc.nextLine();
+			}
+		}while(!isTimeValid(temptime));
 
-			local = checkTime(temptime);
-		}
+		local = LocalTime.parse(temptime,tformatter);
 		return local;
 	}
 
@@ -401,7 +402,7 @@ public class ReservationForm {
 		print("==================================");
 		print("Enter customer contact to update reservation: ");
 		print("==================================");
-		String stringchoice = sc.next();
+		String stringchoice = sc.nextLine();
 
 		r = rc.getReservationByContact(stringchoice);
 
@@ -419,7 +420,8 @@ public class ReservationForm {
 			print("(1) Pax");
 			print("(2) Date");
 			print("(3) Time");
-			int choice = sc.nextInt();
+			print("Please enter your choice: ");
+			int choice = Integer.parseInt(sc.nextLine());
 
 			switch(choice) {
 				case 1:
@@ -471,16 +473,19 @@ public class ReservationForm {
 
 			LocalTime converttime = rt.getTableByResId(resid).getTableTime();
 			LocalDate convertdate = rt.getTableByResId(resid).getTableDate();
-			int finalpax = rc.getResById(resid).getResNoPax();
+//			int oldpax = rc.getResById(resid).getResNoPax();
 
 
 			// pass in date time and pax to check
-			int new_tno = -1;
-			new_tno = rt.checkAvailTable(convertdate, converttime, finalpax, resid).getTableNo();
+			int new_tno;
+			if(rt.checkAvailTable(convertdate, converttime, pax, resid) == null)
+				new_tno = -1;
+			else
+				new_tno =rt.checkAvailTable(convertdate, converttime, pax, resid).getTableNo();
 
 			if (new_tno != -1)
 			{
-				rt.updateTablePax(t, resid, new_tno, finalpax);
+				rt.updateTablePax(t, resid, new_tno, pax);
 				print("==================================");
 				print(" data updated successfully");
 				print("==================================");
@@ -507,18 +512,14 @@ public class ReservationForm {
 		rt.createCapTable();
 
 		print("Enter new date (yyyy-MM-dd): ");
-		String date = sc.next();
+		String date = sc.nextLine();
 		LocalDate finaldate = checkDate(date);
 
 		int resid = r.getResId();
 
 
 		try {
-//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//			LocalDate convertdate = LocalDate.parse(date,formatter);
-
 			LocalTime converttime = rt.getTableByResId(resid).getTableTime();
-
 
 			// pass in time and pax to check
 			int new_tno;
@@ -556,20 +557,21 @@ public class ReservationForm {
 		rt.createCapTable();
 
 		print("Enter new time (HH:mm): ");
-		String time = sc.next();
+		String time = sc.nextLine();
 		LocalTime finaltime = checkTime(time);
 
 		int resid = r.getResId();
 
 		try {
-//			DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
-//			LocalTime converttime = LocalTime.parse(time,tformatter);
 
 			LocalDate convertdate = rt.getTableByResId(resid).getTableDate();
 
 			// pass in time and pax to check
-			int new_tno = -1;
-			new_tno = rt.checkAvailTable(convertdate, finaltime, p1, resid).getTableNo();
+			int new_tno;
+			if(rt.checkAvailTable(convertdate, finaltime, p1, resid) == null)
+				new_tno = -1;
+			else
+				new_tno =rt.checkAvailTable(convertdate, finaltime, p1, resid).getTableNo();
 
 			if (new_tno != -1)
 			{
