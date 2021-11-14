@@ -1,43 +1,64 @@
 package entity;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 /**
- * Represents an Ala Carte item for the restaurant. 
- * @author Dilah
- * 
+ * This class represents an Ala Carte item
+ * @version JDK 1.1
  * @since 2021-10-13
+ * @author SSP3 Group 3
  */
 public class AlaCarte {
-	
-	private static final String filename = "DataSet/AlaCarte.csv";
-	
-	private int alaCarteId;
-	private String alaCarteName;
-	private String alaCarteDesc;
-	private Double alaCartePrice;
-	private FoodType foodType;
-	
+
 	/**
-	 * 
+	 * Initialized filepath of the AlaCarte.csv
+	 */
+	private static final String filename = "DataSet/AlaCarte.csv";
+
+	/**
+	 * The Id of this Ala Carte
+	 */
+	private int alaCarteId;
+
+	/**
+	 * The name of this Ala Carte
+	 */
+	private String alaCarteName;
+
+	/**
+	 * The description of this Ala Carte
+	 */
+	private String alaCarteDesc;
+
+	/**
+	 * The price of this Ala Carte
+	 */
+	private Double alaCartePrice;
+
+	/**
+	 * The food type of this Ala Carte
+	 */
+	private FoodType foodType;
+
+	/**
+	 * Class Constructor
 	 */
 	public AlaCarte() {
-		
+
 	}
-	
-	/**
-	 * @param id
-	 * @param n
-	 * @param d
-	 * @param p
-	 * @param ft
+
+	/**Class Constructor with the given id, name, description, price and food type
+	 *
+	 * @param id int value to uniquely identifies the Ala Carte item
+	 * @param n string value for the name of the Ala Carte item
+	 * @param d string value for the description of the Ala Carte item
+	 * @param p double value for the price of the Ala Carte item
+	 * @param ft Food Type object for the type of the Ala Carte item
 	 */
 	public AlaCarte(int id, String n,String d,Double p, FoodType ft) {
 		this.alaCarteId = id;
@@ -47,87 +68,86 @@ public class AlaCarte {
 		this.foodType = ft;
 	}
 
-	/**
-	 * @return
+	/**This method gets the Ala Carte Id
+	 * @return Ala Carte Id
 	 */
 	public int getAlaCarteId() {
 		return this.alaCarteId;
 	}
 
-	/**
-	 * @param id
+	/**This method sets the id
+	 * @param id uniquely identifies the Ala Carte item
 	 */
 	public void setAlaCarteId(int id) {
 		this.alaCarteId = id;
 	}
 
-	/**
-	 * @return
+	/**This method gets the Ala Carte name
+	 * @return name of the Ala Carte item
 	 */
 	public String getAlaCarteName() {
 		return this.alaCarteName;
 	}
 
 
-	/**
-	 * @param name
+	/**This method sets the name for Ala Carte
+	 * @param name string value for the  name of the Ala Carte item
 	 */
 	public void setAlaCarteName(String name) {
 		this.alaCarteName = name;
 	}
 
-	/**
-	 * @return
+	/**This method gets the description for Ala Carte
+	 * @return description of the Ala Carte item
 	 */
 	public String getAlaCarteDesc() {
 		return this.alaCarteDesc;
 	}
 
-	/**
-	 * @param desc
+	/**This method sets the description for Ala Carte
+	 * @param desc string value for the description of the Ala Carte item
 	 */
 	public void setAlaCarteDesc(String desc) {
 		this.alaCarteDesc = desc;
 	}
 
-	/**
-	 * @return
+	/**This method gets the Ala Carte price
+	 * @return price of the Ala Carte item
 	 */
 	public Double getAlaCartePrice() {
 		return this.alaCartePrice;
 	}
 
-	/**
-	 * @param price
+	/**This method sets the price for the Ala Carte
+	 * @param price double value for the price of the Ala Carte item
 	 */
 	public void setAlaCartePrice(double price) {
 		this.alaCartePrice = price;
 	}
 
-	/**
-	 * @return
+	/**This method gets the food type of the Ala Carte
+	 * @return food type of the Ala Carte item
 	 */
 	public FoodType getFoodType() {
 		return this.foodType;
 	}
 
-	/**
-	 * @param foodType
+	/**This method sets the food type for the Ala Carte
+	 * @param foodType FoodType object
 	 */
 	public void setFoodType(FoodType foodType) {
 		this.foodType = foodType;
 	}
 
-	
-	// EXTRACT OUT FROM CSV FILE //Static Method //Main Read Methods
-	/**
-	 * @return
-	 * @throws IOException 
+
+	/**This method extracts the Ala Carte items from the csv file
+	 * @return A list of Ala Carte items
+	 * @throws IOException Display error message if any I/O error found while retrieving from the ala carte records.
 	 */
 	public static ArrayList<AlaCarte> getAllAlaCarteItems() throws IOException {
 		ArrayList<AlaCarte> miList= new ArrayList<>();
-		ArrayList stringitems = (ArrayList) read(filename); 	
-		
+		ArrayList stringitems = (ArrayList) read(filename);
+
 		for (int i = 0; i < stringitems.size(); i++) {
 			String st = (String) stringitems.get(i);
 			StringTokenizer star = new StringTokenizer(st, ",");
@@ -143,36 +163,36 @@ public class AlaCarte {
 		}
 		return miList;
 	}
-	
 
-	//ADDING TO CSV FILE (Reduced Time)
-	/**
-	 * @param menuName
-	 * @param menuDesc
-	 * @param menuPrice
-	 * @param menuType
-	 * @throws IOException
+
+
+	/**Thia method adds Ala Carte item in the csv file
+	 * @param name string value for the name of the Ala Carte item
+	 * @param desc string value for the description of the Ala Carte item
+	 * @param price double value for the price of the Ala Carte item
+	 * @param type FoodType object for the type of the Ala Carte item
+	 * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
 	 */
-	public static void saveAlaCarteItem(String menuName, String menuDesc, double menuPrice, FoodType menuType) throws IOException {
+	public static void saveAlaCarteItem(String name, String desc, double price, FoodType type) throws IOException {
 		ArrayList<AlaCarte> ala = getAllAlaCarteItems();
 		int last = ala.size();
 		int id = ala.get(last-1).getAlaCarteId()+ 1;
-		String newft = menuType.toString().replace("_"," ");
-		String foodItem = id + "," + menuName + "," + menuDesc +  "," +  menuPrice+ "," +newft;
+		String newft = type.toString().replace("_"," ");
+		String foodItem = id + "," + name + "," + desc +  "," +  price+ "," +newft;
 		List l = new ArrayList();
 		l.add(foodItem);
 		write(filename, l);
 	}
-	
-	//FOR DELETE (Reduced Time)
-	/**
-	 * @param a
-	 * @throws IOException
+
+
+	/**This method deletes an Ala Carte item in the csv file
+	 * @param a AlaCarte Object
+	 * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
 	 */
 	public static void deleteAlaCarteItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllAlaCarteItems();
-		
+
 		for(int i=0;i<miList.size();i++) {
 			if(miList.get(i).getAlaCarteId() == a.getAlaCarteId()) {
 				miList.remove(i);
@@ -185,32 +205,35 @@ public class AlaCarte {
 		}
 		replace(filename, l);
 	}
-	
-	//FOR UPDATE 
-	/**
-	 * @param a
-	 * @throws IOException
+
+	/**This method updates an Ala Carte item from the csv file
+	 * @param a Ala Carte object
+	 * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
 	 */
 	public static void updateAlaCarteItem(AlaCarte a) throws IOException {
 		List l = new ArrayList<>();
 		ArrayList<AlaCarte> miList = getAllAlaCarteItems();
-		
+
 		for(int i=0;i<miList.size();i++) {
 
 			if(miList.get(i).getAlaCarteId() == a.getAlaCarteId()) {
 				miList.set(i, a);
 			}
-					
+
 			AlaCarte k = miList.get(i);
 			String newdesc = k.getAlaCarteDesc().replace(',', '/');
 			String foodItem = k.getAlaCarteId() + "," + k.getAlaCarteName() + "," + newdesc +  "," +  k.getAlaCartePrice()+ "," +k.getFoodType();
 			l.add(foodItem);
 		}
-		replace(filename, l);	
+		replace(filename, l);
 	}
-	
-	//READ AND WRITE TO CSV (No Change)
-	
+
+
+	/**This method reads the Ala Carte CSV
+	 * @param filename The filepath of the CSV file
+	 * @return The list of records read from the Ala Carte CSV
+	 * @throws IOException Display error message if any I/O error found while retrieving from the ala carte records.
+	 */
 	private static List read(String filename) throws IOException {
 		List data = new ArrayList();
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -226,28 +249,38 @@ public class AlaCarte {
 		}
 		return data;
 	}
-	
 
+
+	/**
+	 * This method writes the Ala Carte CSV
+	 * @param filename The filepath of the CSV file
+	 * @param data A list of Ala Carte items
+	 * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+	 */
 	private static void write(String filename, List data) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
 			for (int i = 0; i < data.size(); i++) {
-				
+
 				out.write((String) data.get(i)+"\n");
 			}
 		} finally {
 			out.close();
 		}
 	}
-	
-	
+
+	/**This method writes a new set of data and stores into the order CSV
+	 * @param filename The filepath of the CSV file
+	 * @param data A list of Ala Carte items
+	 * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+	 */
 	private static void replace(String filename, List data) throws IOException {
-		
+
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
 			out.write("AlaCarteID" + "," + "Name" + "," + "Desc" + "," + "Price" + "," + "FoodType" + "\n");
 			for (int i = 0; i < data.size(); i++) {
-				
+
 				out.write((String) data.get(i) + "\n");
 			}
 		} finally {

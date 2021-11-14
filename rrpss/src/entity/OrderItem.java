@@ -19,7 +19,7 @@ public class OrderItem {
 	private int orderItemId;
 	private int orderItemQty;
 	private String orderItemName;
-	private Double orderItemPrice;
+	private double orderItemPrice;
 	private int orderId;
 	Promotion promoitem;
 	AlaCarte food;
@@ -70,11 +70,11 @@ public class OrderItem {
 		this.orderItemName = orderItemName;
 	}
 
-	public Double getOrderItemPrice() {
+	public double getOrderItemPrice() {
 		return this.orderItemPrice;
 	}
 
-	public void setOrderItemPrice(Double orderItemPrice) {
+	public void setOrderItemPrice(double orderItemPrice) {
 		this.orderItemPrice = orderItemPrice;
 	}
 

@@ -213,7 +213,7 @@ public class Table {
 
 			Table k = tList.get(i);
 
-			String item = k.getTableNo() + "," + k.getSeatCapacity() + "," + k.getStatus() ;
+			String item = k.getTableNo() + "," + k.getSeatCapacity() + "," + k.getTableDate() +  "," +  k.getTableTime()+ "," + k.getStatus() + "," + k.getTableRes().getResId();
 			l.add(item);
 		}
 

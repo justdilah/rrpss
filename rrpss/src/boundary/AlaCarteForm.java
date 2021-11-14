@@ -9,12 +9,35 @@ import java.util.*;
 
 import controller.AlaCarteController;
 
+
+/**This class represents the boundary class for the Ala Carte class
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ *
+ */
 public class AlaCarteForm {
 
+
+    /**
+     * Control class for Ala Carte
+     */
     final private AlaCarteController ac = new AlaCarteController();
+    /**
+     * Scanner class to read the user's inputs
+     */
     final private static Scanner sc = new Scanner(System.in);
+
+    /**
+     * initialise DecimalFormat df variable
+     */
     private static final DecimalFormat df= new DecimalFormat("0.00");
 
+
+    /**
+     * This method calls the displayAlaCarteOptions method to display the Ala Carte options
+     * @throws IOException Display error message if any I/O error found while retrieving from the ala carte records.
+     */
     public void displayOption() throws IOException{
         int choice;
 
@@ -41,6 +64,9 @@ public class AlaCarteForm {
         }while(choice>4 || choice < 1);
     }
 
+    /**This method calls getAllAlaCarteItems method in the controller class to display the Ala Carte items
+     * @throws IOException Display error message if any I/O error found while retrieving from the ala carte records.
+     */
     private void displayAlaCarte() throws IOException{
 
         int choice, c;
@@ -92,11 +118,15 @@ public class AlaCarteForm {
     }
 
 
+    /**This method calls the addAlaCarte method in the controller class to add an Ala Carte item according
+     * to the user's inputs
+     * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+     */
     private void insertAlaCarte() throws IOException {
         String AlaCarteName, desc;
         boolean setter = true, fail = true;
         double price= 0;
-        
+
         print("==================================");
         print("Add an Ala Carte item");
         print("==================================");
@@ -154,7 +184,11 @@ public class AlaCarteForm {
         }
     }
 
-    
+
+    /**This method calls getAlaCarteByName method in the controller class to update the specific Ala Carte item
+     * according to the user's inputs
+     * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+     */
     private void updateAlaCarte() throws IOException{
 
         int choice, choice2;
@@ -163,7 +197,7 @@ public class AlaCarteForm {
         print("Select the Food Item you would like to update ");
         print("================================================");
         displayAlaCarteItems();
-        
+
         print("Enter 0 to return to the previous page");
         print("Please enter your choice: ");
         do{
@@ -178,10 +212,10 @@ public class AlaCarteForm {
             }
 
         }while(choice<0|| choice> AlaCarteController.getAllAlaCarteItems().size());
-        
+
         if (choice == 0)
             displayOption();
-        
+
         AlaCarte a = AlaCarteController.getAlaCarteByName(AlaCarteController.getAllAlaCarteItems().get(choice-1).getAlaCarteName());
 
         while(true)
@@ -253,6 +287,10 @@ public class AlaCarteForm {
         updateAlaCarte();
     }
 
+    /**This method calls the deleteAlaCarteItem method in the controller class to delete the specific
+     * Ala Carte item according to the user's inputs
+     * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+     */
     private void deleteAlaCarte() throws IOException{
 
         int choice;
@@ -287,7 +325,7 @@ public class AlaCarteForm {
                 System.out.println("==================================");
                 displayOption();
 
-                } catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("==================================");
                 System.out.println("Unsuccessful. Please try again");
                 System.out.println("==================================");
@@ -296,8 +334,11 @@ public class AlaCarteForm {
         }
     }
 
-    //Menu and Misc
-
+    /**This method calls the updateAlaCarteName method in the controller class to update the name of the
+     * Ala Carte item according to the user's input
+     * @param c Ala Carte Object
+     * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+     */
     private void setAlaCarteName(AlaCarte c) throws IOException {
         String AlaCarteName;
         boolean setter = true;
@@ -320,6 +361,11 @@ public class AlaCarteForm {
         ac.updateAlaCarteName(c, AlaCarteName);
     }
 
+    /**This method calls updateAlaCarteDesc method in the controller class to update the description of the
+     * Ala Carte item according to the user's input
+     * @param c Ala Carte Object
+     * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+     */
     private void setAlaCarteDesc(AlaCarte c) throws IOException{
 
         String desc;
@@ -340,6 +386,10 @@ public class AlaCarteForm {
         ac.updateAlaCarteDesc(c, newdesc);
     }
 
+    /**This method displays the Food Type options and prompts the user to choose a Food Type for the Ala Carte
+     * item
+     * @return FoodType Object
+     */
     private FoodType foodTypeOptions()
     {
         int choice =0, i;
@@ -367,6 +417,9 @@ public class AlaCarteForm {
     }
 
 
+    /**This method calls the getAllAlaCarteItems method in the controller class to display all the Ala Carte items
+     * @throws IOException Display error message if any I/O error found while inserting into the ala carte records.
+     */
     private void displayAlaCarteItems() throws IOException
     {
         int i;
@@ -381,6 +434,9 @@ public class AlaCarteForm {
     }
 
 
+    /**
+     * This method is used to display the Ala Carte options
+     */
     private void displayAlaCarteOptions()
     {
         print("=================================");
@@ -394,12 +450,20 @@ public class AlaCarteForm {
     }
 
 
+    /**This method is used to replace System.out.println method to a shorter method name
+     * @param message string value
+     */
     public void print(String message)
     {
         System.out.println(message);
     }
 
 
+    /**This method is used to replace the System.out.printf method to a shorter method name
+     * @param format string value
+     * @param message string value
+     * @param message1 string value
+     */
     public void printf(String format,String message,String message1){
         System.out.printf(format,message,message1);
     }

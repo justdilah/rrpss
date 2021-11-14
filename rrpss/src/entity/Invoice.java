@@ -134,18 +134,6 @@ public class Invoice {
 
 	}
 
-//	public Invoice(int no, double subtotal, double discount, double total, LocalDate date, Staff s, Order o)
-//	{
-//		this.invoiceNo = no;
-//		this.subTotal = subtotal;
-//		this.discounts = discount;
-//		this.totalPrice = total;
-//		this.invoiceDate = date;
-//		this.staff = s;
-//		this.order = o;
-//	}
-
-
 	public Invoice(int no, double subtotal, double servicecharge, double discount, double total, double gst, LocalDate date, LocalTime time, Staff s, Order o, Customer c, int tableNo)
 	{
 		this.invoiceNo = no;
@@ -186,10 +174,9 @@ public class Invoice {
 				String gst = star.nextToken().trim();
 				String date = star.nextToken().trim();
 				String time = star.nextToken().trim();
-				String custid = star.nextToken().trim();;
 				String staffid = star.nextToken().trim();
-				String tablno = star.nextToken().trim();
 				String orderno= star.nextToken().trim();
+				String custid = star.nextToken().trim();
 				String tableno = star.nextToken().trim();
 
 				Customer c = new Customer();

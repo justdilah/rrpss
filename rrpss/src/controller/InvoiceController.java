@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import entity.Table;
 
 public class InvoiceController {
 
+	DecimalFormat df= new DecimalFormat("0.00");
 
 	public int checkFileEmpty() throws IOException
 	{
@@ -46,17 +48,21 @@ public class InvoiceController {
 
 	public ArrayList<Order> getUnpaidOrdersByTableNo(Table t) throws IOException
 	{
+		ArrayList<Order> unpaidOrder = OrderController.getUnpaidOrders();
 		ArrayList<Order> orders = new ArrayList<>();
 		int checker = 0;
-		for(int k=0;k<OrderController.getUnpaidOrders().size();k++) {
-			if(OrderController.getUnpaidOrders().get(k).getTable().getTableNo() == t.getTableNo())
-			{
-				orders.add(OrderController.getUnpaidOrders().get(k));
-				checker++;
+		if (unpaidOrder ==  null)
+			return null;
+		else {
+			for (int k = 0; k < OrderController.getUnpaidOrders().size(); k++) {
+				if (OrderController.getUnpaidOrders().get(k).getTable().getTableNo() == t.getTableNo()) {
+					orders.add(OrderController.getUnpaidOrders().get(k));
+					checker++;
+				}
 			}
-		}
-		if(checker == 0) {
-			orders = null;
+			if (checker == 0) {
+				orders = null;
+			}
 		}
 		return orders;
 	}
@@ -73,7 +79,7 @@ public class InvoiceController {
 		String invoice = i.getInvoiceNo() + "," + i.getSubTotal() + ","
 				+ i.getServiceCharge() + "," + i.getDiscounts()
 				+ "," + i.getTotalPrice() + "," + i.getGst() + ","
-				+i.getInvoiceDate() + "," +i.getInvoiceTime() + staffId
+				+i.getInvoiceDate() + "," +i.getInvoiceTime() +","+ staffId
 				+ "," + orderId + "," + custId + "," +i.getTableNo();
 		l.add(invoice);
 		Invoice.saveInvoice(l);
@@ -86,30 +92,29 @@ public class InvoiceController {
 		double subTotalPrice = 0;
 
 		for(int i=0;i<itemList.size();i++)
-		{
 			subTotalPrice += itemList.get(i).getOrderItemPrice();
-		}
-		return subTotalPrice;
+
+		return Double.parseDouble(df.format(subTotalPrice));
 	}
 
 	public double calculateDiscount(double subTotalPrice)
 	{
-		return 0.15 * subTotalPrice;
+		return Double.parseDouble(df.format(0.15 * subTotalPrice));
 	}
 
 	public double calculateGst(double subTotalPrice)
 	{
-		return 0.07 * subTotalPrice;
+		return Double.parseDouble(df.format(0.07 * subTotalPrice));
 	}
 
 	public double calculateService(double subTotalPrice)
 	{
-		return 0.10 * subTotalPrice;
+		return Double.parseDouble(df.format(0.10 * subTotalPrice));
 	}
 
 	public double calculateTotal(double sub, double service, double gst)
 	{
-		return sub+service+gst;
+		return Double.parseDouble(df.format(sub+service+gst));
 	}
 
 //

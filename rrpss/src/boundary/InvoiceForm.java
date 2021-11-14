@@ -2,6 +2,7 @@ package boundary;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,7 @@ public class InvoiceForm {
     ReservationController rct = new ReservationController();
     ResTableController rtc = new ResTableController();
     Scanner sc = new Scanner(System.in);
+    DecimalFormat df= new DecimalFormat("0.00");
 	
 	public void displayOption() throws IOException {
 		printInvoice();
@@ -29,9 +31,9 @@ public class InvoiceForm {
 	public void printInvoice() throws IOException {
 
         int choice =-1;
-        double subTotalprice , discount, gst, svc, totalPrice=0, discountedP=0;
+        double subTotalprice , discount, gst, svc, totalPrice, discountedP;
         String member;
-        String format = "%-30s%s%n", format1 = "%-30s%-10s%s%n";;
+        String format = "%-25s%s%n", format1 = "%-30s%-10s%s%n";;
         ArrayList<Order> orders;
         ArrayList<OrderItem> oitems = new ArrayList<>();
         LocalDate orderDate;
@@ -41,18 +43,20 @@ public class InvoiceForm {
         Staff s;
         Customer cust;
 
-        //RETRIEVE OCCUPIED TABLES
-        if(tc.getAllOccupiedTables().size()>0){
-            for(int i=0; i<tc.getAllOccupiedTables().size(); i++) {
-                print(i+1 + ") Table No " + tc.getAllOccupiedTables().get(i).getTableNo());
-            }
-        }
-        else{
+        //RETRIEVE OCCUPIED TABLE
+
+        if(tc.getAllOccupiedTables() == null){
             print("============================================================");
             print("There are no occupied tables");
             print("============================================================");
             MainAppUI.print();
         }
+
+
+        for(int i=0; i<tc.getAllOccupiedTables().size(); i++) {
+            print(i+1 + ") Table No " + tc.getAllOccupiedTables().get(i).getTableNo());
+        }
+
 
         print("=================================");
         print("\t Generating Invoice ");
@@ -71,7 +75,6 @@ public class InvoiceForm {
 
         //RETRIEVE SPECIFIC TABLE
         Table t = tc.getAllOccupiedTables().get(choice-1);
-
         orders = ivc.getUnpaidOrdersByTableNo(t);
         cust = orders.get(0).getCust();
         String staffID = orders.get(0).getStaffId();
@@ -107,7 +110,7 @@ public class InvoiceForm {
         print("\t Order Items");
         print("==================================");
         int counter = 0;
-        if(ivc.checkFileEmpty() == 1)
+        if(ivc.checkFileEmpty() == 0)
             counter = 8000;
         else{
             int last =  InvoiceController.getAllInvoice().size()-1;
@@ -120,16 +123,17 @@ public class InvoiceForm {
             ord.setIsPaid(true);
             or.replaceOrder(ord);
         }
+        System.out.printf(format1, "Order Item name", "Quantity", "Price");
+        print("=================================================");
 
         for(OrderItem oitem: oitems){
-            System.out.printf(format1, oitem.getOrderItemName(), oitem.getOrderItemQty(), "$"+ oitem.getOrderItemPrice());
-            print("");
+            System.out.printf(format1, oitem.getOrderItemName(), oitem.getOrderItemQty(), "$"+ df.format(oitem.getOrderItemPrice()));
         }
 
         subTotalprice = ivc.calculateSubTotalPriceOrder(oitems);
         gst = ivc.calculateGst(subTotalprice);
         svc = ivc.calculateService(subTotalprice);
-        totalPrice = subTotalprice+gst+svc;
+        totalPrice = ivc.calculateTotal(subTotalprice,svc,gst);
 
         if(cc.isMember(cust.getCustId()))
             discount = ivc.calculateDiscount(totalPrice);
@@ -137,8 +141,8 @@ public class InvoiceForm {
             discount = 0;
 
         discountedP = totalPrice - discount;
-        time = LocalTime.parse(LocalTime.now().toString(),formatter);
-
+        discountedP = Double.parseDouble(df.format(discountedP));
+        time = LocalTime.parse(LocalTime.now().format(formatter));
 
         Invoice inv = new Invoice(counter, subTotalprice,svc,discount,discountedP,gst,orderDate,time,s,order,cust,t.getTableNo());
         ivc.saveInvoice(inv);
@@ -146,20 +150,35 @@ public class InvoiceForm {
 
         Invoice setInv = ivc.getInvoiceById(counter);
         if (setInv == null)
-            print("Unexpected Error has occured");
+            print("Unexpected Error has occurred");
         else
         {
             print("------------------------------------------------------------");
-            printf(format,"Sub Total Price :", "$"+ subTotalprice);
-            printf(format,"GST :", "$"+ String.format("%.2f",gst));
-            printf(format,"Discount :", "S"+ String.format("%.2f",discount));
-            printf(format,"Total Price :","$" + String.format("%.2f",((subTotalprice + gst)- discount)));
-            print("------------------------------------------------------------");
-            Reservation r = ReservationController.getReservationByContact(setInv.getCustomer().getPersPhoneNo());
-            int res_id = r.getResId();
-            rct.removeReservation(r);
-            rtc.deleteTable(res_id);
+            printf(format,"Sub Total Price :", "$"+ df.format(subTotalprice));
+            printf(format,"GST :", "$"+ df.format(gst));
+            printf(format,"Service Charge: ", "$"+df.format(svc));
+            printf(format,"Total Price: ", "$"+df.format(subTotalprice+svc+gst));
+            if(discount == 0)
+            {
+                print("------------------------------------------------------------");
+                Reservation r = ReservationController.getReservationByContact(setInv.getCustomer().getPersPhoneNo());
+                int res_id = r.getResId();
+                rct.removeReservation(r);
+                rtc.deleteTable(res_id);
+            }
+            else {
+                print("------------------------------------------------------------");
+                printf(format, "Discount :", "S" + df.format(discount));
+                print("------------------------------------------------------------");
+                printf(format, "Discounted Total Price :", "$" + df.format(discountedP));
+                print("------------------------------------------------------------");
+                Reservation r = ReservationController.getReservationByContact(setInv.getCustomer().getPersPhoneNo());
+                int res_id = r.getResId();
+                rtc.deleteTable(res_id);
+                rct.removeReservation(r);
+            }
         }
+        MainAppUI.print();
     }
 
 	public void print(String message)

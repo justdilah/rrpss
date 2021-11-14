@@ -1,48 +1,46 @@
 package controller;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.*;
 
-import entity.Invoice;
 
 public class SaleRevenueMonthController {
 
-	public void generateMonthRevenue(int monthchosen) throws IOException {
-
+	public ArrayList<ArrayList<String>> generateMonthRevenue(int monthchosen) throws IOException {
 			// based on the month chosen by the user
 			// get OrderID array to compare against OrderItem.csv
 			// get the Subtotal, Discount & GST to calculate overall total
 			BufferedReader reader = new BufferedReader(new FileReader("DataSet/Invoice.csv"));
+			ArrayList<ArrayList<String>> store = new ArrayList<>();
+			int increment = 0;
 			
-			List<Integer> invoiceList_orderID = new ArrayList<>();
-			List<Double> invoiceList_SubTotal = new ArrayList<>();
-			List<Double> invoiceList_discount = new ArrayList<>();
-			List<Double> invoiceList_GST = new ArrayList<>();
+			ArrayList<Integer> invoiceList_orderID = new ArrayList<>();
+			ArrayList<Double> invoiceList_Total = new ArrayList<>();
 			
 			String headerLine = reader.readLine();
 			String currentLine;
 			while ((currentLine = reader.readLine()) != null) { 
 	            String[] str = currentLine.split(",");
-	            String[] date = str[2].split("-");
+	            String[] date = str[6].split("-");
 	            int month = Integer.parseInt(date[1]);
 	            if(month == monthchosen) {
 	            	// do not include duplicate orderIDs
-	            	if(!invoiceList_orderID.contains(Integer.parseInt(str[1]))) {
-	            		invoiceList_orderID.add(Integer.parseInt(str[1]));
+	            	if(!invoiceList_orderID.contains(Integer.parseInt(str[9]))) {
+	            		invoiceList_orderID.add(Integer.parseInt(str[9]));
 	            	}
-	            invoiceList_SubTotal.add(Double.parseDouble(str[3]));
-	            invoiceList_discount.add(Double.parseDouble(str[4]));
-	            invoiceList_GST.add(Double.parseDouble(str[5]));
+	            invoiceList_Total.add(Double.parseDouble(str[4]));
 	            }
 	        }
-			
+
+			ArrayList<String> invoiceList_TotalSt = new ArrayList<>();
+			for(Double d: invoiceList_Total)
+				invoiceList_TotalSt.add(String.valueOf(d));
+
+			store.add(invoiceList_TotalSt);
+
+
 			// get the OrderItemName, qty, price for individual dish calculation
 			List<String> OIList_OrderItemName = new ArrayList<>();
 			List<Integer> OIList_qty = new ArrayList<>();
@@ -70,9 +68,9 @@ public class SaleRevenueMonthController {
 //			System.out.println(OIList_price); 
 			
 			// now just distinct dish name, the total qty and price across all orders
-			List<String> OIList_OrderItemName_distinct = new ArrayList<>();
-			List<Integer> OIList_qty_total = new ArrayList<>();
-			List<Double> OIList_price_total = new ArrayList<>();
+			ArrayList<String> OIList_OrderItemName_distinct = new ArrayList<>();
+			ArrayList<Integer> OIList_qty_total = new ArrayList<>();
+			ArrayList<Double> OIList_price_total = new ArrayList<>();
 			
 			int itemindex = 0;
 			for(String item: OIList_OrderItemName) {
@@ -98,50 +96,21 @@ public class SaleRevenueMonthController {
 				}
 				itemindex++;
 			}
-			
-//			System.out.println(OIList_OrderItemName_distinct); 
-//			System.out.println(OIList_qty_total); 
-//			System.out.println(OIList_price_total); 
-			
-			// PRINTING OF MONTHLY REVENUE
-			System.out.println("-----------------------------------------------------------------");
-			System.out.println("|\t\t\t REVENUE REPORT \t\t\t|");
-			System.out.println("|\t\t\t                \t\t\t|");
-			System.out.println("|Item \t\t\t\t    Total Qty\t    Total Price\t|");
-			System.out.println("|---- \t\t\t\t    ---------\t    -----------\t|");
-			int printindex = 0;
-			for(String item: OIList_OrderItemName_distinct) {
-				String qty = OIList_qty_total.get(printindex).toString();
-				String price = OIList_price_total.get(printindex).toString();
-				
-				System.out.println(String.format("|%-40s %-15s $%-5s|",item, qty, price));
-				
-				printindex++;
-			}
-			// generate overall total sales for the month
-			double sum_orderID = 0;
-			for(double value: invoiceList_SubTotal) {
-				sum_orderID += value;
-			}
-			
-			double sum_discount = 0;
-			for(double value: invoiceList_discount) {
-				sum_discount += value;
-			}
-			
-			double sum_GST = 0;
-			for(double value: invoiceList_GST) {
-				sum_GST += value;
-			}
-			
-			Double FinalTotal = sum_orderID - sum_discount + sum_GST;
-			
-			System.out.println("-----------------------------------------------------------------");
-			System.out.println("|\t\t\t                \t\t\t|");
-			System.out.printf("| \t\t\t             Total Revenue: SGD %.2f  |\n", FinalTotal); 
-			System.out.println("|\t\t\t                \t\t\t|");
-			System.out.println("-----------------------------------------------------------------");
-			
-		
+
+
+			ArrayList<String>OIList_qty_totalSt = new ArrayList<>();
+			for(Integer i: OIList_qty_total)
+				OIList_qty_totalSt.add(String.valueOf(i));
+
+			ArrayList<String>OIList_price_totalSt = new ArrayList<>();
+			for(Double d: OIList_price_total)
+				OIList_price_totalSt.add(String.valueOf(d));
+
+			store.add(OIList_OrderItemName_distinct);
+			store.add(OIList_qty_totalSt);
+			store.add(OIList_price_totalSt);
+
+			return store;
+
 	}
 }

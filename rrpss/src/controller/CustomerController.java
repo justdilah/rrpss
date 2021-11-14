@@ -15,12 +15,8 @@ public class CustomerController {
 
 		for(int i=0; i<cList.size();i++)
 		{
-			if(cList.get(i).getCustId() == custID) {
-				if(cList.get(i).getMembership()) {
-					return true;
-				}
-			} else {
-				break;
+			if(cList.get(i).getCustId() == custID && cList.get(i).getMembership()) {
+				return true;
 			}
 		}
 		return false;

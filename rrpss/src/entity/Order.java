@@ -1,4 +1,4 @@
- package entity;
+package entity;
 
 import controller.CustomerController;
 import controller.OrderController;
@@ -16,24 +16,77 @@ import java.util.*;
 
 
 
+/**
+ * This class represents an Order
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 public class Order {
 
+	/**
+	 * Initialized filepath of the Order.csv
+	 */
 	private static final String filename = "DataSet/Order.csv";
+
+	/**
+	 * The Id of the order
+	 */
 	private int orderId;
+
+	/**
+	 * The time the order has been placed
+	 */
 	private LocalTime timeStamp;
+
+	/**
+	 * The date the order has been placed
+	 */
 	private LocalDate date;
+
+	/**
+	 * An indication on whether the customer has paid for the order or not
+	 */
 	private Boolean isPaid;
+
+	/**
+	 * The Id of the staff
+	 */
 	private String staffId;
-//	Staff waiter;
+
+	/**
+	 * Customer object
+	 */
 	Customer customer;
+
+	/**
+	 * Table object
+	 */
 	Table table;
-	ArrayList <OrderItem> orderItemList; 
-//	Invoice invoice;
-	
+
+	/**
+	 * List of order items for the order
+	 */
+	ArrayList <OrderItem> orderItemList;
+
+	/**
+	 * Class Constructor
+	 */
 	public Order() {
 		this.orderItemList = new ArrayList<OrderItem>();
 	}
 
+	/**
+	 * Class Constructor with given id, the time order has been placed, date order has been placed,
+	 * id of the staff, customer object and table object
+	 * @param id int value to uniquely identify order
+	 * @param timeStamp LocalTime variable to represent the time order has been placed
+	 * @param date LocalDate variable to represent the date order has been placed
+	 * @param isPaid boolean value to indicate whether the customer has paid for the order or not
+	 * @param staffId int value to uniquely identify staff
+	 * @param cust customer object
+	 * @param t table object
+	 */
 	public Order(int id, LocalTime timeStamp, LocalDate date, Boolean isPaid, String staffId, Customer cust, Table t) {
 		this.orderId = id;
 		this.timeStamp = timeStamp;
@@ -45,122 +98,168 @@ public class Order {
 		Invoice invoice = new Invoice();
 	}
 
+	/**This method gets the id of the order
+	 * @return id of the order
+	 */
 	public int getOrderId() {
 		return this.orderId;
 	}
-	
-	public void setTable(Table t) {
-		this.table = t;
+
+	/**This method sets the id of the order
+	 * @param orderId int value to uniquely identify the order
+	 */
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
-	
+
+	/**This method gets the table object
+	 * @return table object
+	 */
 	public Table getTable() {
 		return this.table;
 	}
 
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
-	
-	public LocalTime getTimeStamp() {
-		return this.timeStamp;
-	}	
-	/**
-	 * 
-	 * @param t
+	/**This method sets the table object
+	 * @param t table object
 	 */
-	public void setTimeStamp(LocalTime t) {
-		this.timeStamp = t;
-	}
-	
-	public LocalDate getDate() {
-		return this.date;
-	}	
-	
-	/**
-	 * 
-	 * @param t
-	 */
-	public void setDate(LocalDate t) {
-		this.date = t;
+	public void setTable(Table t) {
+		this.table = t;
 	}
 
+
+	/**This method gets the time the order has been placed
+	 * @return time the order has been placed
+	 */
+	public LocalTime getTimeStamp() {
+		return this.timeStamp;
+	}
+	/**
+	 * This method sets the time the order has been placed
+	 * @param time LocalTime variable to represent the time the order has been placed
+	 */
+	public void setTimeStamp(LocalTime time) {
+		this.timeStamp = time;
+	}
+
+	/**This method gets the date the order has been placed
+	 * @return time the order has been placed
+	 */
+	public LocalDate getDate() {
+		return this.date;
+	}
+
+	/**
+	 * This method sets the date the order has been placed
+	 * @param date the date order has been placed
+	 */
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	/**
+	 * This method gets the id of the staff
+	 * @return id of the staff
+	 */
 	public String getStaffId() {
 		return this.staffId;
 	}
 
 	/**
-	 * 
-	 * @param staffId
+	 * This methods sets the id of the staff
+	 * @param staffId int value to uniquely identify the staff
 	 */
 	public void setStaffId(String staffId) {
 		this.staffId = staffId;
 	}
 
+
+	/**
+	 * This method gets the boolean variable to show if the customer has paid the order or not
+	 * @return boolean variable represents an indicator if the customer has paid the order or not
+	 */
 	public Boolean getIsPaid() {
 		return this.isPaid;
 	}
 
 	/**
-	 * 
-	 * @param isPaid
+	 * This method sets the boolean variable to show if the customer has paid the order or not
+	 * @param isPaid boolean value to indicate whether the customer has paid for the order or not
 	 */
 	public void setIsPaid(Boolean isPaid) {
 		this.isPaid = isPaid;
 	}
-	
+
+	/**
+	 * This method gets the customer object
+	 * @return customer object
+	 */
 	public Customer getCust() {
 		return this.customer;
 	}
-	
+
+	/**
+	 * This method sets the customer object
+	 * @param cust customer object
+	 */
 	public void setCust(Customer cust) {
 		this.customer = cust;
 	}
 
-	
+
+	/**This method gets the list of order items
+	 * @return list of order items
+	 */
 	public ArrayList<OrderItem> getOrderItemList() {
 		return this.orderItemList;
 	}
 
 
 	/**
-	 * 
-	 * @param orderItemList
+	 * This method sets the list of order items
+	 * @param orderItemList list of order items
 	 */
 	public void setOrderItemList(ArrayList<OrderItem> orderItemList) {
 		this.orderItemList = orderItemList;
 	}
-	
-	// SAVE THE ORDER
+
+
+	/**This method adds the order to the order csv
+	 * @param list list of orders
+	 * @throws IOException Display error message if any I/O error found while inserting into the order records.
+	 */
 	public static void saveOrder(List list) throws IOException {
 		write(filename, list);
 	}
-	
+
 	public static void replaceOrder(Order o) throws IOException {
-		
+
 		List l = new ArrayList<>();
 		ArrayList<Order> miList = getAllOrders();
 
 		int size = miList.size();
-		
+
 		for(int i=0;i<size;i++) {
-			
+
 			if(miList.get(i).getOrderId() == o.getOrderId()) {
 				miList.set(i, o);
-			} 
-			
+			}
+
 			Order k = miList.get(i);
 			String order = k.getOrderId() + "," + k.getTimeStamp()
 					+  "," + k.getDate() +  "," +  k.getStaffId()
 					+ "," + k.getIsPaid() + "," + k.getCust().getCustId()
 					+ "," +  k.getTable().getTableNo();
 			l.add(order);
-			
-			
+
+
 		}
 		replace(filename,l);
 	}
 
-	// GET ALL THE ORDERS
+	/**This method extracts out all the orders from the order csv
+	 * @return list of orders
+	 * @throws IOException Display error message if any I/O error found while retrieving into the order records.
+	 */
 	public static ArrayList<Order> getAllOrders() throws IOException {
 		ArrayList<Order> psList= new ArrayList<>();
 		ArrayList stringitems = (ArrayList) read(filename);
@@ -175,11 +274,11 @@ public class Order {
 				String timeOrdered = star.nextToken().trim();
 				String dateOrdered = star.nextToken().trim();
 				String staffId = star.nextToken().trim();
-				String isPaid = star.nextToken().trim();	
-				String custid = star.nextToken().trim(); 
+				String isPaid = star.nextToken().trim();
+				String custid = star.nextToken().trim();
 				String tableNo = star.nextToken().trim();
 				int no = Integer.parseInt(tableNo);
-				
+
 				DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
 				LocalTime converttime = LocalTime.parse(timeOrdered,tformatter);
 
@@ -196,19 +295,23 @@ public class Order {
 		}
 		return psList;
 	}
-	
-	// DELETE THE ORDER
+
+
+	/**This method deletes an order in the order csv
+	 * @param orderId int value to uniquely identify the order
+	 * @throws IOException Display error message if any I/O error found while inserting into the order records.
+	 */
 	public static void deleteOrder(int orderId) throws IOException {
-		
+
 		List l = new ArrayList<>();
 		ArrayList<Order> miList = getAllOrders();
-		
+
 		OrderItem item = new OrderItem();
-		
+
 		int size = miList.size();
-		
+
 		for(int i=0;i<size;i++) {
-			
+
 			if(miList.get(i).getOrderId() == orderId) {
 				item.removeEntireOrderItemList(orderId);
 				miList.remove(i);
@@ -223,8 +326,13 @@ public class Order {
 		}
 		replace(filename,l);
 	}
-	
-	//READ AND WRITE TO CSV
+
+
+	/**This method reads the order CSV
+	 * @param filename The filepath of the CSV file
+	 * @return data A list of orders
+	 * @throws IOException Display error message if any I/O error found while retrieving into the order records.
+	 */
 	private static List read(String filename) throws IOException {
 		List data = new ArrayList();
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -240,32 +348,43 @@ public class Order {
 		}
 		return data;
 	}
-	
+
+
+	/**This method writes the order CSV
+	 * @param filename The filepath of the CSV file
+	 * @param data A list of orders
+	 * @throws IOException Display error message if any I/O error found while inserting into the order records.
+	 */
 	private static void write(String filename, List data) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename,true));
 		try {
 			for (int i = 0; i < data.size(); i++) {
-				
+
 				out.write((String) data.get(i)+"\n");
 			}
 		} finally {
 			out.close();
 		}
 	}
-	
+
+	/**This method writes a new set of data and stores into the order CSV
+	 * @param filename The filepath of the CSV file
+	 * @param data A list of orders
+	 * @throws IOException Display error message if any I/O error found while inserting into the order records.
+	 */
 	private static void replace(String filename, List data) throws IOException {
-		
+
 		BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 		try {
 			out.write("OrderID" + "," + "TimeOrdered" + "," + "DateOrdered" + "," + "StaffID" + "," + "IsPaid" + "," +  "CustID" + "," +  "TableNo" + "\n");
 			for (int i = 0; i < data.size(); i++) {
-				
+
 				out.write((String) data.get(i) + "\n");
 			}
 		} finally {
 			out.close();
 		}
 	}
-	
+
 
 }

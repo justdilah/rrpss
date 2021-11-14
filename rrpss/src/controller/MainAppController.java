@@ -2,13 +2,8 @@ package controller;
 
 import java.io.IOException;
 
-import boundary.AlaCarteForm;
+import boundary.*;
 //import boundary.InvoiceForm;
-import boundary.OrderForm;
-import boundary.PromotionForm;
-import boundary.ReservationForm;
-import boundary.SaleRevenueMonthForm;
-
 
 
 public class MainAppController {
@@ -39,8 +34,8 @@ public class MainAppController {
 		r.displayOption();
 	}
 	
-//	public void getInvoiceForm() throws IOException {
-//		InvoiceForm i = new InvoiceForm();
-//		i.displayOption();
-//	}
+	public void getInvoiceForm() throws IOException {
+		InvoiceForm i = new InvoiceForm();
+		i.displayOption();
+	}
 }

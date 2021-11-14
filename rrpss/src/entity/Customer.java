@@ -17,14 +17,14 @@ public class Customer extends Person {
 	private static final String filename = "DataSet/Customer.csv";
 
 	private int custId;
-	private Boolean membership;
+	private boolean membership;
 
 	public Customer()
 	{
 		super();
 	}
 
-	public Customer(int id, String name, String contact, Boolean membership)
+	public Customer(int id, String name, String contact, boolean membership)
 	{
 		super(name, contact);
 		this.custId = id;
@@ -32,18 +32,18 @@ public class Customer extends Person {
 	}
 
 	public int getCustId() {
-		return custId;
+		return this.custId;
 	}
 
 	public void setCustId(int custId) {
 		this.custId = custId;
 	}
 
-	public Boolean getMembership() {
-		return membership;
+	public boolean getMembership() {
+		return this.membership;
 	}
 
-	public void setMembership(Boolean membership) {
+	public void setMembership(boolean membership) {
 		this.membership = membership;
 	}
 
@@ -63,12 +63,7 @@ public class Customer extends Person {
 			String contact = star.nextToken().trim();
 			String membership = star.nextToken().trim();
 
-			Boolean m = null;
-
-			if (membership.equals("TRUE")) // is member
-				m = true;
-			else if (membership.equals("FALSE"))
-				m = false;
+			boolean m = membership.equals("true");
 
 			Customer c = new Customer(Integer.parseInt(custid), name, contact, m);
 			clist.add(c);
@@ -82,7 +77,7 @@ public class Customer extends Person {
 		int last = getAllCustomerDetails().size();
 		int id = getAllCustomerDetails().get(last-1).getCustId()+1;
 
-		String cust = id + "," + name + "," + contact + "," + "FALSE";
+		String cust = id + "," + name + "," + contact + "," + "false";
 		List l = new ArrayList();
 		l.add(cust);
 		write(filename, l);
@@ -93,9 +88,9 @@ public class Customer extends Person {
 		String m = "";
 		for(int i=0;i<getAllCustomerDetails().size();i++) {
 			if(getAllCustomerDetails().get(i).getMembership() == true) {
-				m = "TRUE";
+				m = "true";
 			} else {
-				m = "FALSE";
+				m = "false";
 			}
 
 			String cust = getAllCustomerDetails().get(i).getCustId() + "," + getAllCustomerDetails().get(i).getPersName() + ","+ getAllCustomerDetails().get(i).getPersPhoneNo() +  "," +  m;

@@ -12,14 +12,39 @@ import controller.PromotionController;
 import entity.AlaCarte;
 import entity.Promotion;
 
+/**This class represents the boundary class of the promotion class
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 public class PromotionForm {
 
+
+	/**
+	 * Control class for promotion
+	 */
 	final private PromotionController control = new PromotionController();
+	/**
+	 * Control class for ala carte
+	 */
 	final private AlaCarteController alcontrol = new AlaCarteController();
+	/**
+	 * Scanner class to read the user's inputs
+	 */
 	final private static Scanner sc = new Scanner(System.in);
+	/**
+	 * price of the promotion item
+	 */
 	private static double price;
+	/**
+	 * initialise DecimalFormat df variable
+	 */
 	private static final DecimalFormat df = new DecimalFormat("0.00");
 
+
+	/**This method calls the displayAlaCarteOptions method to display the promotion options
+	 * @throws IOException Display error message if any I/O error found while retrieving from the promotion records.
+	 */
 	public void displayOption() throws IOException {
 		int choice = -1;
 		do {
@@ -32,7 +57,7 @@ public class PromotionForm {
 			print("(4) Delete Promotion Set ");
 			print("(5) Return to Main Menu");
 			print("Please enter your choice: ");
-	
+
 			do {
 				try {
 					choice = Integer.parseInt(sc.nextLine());
@@ -55,6 +80,9 @@ public class PromotionForm {
 		} while (choice > 5 || choice < 1);
 	}
 
+	/**This method calls the getAllPromotionSets method in the controller class to display all the promotion items
+	 * @throws IOException Display error message if any I/O error found while retrieving from the promotion records.
+	 */
 	private void displayPromotionItem() throws IOException {
 
 		int i, c = -1;
@@ -120,6 +148,10 @@ public class PromotionForm {
 		displayPromotionItem();
 	}
 
+	/**This method calls the addPromotionSet method in the controller class to add a promotion item according
+	 * to the user's inputs
+	 * @throws IOException Display error message if any I/O error found while inserting into the promotion records.
+	 */
 	private void insertPromotionItem() throws IOException {
 
 		boolean setter = true, fail = true, pass=true;
@@ -143,7 +175,7 @@ public class PromotionForm {
 
 		ArrayList<AlaCarte> items;
 		ArrayList<Promotion> promos = new ArrayList<>();
-		
+
 		setter = true;
 		do{
 			items = selectAlaCarteItems();
@@ -233,6 +265,10 @@ public class PromotionForm {
 		displayOption();
 	}
 
+	/**This method calls the updatePromotionSet methods in the controller class
+	 * to update a promotion item according to the user's inputs
+	 * @throws IOException Display error message if any I/O error found while inserting into the promotion records.
+	 */
 	private void updatePromotionItem() throws IOException {
 
 		boolean fail;
@@ -368,6 +404,11 @@ public class PromotionForm {
 		}
 	}
 
+	/**The methods calls getAllAlaCarteItems method in the ala carte controller class to retrieve all the
+	 * ala carte items and select specific ala carte items according to the user's inputs
+	 * @return list of ala carte items
+	 * @throws IOException Display error message if any I/O error found while retrieving from the promotion records.
+	 */
 	private ArrayList<AlaCarte> selectAlaCarteItems() throws IOException {
 
 		int c=0;
@@ -421,6 +462,12 @@ public class PromotionForm {
 		return alList;
 	}
 
+	/**This method display the update promotion item options and prompt the user to update the ala carte items or
+	 * delete a specific ala carte item in the promotion set
+	 * @param p Promotion object
+	 * @return list of modified ala carte items of the promotion set
+	 * @throws FileNotFoundException Display error message if any I/O error found while retrieving from the promotion records.
+	 */
 	private ArrayList<AlaCarte> selectPromotionItemOptions(Promotion p) throws FileNotFoundException {
 
 		int choice, c, k;
@@ -520,14 +567,18 @@ public class PromotionForm {
 		return alList;
 	}
 
+	/**This method calls the deletePromotionSet method in the controller class to delete the specific
+	 * promotion item according to the user's inputs
+	 * @throws IOException Display error message if any I/O error found while inserting into the promotion records.
+	 */
 	private void deletePromotionItem() throws IOException {
 
 		String deletedname;
 		int option = 0;
 		print("==================================================");
-        print("Select the Promotion Set you would like to delete ");
+		print("Select the Promotion Set you would like to delete ");
 		print("==================================================");
-		
+
 		for(int i = 0; i< PromotionController.getAllPromotionSets().size() ; i++ ) {
 			print(i+1 + ") "+ PromotionController.getAllPromotionSets().get(i).getPackName());
 		}
@@ -545,9 +596,9 @@ public class PromotionForm {
 			catch(NumberFormatException e){
 				print("Input is of invalid format, please enter a valid choice: ");
 			}
-			
+
 		} while(option < 1 || option > PromotionController.getAllPromotionSets().size());
-		
+
 		Promotion c = control.getPromotionSetByName(PromotionController.getAllPromotionSets().get(option-1).getPackName());
 		deletedname = c.getPackName();
 		control.deletePromotionSet(c);
@@ -557,6 +608,9 @@ public class PromotionForm {
 		displayOption();
 	}
 
+	/**This method is used to replace System.out.println method to a shorter method name
+	 * @param message string value
+	 */
 	public void print(String message)
 	{
 		System.out.println(message);

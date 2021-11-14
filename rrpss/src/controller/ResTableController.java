@@ -67,7 +67,7 @@ public class ResTableController {
     }
 
 
-    public ArrayList<Table> getAllReservedTables() throws FileNotFoundException
+    public ArrayList<Table> getAllReservedTables(LocalDate date) throws FileNotFoundException
     {
         ArrayList<Table> tableList = new ArrayList<>();
         ArrayList<Table> tList = Table.getAllTableDetails();
