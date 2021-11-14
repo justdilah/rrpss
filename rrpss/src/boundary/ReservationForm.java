@@ -205,16 +205,12 @@ public class ReservationForm {
 		print("Enter Date of Reservation (yyyy-MM-dd) format: ");
 		String date = sc.nextLine();
 
-		//	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		//	LocalDate finaldate = LocalDate.parse(date,formatter);
 		LocalDate finaldate = checkDate(date);
 
 
 		print("Enter Time of Reservation (HH:mm) format:");
 		String time = sc.nextLine();
 
-		//	DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HH:mm");
-		//	LocalTime finaltime = LocalTime.parse(time, tformatter);
 
 		LocalTime finaltime = checkTime(time);
 
@@ -257,10 +253,6 @@ public class ReservationForm {
 		try {
 
 			Table t = rtc.checkForTable(finaldate, finaltime, pax);
-
-			//			rc.addReservation(name, contact, pax, custid, staffid);
-			//			int resid = ReservationController.getReservationByContact(contact).getResId();
-			//			Table t = rtc.reserveTable(finaldate, finaltime, pax, resid);
 
 
 			if(t != null)
@@ -415,18 +407,19 @@ public class ReservationForm {
 
 		Reservation r1 = ReservationController.getReservationByContact(choice);
 
-		if (r1.getResId() == 0)
+		if (r1.getResId() == 0) {
 			print("Reservation does not exist");
+			displayOption();
+		}
 		else
 		{
 			print("==================================================");
 			System.out.println("ResId: " +  r1.getResId());
 
-			// get custid and staffid
 			CustomerController c = new CustomerController();
 			int cid = c.getCustByContact(r1.getResContact()).getCustId();
 
-			Staff s = new Staff();
+			Staff s;
 			s = stc.getStaffById(r1.getStaff().getStaffId());
 			int sid = s.getStaffId();
 			String name = s.getPersName();
@@ -444,9 +437,8 @@ public class ReservationForm {
 			print("Allocated: [Table " + tid + "]");
 			print("Reservation will be auto-cancelled at " + t.getTableTime().plusMinutes(10) + " HR");
 			print("==================================================");
+			displayOption();
 		}
-
-		displayOption();
 	}
 
 
@@ -456,8 +448,8 @@ public class ReservationForm {
 	 */
 	public void updateReservation() throws IOException
 	{
-		Reservation r = new Reservation();
-		Table t = new Table();
+		Reservation r;
+		Table t;
 		ResTableController rtc = new ResTableController();
 
 		print("==================================");
@@ -469,18 +461,15 @@ public class ReservationForm {
 
 		r = ReservationController.getReservationByContact(stringchoice);
 
+		if (r.getResId() == 0) {
+			print("Reservation does not exist");
+			displayOption();
+		}
+
 		t = rtc.getTableByResId(r.getResId());
 
 		int p1 = r.getResNoPax();
-		do{
-			if (r.getResId() == 0) {
-				print("Reservation does not exist, Please try again.");
-				stringchoice = sc.nextLine();
-				r = ReservationController.getReservationByContact(stringchoice);
-				t = rtc.getTableByResId(r.getResId());
-				p1 = r.getResNoPax();
-			}
-		}while (r.getResId() == 0);
+
 
 		print("=========================================================");
 		print("\t Select which field to update");
@@ -531,7 +520,6 @@ public class ReservationForm {
 
 		try
 		{
-			// try catch for insert into reservation
 			try
 			{
 				print("==================================");
@@ -546,13 +534,10 @@ public class ReservationForm {
 				updateReservationPax(r, t);
 			}
 
-
 			LocalTime converttime = rt.getTableByResId(resid).getTableTime();
 			LocalDate convertdate = rt.getTableByResId(resid).getTableDate();
-			//			int oldpax = rc.getResById(resid).getResNoPax();
 
 
-			// pass in date time and pax to check
 			int new_tno;
 			if(rt.checkForTable(convertdate, converttime, pax1) == null)
 				new_tno = -1;
@@ -604,8 +589,6 @@ public class ReservationForm {
 
 		try {
 			LocalTime converttime = rt.getTableByResId(resid).getTableTime();
-
-			// pass in time and pax to check
 			int new_tno;
 			if(rt.checkForTable(finaldate, converttime, p1) == null)
 				new_tno = -1;
@@ -657,7 +640,6 @@ public class ReservationForm {
 
 			LocalDate convertdate = rt.getTableByResId(resid).getTableDate();
 
-			// pass in time and pax to check
 			int new_tno;
 			if(rt.checkForTable(convertdate, finaltime, p1) == null)
 				new_tno = -1;
@@ -709,7 +691,6 @@ public class ReservationForm {
 				print("==================================");
 				String name = r.getResName();
 				System.out.printf("%s 's reservation with contact number %s has been remove successfully\n", name, choice);
-				//print("Remove successfully");
 				print("==================================");
 			}
 			else {

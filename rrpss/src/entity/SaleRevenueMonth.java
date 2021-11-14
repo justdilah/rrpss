@@ -3,6 +3,12 @@ package entity;
 
 import java.util.List;
 
+/**
+ * This class represents the Sale Revenue by Month entity of the restaurant.
+ * @version JDK 1.1
+ * @since 2021-10-13
+ * @author SSP3 Group 3
+ */
 public class SaleRevenueMonth {
 
 	private Double totalRevenue;
@@ -23,32 +29,6 @@ public class SaleRevenueMonth {
 	public void setInvoiceID(List<Integer> invoiceID) {
 		this.invoiceID = invoiceID;
 	}
-	
-//	private int saleId;
-//	private Double totalRevenue;
-//
-//	public int getSaleId() {
-//		return this.saleId;
-//	}
-//
-//	/**
-//	 * 
-//	 * @param saleId
-//	 */
-//	public void setSaleId(int saleId) {
-//		this.saleId = saleId;
-//	}
-//
-//	public Double getTotalRevenue() {
-//		return this.totalRevenue;
-//	}
-//
-//	/**
-//	 * 
-//	 * @param totalRevenue
-//	 */
-//	public void setTotalRevenue(Double totalRevenue) {
-//		this.totalRevenue = totalRevenue;
-//	}
+
 
 }

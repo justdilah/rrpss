@@ -45,7 +45,7 @@ public class MainAppUI {
 			System.out.println("(1) Reservation");
 			System.out.println("(2) Orders");
 			System.out.println("(3) Sales Revenue Report");
-			System.out.println("(4) Menu");
+			System.out.println("(4) Ala Carte");
 			System.out.println("(5) Promotion");
 			System.out.println("(6) Payment");
 			System.out.println("(7) Exit");
@@ -67,7 +67,7 @@ public class MainAppUI {
 					System.out.println("(1) Reservation");
 					System.out.println("(2) Orders");
 					System.out.println("(3) Sales Revenue Report");
-					System.out.println("(4) Menu");
+					System.out.println("(4) Ala Carte");
 					System.out.println("(5) Promotion");
 					System.out.println("(6) Exit");
 				}
@@ -111,7 +111,7 @@ public class MainAppUI {
 					System.out.println("(1) Reservation");
 					System.out.println("(2) Orders ");
 					System.out.println("(3) Sales Revenue Report ");
-					System.out.println("(4) Menu");
+					System.out.println("(4) Ala Carte");
 					System.out.println("(5) Promotion");
 					System.out.println("(6) Exit ");
 					choice = sc.nextInt();

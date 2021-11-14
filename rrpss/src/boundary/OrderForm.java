@@ -14,7 +14,6 @@ import entity.Customer;
 import entity.Order;
 import entity.OrderItem;
 import entity.Promotion;
-import entity.Staff;
 import entity.Table;
 
 /**
@@ -129,6 +128,7 @@ public class OrderForm {
             else{
                 for (Order order: CurrentOrder){
                     if (!order.getIsPaid()) {
+                        TotalPrice = 0;
                         printf(format, "Order ID :", String.valueOf(order.getOrderId()));
                         printf(format, "Time Ordered : ", String.valueOf(order.getTimeStamp()));
                         printf(format, "Date Ordered : ", order.getDate().toString().substring(8, 10) +
@@ -147,6 +147,7 @@ public class OrderForm {
                         print("");
                         printf(format, "Total Price: ", "$" + df.format(TotalPrice));
                         print("");
+                        print("=============================================");
                     }
                 }
             }
@@ -178,8 +179,10 @@ public class OrderForm {
                 }
             }while(setter);
 
-            if(date2.isAfter(LocalDate.now()))
+            if(date2.isAfter(LocalDate.now())) {
                 print("Date has not arrived yet.");
+                displayOption();
+            }
 
             CurrentOrder = or.getCurrentDateOrder(date2);
             if(CurrentOrder.size()==0){
@@ -188,6 +191,7 @@ public class OrderForm {
             else{
                 print("=============================================");
                 for (Order order: CurrentOrder){
+                    TotalPrice = 0;
                     printf(format,"Order ID :", String.valueOf(order.getOrderId()));
                     printf(format,"Time Ordered : " , String.valueOf(order.getTimeStamp()));
                     printf(format,"Date Ordered : " , order.getDate().toString().substring(8,10)+
@@ -384,7 +388,7 @@ public class OrderForm {
                 c = Integer.parseInt(sc.nextLine());
                 if(c==0)
                     break;
-                else if(c<0||c>indexes)
+                else if(c<0||c>indexes+1)
                     print("Choice does not exist, please enter a valid choice: ");
                 else{
                     if (c<= alarCarteItems.size()){
@@ -473,7 +477,6 @@ public class OrderForm {
                 }
             }catch(NumberFormatException e){
                 print("Choice is not of valid format, please enter a valid choice: ");
-                c=-1;
             }
         }while(c!=0);
         displayOption();
@@ -793,17 +796,18 @@ public class OrderForm {
                     updateOptions(or.getOrderById(o.getOrderId()));
                 }
                 else {
+                    int ogQty = oi.getOrderItemQty();
                     print("Input quantity to be removed");
                     do {
                         qty = Integer.parseInt(sc.nextLine());
-                        if(qty > oi.getOrderItemQty()) {
+                        if(qty > ogQty) {
                             print("Entered Quantity cannot be over than Item Quantity");
                             print("Please enter a valid Quantity");
                         }
                         else if(qty == 0)
                             print("0 is not a valid Quantity, please enter a valid Quantity: ");
                         else{
-                            int newQty = oi.getOrderItemQty() - qty;
+                            int newQty = ogQty - qty;
                             if (newQty == 0) {
                                 or.removeOrderItem(o.getOrderId(), o.getOrderItemList().get(choice - 1).getOrderItemId());
                                 print("Order Item has been deleted successfully");
@@ -813,7 +817,7 @@ public class OrderForm {
                                 print("Quantity has been updated successfully");
                             }
                         }
-                    }while(qty==0 || qty>oi.getOrderItemQty());
+                    }while(qty==0 || qty>ogQty);
                 }
             }
             else{
@@ -834,13 +838,12 @@ public class OrderForm {
         String format = "%-20s%s%n";
         int size, choice;
 
-        size = or.getUnpaidOrders().size();
-        if(size == 0) {
-            print("================================================");
-            print("There are no orders to be deleted ");
-            print("================================================");
+        if (OrderController.getUnpaidOrders() == null)
+        {
+            print("There are no orders for to be deleted");
             displayOption();
         }
+        size = or.getUnpaidOrders().size();
 
         print("================================================");
         print("Select the Order you would like to delete ");
@@ -875,7 +878,7 @@ public class OrderForm {
         }while(choice<0 || choice>size);
 
         if (choice != 0) {
-            or.deleteOrder(or.getUnpaidOrders().get(choice - 1).getOrderId());
+            or.deleteOrder(OrderController.getUnpaidOrders().get(choice - 1).getOrderId());
             System.out.println("==================================");
             System.out.println("Order deleted successfully");
             System.out.println("==================================");

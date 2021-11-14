@@ -17,7 +17,7 @@ import java.util.*;
 
 
 /**
- * This class represents an Order
+ * This class represents an Order entity of the restaurant
  * @version JDK 1.1
  * @since 2021-10-13
  * @author SSP3 Group 3
@@ -235,6 +235,7 @@ public class Order {
 
 		List l = new ArrayList<>();
 		ArrayList<Order> miList = getAllOrders();
+		String order = "";
 
 		int size = miList.size();
 
@@ -242,14 +243,34 @@ public class Order {
 
 			if(miList.get(i).getOrderId() == o.getOrderId()) {
 				miList.set(i, o);
+				Order k = miList.get(i);
+				order = k.getOrderId() + "," + k.getTimeStamp()
+						+  "," + k.getDate() +  "," +  k.getStaffId()
+						+ "," + k.getIsPaid() + "," + k.getCust().getCustId()
+						+ "," +  k.getTable().getTableNo();
+				l.add(order);
+			}
+			else
+			{
+				Order k = miList.get(i);
+				if(k.getTable() == null)
+				{
+					order = k.getOrderId() + "," + k.getTimeStamp()
+							+  "," + k.getDate() +  "," +  k.getStaffId()
+							+ "," + k.getIsPaid() + "," + k.getCust().getCustId()
+							+ "," +  0;
+				}
+				else{
+					order = k.getOrderId() + "," + k.getTimeStamp()
+							+  "," + k.getDate() +  "," +  k.getStaffId()
+							+ "," + k.getIsPaid() + "," + k.getCust().getCustId()
+							+ "," +  k.getTable().getTableNo();
+				}
+
+				l.add(order);
+
 			}
 
-			Order k = miList.get(i);
-			String order = k.getOrderId() + "," + k.getTimeStamp()
-					+  "," + k.getDate() +  "," +  k.getStaffId()
-					+ "," + k.getIsPaid() + "," + k.getCust().getCustId()
-					+ "," +  k.getTable().getTableNo();
-			l.add(order);
 
 
 		}
@@ -313,8 +334,7 @@ public class Order {
 		for(int i=0;i<size;i++) {
 
 			if(miList.get(i).getOrderId() == orderId) {
-				item.removeEntireOrderItemList(orderId);
-				miList.remove(i);
+				OrderItem.removeEntireOrderItemList(orderId);
 			} else {
 				Order k = miList.get(i);
 				String foodItem = k.getOrderId() + "," + k.getTimeStamp()

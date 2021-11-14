@@ -139,7 +139,7 @@ public class SaleRevenueMonthForm {
 
 		print("-----------------------------------------------------------------");
 		print("|\t\t\t\t\t\t                \t\t\t\t\t\t|");
-		System.out.printf(format,"| \t\t\t\t\t\t             Total Revenue: SGD ", sum_order+"\t|");
+		System.out.printf(format,"| \t\t\t\t\t\t             Total Revenue: SGD ", df.format(sum_order)+"\t|");
 		print("|\t\t\t\t\t\t                \t\t\t\t\t\t|");
 		print("-----------------------------------------------------------------");
 

@@ -121,14 +121,13 @@ public class InvoiceForm {
         do{
             try {
                 choice = Integer.parseInt(sc.nextLine());
-                if (choice < 0 || choice < rtc.getAllOccupiedTables().size())
+                if (choice < 0 || choice > rtc.getAllOccupiedTables().size())
                     print("Choice does not exist, please enter a valid choice: ");
             }catch(NumberFormatException e){
                 print("Choice is of invalid format, please enter a valid choice: ");
             }
         }while(choice<0||choice>rtc.getAllOccupiedTables().size());
 
-        //RETRIEVE SPECIFIC TABLE
         Table t = rtc.getAllOccupiedTables().get(choice-1);
         orders = ivc.getUnpaidOrdersByTableNo(t);
         cust = orders.get(0).getCust();
@@ -172,7 +171,6 @@ public class InvoiceForm {
             counter = InvoiceController.getAllInvoice().get(last).getInvoiceNo()+1;
         }
 
-        //SETTING PAYMENT TO TRUE
         for (Order ord: orders){
             oitems = ord.getOrderItemList();
             ord.setIsPaid(true);
@@ -218,8 +216,8 @@ public class InvoiceForm {
                 print("------------------------------------------------------------");
                 Reservation r = ReservationController.getReservationByContact(setInv.getCustomer().getPersPhoneNo());
                 int res_id = r.getResId();
-                rct.removeReservation(r);
                 rtc.deleteTable(res_id);
+                rct.removeReservation(r);
             }
             else {
                 print("------------------------------------------------------------");
