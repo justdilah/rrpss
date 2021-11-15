@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import entity.Table;
+import entity.TableCapacity;
 import entity.TableStatus;
 
 /**
@@ -314,7 +315,11 @@ public class ResTableController {
      */
     public void updateTablePax(Table t, int resid, int tno) throws IOException
     {
+        Table te;
+        te = tables.get(tno-1);
+        TableCapacity capacity = te.getSeatCapacity();
         t.setTableNo(tno);
+        t.setSeatCapacity(capacity);
         Table.updateTable(t, resid);
     }
 
@@ -329,10 +334,14 @@ public class ResTableController {
      */
     public void updateTableDate(Table t, int resid, int tno, String date) throws IOException
     {
+        Table te;
+        te= tables.get(tno-1);
+        TableCapacity capacity = te.getSeatCapacity();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate convertdate = LocalDate.parse(date,formatter);
         t.setTableDate(convertdate);
         t.setTableNo(tno);
+        t.setSeatCapacity(capacity);
 
         Table.updateTable(t, resid);
     }
@@ -347,9 +356,14 @@ public class ResTableController {
      */
     public void updateTableTime(Table t, int resid, int tno, String time) throws IOException
     {
+        Table te;
+        te = tables.get(tno-1);
+        TableCapacity capacity = te.getSeatCapacity();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime converttime = LocalTime.parse(time,formatter);
         t.setTableTime(converttime);
+        t.setTableNo(tno);
+        t.setSeatCapacity(capacity);
         Table.updateTable(t,resid);
     }
 

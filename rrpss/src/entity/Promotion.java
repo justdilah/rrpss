@@ -40,12 +40,11 @@ public class Promotion {
 	/**
 	 * The list of ala carte items
 	 */
-	private static ArrayList<AlaCarte> packItems;
+	private ArrayList<AlaCarte> packItems;
 	/**
 	 * The description of the promotion item
 	 */
 	private String packDesc;
-
 	/**
 	 * Class constructor
 	 */
@@ -203,11 +202,11 @@ public class Promotion {
 			String name = star.nextToken().trim();
 			String items = star.nextToken().trim();
 			String[] pi = items.split("@");
-			packItems = addAlaCarteItems(pi);
+			ArrayList<AlaCarte> itemlist = addAlaCarteItems(pi);
 			String desc = star.nextToken().trim();
 			String newdesc = desc.replace('/', ',');
 			String price = star.nextToken().trim();
-			Promotion m = new Promotion(Integer.parseInt(id),name,packItems,newdesc,Double.valueOf(price));
+			Promotion m = new Promotion(Integer.parseInt(id),name,itemlist,newdesc,Double.valueOf(price));
 			psList.add(m);
 		}
 		return psList;
@@ -340,7 +339,6 @@ public class Promotion {
 		try {
 			out.write("PromoID" + "," + "Name" + "," + "Items" + "," + "Desc" + "," + "Price" + "\n");
 			for (int i = 0; i < data.size(); i++) {
-
 				out.write((String) data.get(i) + "\n");
 			}
 		} finally {

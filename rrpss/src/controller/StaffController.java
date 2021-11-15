@@ -36,7 +36,7 @@ public class StaffController {
 	 */
 	public Staff getStaffById(int id) throws IOException
 	{
-		Staff c = new Staff();
+		Staff c = null;
 		ArrayList<Staff> sList = Staff.getAllStaffDetails();
 
 		for(int i=0; i<sList.size();i++)

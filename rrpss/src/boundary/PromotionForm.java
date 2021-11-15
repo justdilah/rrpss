@@ -365,6 +365,7 @@ public class PromotionForm {
 						{
 							checkPrice+= items.get(i).getAlaCartePrice();
 						}
+						checkPrice = Double.parseDouble(df.format(checkPrice));
 						print("Enter the New Promotion Set Price\n" +
 								"(Original Price: $"+df.format(ogprice)+")||(AlaCarte Combined Price: $"+df.format(checkPrice)+"): ");
 						do {
@@ -503,7 +504,6 @@ public class PromotionForm {
 			try {
 				switch (choice) {
 					case 1 -> {
-						AlaCarte a = new AlaCarte();
 						print("Select AlaCarte items to be added to Promotion Set: ");
 						print("====================================================");
 						System.out.printf(format1, "Food Name", "Price");
@@ -540,7 +540,7 @@ public class PromotionForm {
 								System.out.printf(format1, "Food Name", "Price");
 								print("====================================================");
 								for(int i=0; i< alList.size(); i++){
-									System.out.printf(format1,i + 1 + ") "+alList.get(i).getAlaCarteName(),"$"+alList.get(i).getAlaCartePrice());
+									System.out.printf(format1,i + 1 + ") "+alList.get(i).getAlaCarteName(),"$"+df.format(alList.get(i).getAlaCartePrice()));
 								}
 								print("Press 0 to end the deletion to the list");
 								print("Please enter your choice: ");

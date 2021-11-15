@@ -44,7 +44,6 @@ public class PromotionController {
 		return Promotion.getAllPromotionItems();
 	}
 
-
 	/**This method calls updatePromotionSet method in the entity class to update the name of the promotion item
 	 * @param promo Promotion object
 	 * @param name string value for the name of the promotion object
@@ -65,7 +64,6 @@ public class PromotionController {
 		promo.setPackItems(items);
 		Promotion.updatePromotionSet(promo);
 	}
-
 
 	/**This method calls updatePromotionSet method in the entity class to update the description of the promotion item
 	 * @param promo Promotion object

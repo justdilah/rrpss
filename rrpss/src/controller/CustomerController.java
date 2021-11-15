@@ -57,7 +57,7 @@ public class CustomerController {
 	 */
 	public Customer getCustById(int id) throws IOException
 	{
-		Customer c = new Customer();
+		Customer c = null;
 		ArrayList<Customer> cList = Customer.getAllCustomerDetails();
 
 		for(int i=0; i<cList.size();i++) {
@@ -77,7 +77,7 @@ public class CustomerController {
 	 */
 	public Customer getCustByContact(String contact) throws IOException
 	{
-		Customer c = new Customer();
+		Customer c = null;
 		ArrayList<Customer> cList = Customer.getAllCustomerDetails();
 
 		for(int i=0; i<cList.size();i++) {

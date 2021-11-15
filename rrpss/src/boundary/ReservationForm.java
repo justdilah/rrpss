@@ -91,7 +91,7 @@ public class ReservationForm {
 
 			do {
 				try {
-					choice = sc.nextInt();
+					choice = Integer.parseInt(sc.nextLine());
 
 
 				}catch(InputMismatchException e) {
@@ -108,7 +108,6 @@ public class ReservationForm {
 					print("(4) Delete Reservation");
 					print("(5) Back");
 				}
-				sc.nextLine();
 
 			}while (choice == -1);
 
@@ -184,7 +183,9 @@ public class ReservationForm {
 
 		Customer c1;
 		c1 = cc.getCustByContact(contact);
-		if(c1.getPersName() == null){
+		if(c1== null || c1.getPersName() == null){
+			print("--No contact found: new user detected--");
+			print("--Creating new customer--");
 			print("Enter Customer Name: ");
 			name = sc.nextLine();
 			cc.saveCustomer(name, contact);
@@ -232,7 +233,7 @@ public class ReservationForm {
 				print("Enter Number of Pax: ");
 				pax = Integer.parseInt(sc.nextLine());
 
-				if (pax >=1)
+				if (pax >=1 && pax<11)
 					temp =false;
 			}
 		}
@@ -245,7 +246,7 @@ public class ReservationForm {
 				print("Enter Number of Pax: ");
 				pax = Integer.parseInt(sc.nextLine());
 
-				if (pax >=1)
+				if (pax >=1 && pax<11)
 					temp =false;
 			}
 		}
@@ -410,7 +411,7 @@ public class ReservationForm {
 		print("==================================");
 		print("Enter customer contact to retrieve details: ");
 		print("==================================");
-		String choice = sc.next();
+		String choice = sc.nextLine();
 
 		Reservation r1 = ReservationController.getReservationByContact(choice);
 
@@ -466,39 +467,38 @@ public class ReservationForm {
 		print("==================================");
 		String stringchoice = sc.nextLine();
 
-		r = rc.getReservationByContact(stringchoice);
+		r = ReservationController.getReservationByContact(stringchoice);
 
 		t = rtc.getTableByResId(r.getResId());
 
 		int p1 = r.getResNoPax();
+		do{
+			if (r.getResId() == 0) {
+				print("Reservation does not exist, Please try again.");
+				stringchoice = sc.nextLine();
+				r = ReservationController.getReservationByContact(stringchoice);
+				t = rtc.getTableByResId(r.getResId());
+				p1 = r.getResNoPax();
+			}
+		}while (r.getResId() == 0);
 
-		if (r.getResId() == 0)
-			print("Reservation does not exist");
-		else
-		{
-			print("=========================================================");
-			print("\t Select which field to update");
-			print("=========================================================");
-			print("(1) Pax");
-			print("(2) Date");
-			print("(3) Time");
-			print("Please enter your choice: ");
-			int choice = Integer.parseInt(sc.nextLine());
+		print("=========================================================");
+		print("\t Select which field to update");
+		print("=========================================================");
+		print("(1) Pax");
+		print("(2) Date");
+		print("(3) Time");
+		print("Please enter your choice: ");
+		int choice = Integer.parseInt(sc.nextLine());
 
-			switch(choice) {
-				case 1:
-					updateReservationPax(r, t);
-					break;
-				case 2:
-					updateReservationDate(r, t, p1);
-					break;
-				case 3:
-					updateReservationTime(r, t, p1);
-					break;
-				default:
-					break;
+		switch (choice) {
+			case 1 -> updateReservationPax(r, t);
+			case 2 -> updateReservationDate(r, t, p1);
+			case 3 -> updateReservationTime(r, t, p1);
+			default -> {
 			}
 		}
+
 	}
 	/**
 	 * This method updates the specifIc reservation number of pax and store into the reservation CSV
@@ -508,13 +508,23 @@ public class ReservationForm {
 	 */
 	public void updateReservationPax(Reservation r, Table t) throws IOException
 	{
+		int pax1 = 0;
+
 		ResTableController rt = new ResTableController();
 		ReservationController rc = new ReservationController();
 
 		rt.createCapTable();
 
-		print("Enter updated pax number: ");
-		int pax1 = sc.nextInt();
+		print("Enter updated pax number (Max 10) : ");
+		do{
+			try {
+				pax1 = Integer.parseInt(sc.nextLine());
+				if(pax1 < 1 || pax1> 10)
+					print("Entered Pax is invalid, please enter a valid pax: ");
+			}catch(NumberFormatException e){
+				print("Entered Pax is of invalid format, please enter a valid pax: ");
+			}
+		}while(pax1 <1 || pax1 > 10);
 
 
 		int resid = r.getResId();
@@ -524,7 +534,6 @@ public class ReservationForm {
 			// try catch for insert into reservation
 			try
 			{
-				rc.updateReservationPax(r, pax1);
 				print("==================================");
 				print("loading to search for table");
 				print("==================================");
@@ -545,15 +554,15 @@ public class ReservationForm {
 
 			// pass in date time and pax to check
 			int new_tno;
-			int pax =0;
-			if(rt.checkForTable(convertdate, converttime, pax) == null)
+			if(rt.checkForTable(convertdate, converttime, pax1) == null)
 				new_tno = -1;
 			else
-				new_tno =rt.checkForTable(convertdate, converttime, pax).getTableNo();
+				new_tno =rt.checkForTable(convertdate, converttime, pax1).getTableNo();
 
 			if (new_tno != -1)
 			{
 				rt.updateTablePax(t, resid, new_tno);
+				rc.updateReservationPax(r, pax1);
 				print("==================================");
 				print(" data updated successfully");
 				print("==================================");
@@ -605,7 +614,7 @@ public class ReservationForm {
 
 			if (new_tno != -1)
 			{
-				rt.updateTableDate(t, resid, new_tno, date);
+				rt.updateTableDate(t, resid, new_tno, finaldate.toString());
 				print("==================================");
 				print(" data updated successfully");
 				print("==================================");
@@ -657,7 +666,7 @@ public class ReservationForm {
 
 			if (new_tno != -1)
 			{
-				rt.updateTableTime(t, resid, new_tno, time);
+				rt.updateTableTime(t, resid, new_tno, finaltime.toString());
 				print("==================================");
 				print(" data updated successfully");
 				print("==================================");

@@ -240,7 +240,7 @@ public class Table {
 	 * @param cap int value to be converted into TableCapacity enum value.
 	 * @return Value that corresponds to each different capacity value.
 	 */
-	private TableCapacity returnTScapcity(int cap)
+	public TableCapacity returnTScapcity(int cap)
 	{
 		if (cap==2)
 			return TableCapacity.TWO_SEATER;
